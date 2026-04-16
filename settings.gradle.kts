@@ -40,8 +40,10 @@ include(":core:database")
 include(":core:ktor")
 include(":core:network:api")
 include(":core:network:impl")
+include(":core:design")
 
 /** Features */
+include(":features:pokemon:api")
 include(":features:pokemon-list:api")
 include(":features:pokemon-list:impl:data")
 include(":features:pokemon-list:impl:domain")

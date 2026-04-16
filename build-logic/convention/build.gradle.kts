@@ -51,6 +51,10 @@ gradlePlugin {
             id = "pokedex.kmp.base.config.plugin"
             implementationClass = "KmpBaseConfigPlugin"
         }
+        register("pokedex.kmp.feature.base.config.plugin") {
+            id = "pokedex.kmp.feature.base.config.plugin"
+            implementationClass = "KmpFeatureBaseConfigPlugin"
+        }
         register("pokedex.kmp.compose.config.plugin") {
             id = "pokedex.kmp.compose.config.plugin"
             implementationClass = "KmpComposeConfigPlugin"

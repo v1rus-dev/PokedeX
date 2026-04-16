@@ -1,3 +1,3 @@
 plugins {
-    alias(libs.plugins.pokedex.kmp.base.config.plugin)
+    alias(libs.plugins.pokedex.kmp.feature.base.config.plugin)
 }
