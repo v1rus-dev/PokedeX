@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		B3B21EEF780B9A093B0CE135 /* pockedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pockedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3B21EEF780B9A093B0CE135 /* pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -59,7 +59,7 @@
 		76A8AFEC015A9BCAC6E51ABF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B3B21EEF780B9A093B0CE135 /* pockedex.app */,
+				B3B21EEF780B9A093B0CE135 /* pokedex.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = B3B21EEF780B9A093B0CE135 /* pockedex.app */;
+			productReference = B3B21EEF780B9A093B0CE135 /* pokedex.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

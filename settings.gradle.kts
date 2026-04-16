@@ -1,4 +1,4 @@
-rootProject.name = "pockedex"
+rootProject.name = "pokedex"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -40,3 +40,27 @@ include(":core:database")
 include(":core:ktor")
 include(":core:network:api")
 include(":core:network:impl")
+
+/** Features */
+include(":features:pokemon-list:api")
+include(":features:pokemon-list:impl:data")
+include(":features:pokemon-list:impl:domain")
+include(":features:pokemon-list:impl:presentation")
+// Root
+include(":features:root:api")
+include(":features:root:impl:presentation")
+// Search
+include(":features:search:api")
+include(":features:search:impl:data")
+include(":features:search:impl:domain")
+include(":features:search:impl:presentation")
+// Settings
+include(":features:settings:api")
+include(":features:settings:impl:data")
+include(":features:settings:impl:domain")
+include(":features:settings:impl:presentation")
+// Favorites
+include(":features:favorites:api")
+include(":features:favorites:impl:data")
+include(":features:favorites:impl:domain")
+include(":features:favorites:impl:presentation")

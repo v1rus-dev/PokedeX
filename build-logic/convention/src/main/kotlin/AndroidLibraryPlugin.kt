@@ -15,7 +15,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
             pluginManager.withPlugin("com.android.library") {
                 extensions.configure<LibraryExtension> {
                     namespace = buildNamespace(
-                        base = "yegor.cheprasov.pockedex",
+                        base = "yegor.cheprasov.pokedex",
                         projectPath = project.path,
                     )
                 }

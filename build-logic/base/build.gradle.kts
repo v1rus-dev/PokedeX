@@ -6,13 +6,14 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "yegor.cheprasov.pockedex.buildlogic"
+group = "yegor.cheprasov.pokedex.buildlogic"
 
 dependencies {
     implementation(libs.gradleplugin.android)
     implementation(libs.gradleplugin.compose)
     implementation(libs.gradleplugin.composeCompiler)
     implementation(libs.gradleplugin.kotlin)
+    implementation(libs.gradleplugin.kotlinSerialization)
     implementation(libs.gradleplugin.di.metro)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))

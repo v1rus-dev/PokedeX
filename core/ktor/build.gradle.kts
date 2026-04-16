@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.pockedex.kmp.base.config.plugin)
+    alias(libs.plugins.pokedex.kmp.base.config.plugin)
 }
 
 kotlin {

@@ -6,7 +6,7 @@ class KmpBaseConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("pockedex.android.library.plugin")
+                apply("pokedex.android.library.plugin")
                 apply("kmp.base.config")
                 apply("metro.di.base.config")
 //                apply("dev.zacsweers.metro")

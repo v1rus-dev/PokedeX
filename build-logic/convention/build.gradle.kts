@@ -6,7 +6,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "yegor.cheprasov.pockedex.buildlogic.convention"
+group = "yegor.cheprasov.pokedex.buildlogic.convention"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -39,17 +39,25 @@ tasks.withType<KotlinCompile>().configureEach {
 
 gradlePlugin {
     plugins {
-        register("pockedex.android.application.plugin") {
-            id = "pockedex.android.application.plugin"
+        register("pokedex.android.application.plugin") {
+            id = "pokedex.android.application.plugin"
             implementationClass = "AndroidApplicationPlugin"
         }
-        register("pockedex.android.library.plugin") {
-            id = "pockedex.android.library.plugin"
+        register("pokedex.android.library.plugin") {
+            id = "pokedex.android.library.plugin"
             implementationClass = "AndroidLibraryPlugin"
         }
-        register("pockedex.kmp.base.config.plugin") {
-            id = "pockedex.kmp.base.config.plugin"
+        register("pokedex.kmp.base.config.plugin") {
+            id = "pokedex.kmp.base.config.plugin"
             implementationClass = "KmpBaseConfigPlugin"
+        }
+        register("pokedex.kmp.compose.config.plugin") {
+            id = "pokedex.kmp.compose.config.plugin"
+            implementationClass = "KmpComposeConfigPlugin"
+        }
+        register("pokedex.kmp.presentation.config.plugin") {
+            id = "pokedex.kmp.presentation.config.plugin"
+            implementationClass = "KmpPresentationConfigPlugin"
         }
     }
 }

@@ -5,10 +5,10 @@ import extensions.projectJavaVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 androidConfig {
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 
     sourceSets.named("main") {

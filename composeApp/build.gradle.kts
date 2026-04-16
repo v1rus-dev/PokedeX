@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -39,11 +40,33 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.kotlinx.serialization.json)
 
+            /** Core dependencies */
             implementation(projects.core.database)
             implementation(projects.core.ktor)
             implementation(projects.core.network.api)
             implementation(projects.core.network.impl)
+
+            /** Feature dependencies */
+            implementation(projects.features.root.api)
+            implementation(projects.features.root.impl.presentation)
+            implementation(projects.features.pokemonList.api)
+            implementation(projects.features.pokemonList.impl.data)
+            implementation(projects.features.pokemonList.impl.domain)
+            implementation(projects.features.pokemonList.impl.presentation)
+            implementation(projects.features.favorites.api)
+            implementation(projects.features.favorites.impl.data)
+            implementation(projects.features.favorites.impl.domain)
+            implementation(projects.features.favorites.impl.presentation)
+            implementation(projects.features.search.api)
+            implementation(projects.features.search.impl.data)
+            implementation(projects.features.search.impl.domain)
+            implementation(projects.features.search.impl.presentation)
+            implementation(projects.features.settings.api)
+            implementation(projects.features.settings.impl.data)
+            implementation(projects.features.settings.impl.domain)
+            implementation(projects.features.settings.impl.presentation)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -52,11 +75,11 @@ kotlin {
 }
 
 android {
-    namespace = "yegor.cheprasov.pockedex"
+    namespace = "yegor.cheprasov.pokedex"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "yegor.cheprasov.pockedex"
+        applicationId = "yegor.cheprasov.pokedex"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

@@ -1,7 +1,7 @@
 TEAM_ID=
 
-PRODUCT_NAME=pockedex
-PRODUCT_BUNDLE_IDENTIFIER=yegor.cheprasov.pockedex.pockedex$(TEAM_ID)
+PRODUCT_NAME=pokedex
+PRODUCT_BUNDLE_IDENTIFIER=yegor.cheprasov.pokedex.pokedex$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0
