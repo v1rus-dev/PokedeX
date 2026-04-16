@@ -39,6 +39,11 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(projects.core.database)
+            implementation(projects.core.ktor)
+            implementation(projects.core.network.api)
+            implementation(projects.core.network.impl)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,4 +81,3 @@ android {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
-

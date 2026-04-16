@@ -26,13 +26,13 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libs") {
-            from(files("../gradle/libs.versions.toml"))
+            from(files("../../gradle/libs.versions.toml"))
         }
     }
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "build-logic"
+rootProject.name = "build-logic-convention"
 
-include(":convention")
+includeBuild("../base")

@@ -1,9 +1,3 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-}
-
-kotlin {
-    androidTarget()
-    iosArm64()
+    alias(libs.plugins.pockedex.kmp.base.config.plugin)
 }

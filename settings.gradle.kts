@@ -30,7 +30,8 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-includeBuild("build-logic")
+includeBuild("build-logic/base")
+includeBuild("build-logic/convention")
 
 include(":composeApp")
 
