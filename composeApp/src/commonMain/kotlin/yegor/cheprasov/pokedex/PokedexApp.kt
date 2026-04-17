@@ -1,49 +1,83 @@
 package yegor.cheprasov.pokedex
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import androidx.navigation3.ui.NavDisplay
+import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
+import org.koin.compose.navigation3.koinEntryProvider
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.koinConfiguration
+import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
+import yegor.cheprasov.pokedex.core.design.navigation.navigationConfiguration
+import yegor.cheprasov.pokedex.core.design.navigation.rememberAppNavigationState
+import yegor.cheprasov.pokedex.di.appModules
+import yegor.cheprasov.pokedex.features.favorites.presentation.favoritesTopLevelDestination
+import yegor.cheprasov.pokedex.features.pokemon.details.api.pokemonDetailsSerializersModule
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.pokemonListTopLevelDestination
+import yegor.cheprasov.pokedex.features.root.presentation.RootTabs
+import yegor.cheprasov.pokedex.features.root.presentation.rootEntryProvider
+import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSerializersModule
 
-import pokedex.composeapp.generated.resources.Res
-import pokedex.composeapp.generated.resources.compose_multiplatform
-
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun PokedexApp() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+        val topLevelDestinations = remember {
+            listOf(
+                pokemonListTopLevelDestination,
+                favoritesTopLevelDestination,
+            )
+        }
+        val navigator: AppNavigator = koinInject()
+        val rootOnlyEntryProvider = remember(navigator, topLevelDestinations) {
+            rootEntryProvider(
+                navigator = navigator,
+                topLevelDestinations = topLevelDestinations,
+            )
+        }
+        val navigationState = rememberAppNavigationState(
+            startRoute = RootTabs,
+            configuration = navigationConfiguration(
+                listOf(
+                    rootTabsNavigationSerializersModule,
+                    pokemonDetailsSerializersModule,
+                ),
+            ),
+        )
+        val koinEntryProvider = koinEntryProvider<androidx.navigation3.runtime.NavKey>()
+        val entryProvider = remember(rootOnlyEntryProvider, koinEntryProvider) {
+            { route: androidx.navigation3.runtime.NavKey ->
+                if (route == RootTabs) {
+                    rootOnlyEntryProvider(route)
+                } else {
+                    koinEntryProvider(route)
                 }
             }
+        }
+
+        LaunchedEffect(navigationState) {
+            navigator.setNavigationState(navigationState)
+        }
+
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .fillMaxSize(),
+        ) {
+            NavDisplay(
+                entries = navigationState.toEntries(entryProvider),
+                modifier = Modifier.fillMaxSize(),
+                onBack = navigator::goBack,
+            )
         }
     }
 }

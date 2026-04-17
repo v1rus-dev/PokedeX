@@ -14,7 +14,6 @@ dependencies {
     implementation(libs.gradleplugin.composeCompiler)
     implementation(libs.gradleplugin.kotlin)
     implementation(libs.gradleplugin.kotlinSerialization)
-    implementation(libs.gradleplugin.di.metro)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.di.metro)
 }
 
 kotlin {
@@ -41,21 +40,30 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.navigation3)
 
             /** Core dependencies */
             implementation(projects.core.database)
+            implementation(projects.core.design)
             implementation(projects.core.ktor)
             implementation(projects.core.network.api)
             implementation(projects.core.network.impl)
 
             /** Feature dependencies */
-            implementation(projects.features.root.api)
             implementation(projects.features.root.impl.presentation)
+            implementation(projects.features.pokemon.api)
             implementation(projects.features.pokemonList.api)
             implementation(projects.features.pokemonList.impl.data)
             implementation(projects.features.pokemonList.impl.domain)
             implementation(projects.features.pokemonList.impl.presentation)
+            implementation(projects.features.pokemonDetails.api)
+            implementation(projects.features.pokemonDetails.impl.data)
+            implementation(projects.features.pokemonDetails.impl.domain)
+            implementation(projects.features.pokemonDetails.impl.presentation)
             implementation(projects.features.favorites.api)
             implementation(projects.features.favorites.impl.data)
             implementation(projects.features.favorites.impl.domain)

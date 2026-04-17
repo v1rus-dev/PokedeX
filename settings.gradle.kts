@@ -66,3 +66,8 @@ include(":features:favorites:api")
 include(":features:favorites:impl:data")
 include(":features:favorites:impl:domain")
 include(":features:favorites:impl:presentation")
+// Pokemon details
+include(":features:pokemon-details:api")
+include(":features:pokemon-details:impl:data")
+include(":features:pokemon-details:impl:domain")
+include(":features:pokemon-details:impl:presentation")
