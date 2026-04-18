@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,6 +22,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -36,7 +36,6 @@ kotlin {
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
-            implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -49,13 +48,14 @@ kotlin {
             /** Core dependencies */
             implementation(projects.core.database)
             implementation(projects.core.design)
-            implementation(projects.core.ktor)
             implementation(projects.core.network.api)
             implementation(projects.core.network.impl)
 
             /** Feature dependencies */
             implementation(projects.features.root.impl.presentation)
             implementation(projects.features.pokemon.api)
+            implementation(projects.features.pokemon.impl.data)
+            implementation(projects.features.pokemon.impl.domain)
             implementation(projects.features.pokemonList.api)
             implementation(projects.features.pokemonList.impl.data)
             implementation(projects.features.pokemonList.impl.domain)

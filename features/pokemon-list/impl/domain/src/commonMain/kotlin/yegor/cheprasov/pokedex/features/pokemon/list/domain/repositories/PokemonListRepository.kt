@@ -1,7 +1,7 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.domain.repositories
 
-interface PokemonListRepository {
-    fun getPokemonNames(): List<String>
+import yegor.cheprasov.pokedex.core.network.NetworkResult
 
-    fun getDataSourceDescription(): String
+interface PokemonListRepository {
+    suspend fun getPokemonList(): NetworkResult<Unit>
 }

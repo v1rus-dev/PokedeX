@@ -9,5 +9,7 @@ kotlin {
         implementation(projects.features.pokemonDetails.api)
         implementation(projects.features.pokemonList.impl.domain)
         implementation(projects.features.pokemonList.api)
+        implementation(libs.androidx.paging.compose)
+        implementation(libs.androidx.paging.common)
     }
 }

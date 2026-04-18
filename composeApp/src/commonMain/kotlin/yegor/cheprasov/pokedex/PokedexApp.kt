@@ -10,21 +10,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.ui.NavDisplay
-import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
 import org.koin.core.annotation.KoinExperimentalAPI
-import org.koin.dsl.koinConfiguration
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.core.design.navigation.navigationConfiguration
 import yegor.cheprasov.pokedex.core.design.navigation.rememberAppNavigationState
-import yegor.cheprasov.pokedex.di.appModules
 import yegor.cheprasov.pokedex.features.favorites.presentation.favoritesTopLevelDestination
 import yegor.cheprasov.pokedex.features.pokemon.details.api.pokemonDetailsSerializersModule
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.pokemonListTopLevelDestination
 import yegor.cheprasov.pokedex.features.root.presentation.RootTabs
 import yegor.cheprasov.pokedex.features.root.presentation.rootEntryProvider
 import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSerializersModule
+import yegor.cheprasov.pokedex.features.settings.presentation.settingsTopLevelNavigation
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -35,6 +33,7 @@ fun PokedexApp() {
             listOf(
                 pokemonListTopLevelDestination,
                 favoritesTopLevelDestination,
+                settingsTopLevelNavigation
             )
         }
         val navigator: AppNavigator = koinInject()

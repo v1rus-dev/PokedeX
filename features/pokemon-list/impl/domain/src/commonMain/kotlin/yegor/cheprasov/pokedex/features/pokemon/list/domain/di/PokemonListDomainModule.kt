@@ -1,9 +1,13 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.domain.di
 
-import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
-import yegor.cheprasov.pokedex.features.pokemon.list.domain.PokemonListApi
+import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonListUseCase
+import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonListUseCaseImpl
 
 val pokemonListDomainModule = module {
-    factoryOf(::PokemonListApi)
+    factory<GetPokemonListUseCase> {
+        GetPokemonListUseCaseImpl(
+            pokemonListRepository = get()
+        )
+    }
 }

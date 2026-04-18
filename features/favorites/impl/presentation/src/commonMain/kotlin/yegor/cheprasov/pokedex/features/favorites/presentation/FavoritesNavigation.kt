@@ -10,13 +10,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import pokedex.core.resources.generated.resources.Res
+import pokedex.core.resources.generated.resources.favorites
 import yegor.cheprasov.pokedex.core.design.navigation.TopLevelDestinationSpec
 import yegor.cheprasov.pokedex.features.favorites.api.Favorites
 
 val favoritesTopLevelDestination = TopLevelDestinationSpec(
     route = Favorites,
-    label = "Favorites",
-    iconLabel = "Fv",
+    icon = Res.drawable.favorites,
+    label = Res.string.favorites,
     content = { FavoritesDestination() },
 )
 

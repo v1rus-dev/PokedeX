@@ -63,5 +63,17 @@ gradlePlugin {
             id = "pokedex.kmp.presentation.config.plugin"
             implementationClass = "KmpPresentationConfigPlugin"
         }
+        register("pokedex.kmp.data.config.plugin") {
+            id = "pokedex.kmp.data.config.plugin"
+            implementationClass = "KmpDataConfigPlugin"
+        }
+        register("pokedex.kmp.domain.config.plugin") {
+            id = "pokedex.kmp.domain.config.plugin"
+            implementationClass = "KmpDomainConfigPlugin"
+        }
+        register("pokedex.kmp.feature.api.config.plugin") {
+            id = "pokedex.kmp.feature.api.config.plugin"
+            implementationClass = "KmpFeatureApiConfigPlugin"
+        }
     }
 }

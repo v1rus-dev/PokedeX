@@ -8,9 +8,3 @@ import kotlinx.serialization.modules.subclass
 
 @Serializable
 data object PokemonList : NavKey
-
-val pokemonListNavigationSerializersModule = SerializersModule {
-    polymorphic(NavKey::class) {
-        subclass(PokemonList::class)
-    }
-}

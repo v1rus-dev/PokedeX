@@ -5,11 +5,13 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.plus
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 
 data class TopLevelDestinationSpec(
     val route: NavKey,
-    val label: String,
-    val iconLabel: String,
+    val icon: DrawableResource,
+    val label: StringResource,
     val content: @Composable (AppNavigator) -> Unit,
 )
 
