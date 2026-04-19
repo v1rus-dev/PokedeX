@@ -1,7 +1,9 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.domain.repositories
 
-import yegor.cheprasov.pokedex.core.network.NetworkResult
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 
 interface PokemonListRepository {
-    suspend fun getPokemonList(): NetworkResult<Unit>
+    fun getPokemonList(pageSize: Int): Flow<PagingData<PokemonModel>>
 }

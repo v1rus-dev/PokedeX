@@ -7,7 +7,7 @@ import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemon
 val pokemonListDomainModule = module {
     factory<GetPokemonListUseCase> {
         GetPokemonListUseCaseImpl(
-            pokemonListRepository = get()
+            pokemonListRepository = get(),
         )
     }
 }

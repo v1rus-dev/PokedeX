@@ -12,7 +12,7 @@ data class TopLevelDestinationSpec(
     val route: NavKey,
     val icon: DrawableResource,
     val label: StringResource,
-    val content: @Composable (AppNavigator) -> Unit,
+    val content: @Composable () -> Unit,
 )
 
 fun navigationConfiguration(serializersModules: List<SerializersModule>): SavedStateConfiguration {

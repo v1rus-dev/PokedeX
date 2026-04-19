@@ -1,27 +1,38 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import org.koin.compose.koinInject
 import yegor.cheprasov.pokedex.core.design.composable.effects.CollectEventsUiEffect
+import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
+import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable.PokemonListScreen
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PokemonListDestination(
+    navigator: AppNavigator = koinInject(),
     viewModel: PokemonListViewModel = koinViewModel(),
-    onOpenPokemon: (String) -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val lazyPagingItems = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
+    val cacheWindow = LazyLayoutCacheWindow(aheadFraction = 0.5f, behindFraction = 0.3f)
+    val lazyListState = rememberLazyListState(cacheWindow = cacheWindow)
 
     PokemonListScreen(
-        state = uiState,
+        listState = lazyListState,
+        lazyPagingItems = lazyPagingItems,
         onAction = viewModel::onAction,
     )
 
     CollectEventsUiEffect(viewModel.uiEvents) { event ->
         when(event) {
-            is PokemonListEventUi.NavigateToPokemonDetail -> onOpenPokemon(event.name)
+            is PokemonListEventUi.NavigateToPokemonDetail -> {
+                navigator.navigate(PokemonDetails(pokemonName = event.name))
+            }
         }
     }
 }

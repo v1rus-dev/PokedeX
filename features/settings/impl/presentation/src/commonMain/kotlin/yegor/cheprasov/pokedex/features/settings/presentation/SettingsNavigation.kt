@@ -11,7 +11,7 @@ val settingsTopLevelNavigation = TopLevelDestinationSpec(
     route = Settings,
     icon = Res.drawable.pokeball_settings,
     label = Res.string.settings,
-    content = { navigator: AppNavigator ->
+    content = {
         SettingsDestination()
     }
 )

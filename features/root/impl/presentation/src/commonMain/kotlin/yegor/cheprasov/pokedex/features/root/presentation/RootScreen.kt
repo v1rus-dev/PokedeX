@@ -11,16 +11,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.core.design.navigation.TopLevelDestinationSpec
 import yegor.cheprasov.pokedex.features.root.presentation.navigation.rememberRootNavigator
 
+private val BackgroundColor = Color(0xFFDC0A2D)
+
 @Composable
 fun RootScreen(
-    navigator: AppNavigator,
     topLevelDestinations: List<TopLevelDestinationSpec>,
 ) {
     val rootNavigator = rememberRootNavigator(
@@ -31,7 +32,7 @@ fun RootScreen(
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = BackgroundColor) {
                 topLevelDestinations.forEach { destination ->
                     NavigationBarItem(
                         selected = currentDestination.route == destination.route,
@@ -61,7 +62,7 @@ fun RootScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
         ) {
-            currentDestination.content(navigator)
+            currentDestination.content()
         }
     }
 }

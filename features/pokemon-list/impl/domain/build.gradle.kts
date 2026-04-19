@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
-        implementation(libs.koin.core)
-        implementation(projects.core.network.api)
+        implementation(projects.features.pokemon.api)
+        implementation(libs.androidx.paging.common)
     }
 }

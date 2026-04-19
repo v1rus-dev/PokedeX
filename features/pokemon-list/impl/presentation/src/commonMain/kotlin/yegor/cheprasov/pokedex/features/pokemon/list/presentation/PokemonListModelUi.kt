@@ -4,9 +4,7 @@ import yegor.cheprasov.pokedex.core.design.mvi.ActionUi
 import yegor.cheprasov.pokedex.core.design.mvi.EventUi
 import yegor.cheprasov.pokedex.core.design.mvi.StateUi
 
-data class PokemonListStateUi(
-    val pokemonNames: List<String>,
-) : StateUi
+data object PokemonListStateUi : StateUi
 
 sealed interface PokemonListActionUi : ActionUi {
     data class ClickPokemon(

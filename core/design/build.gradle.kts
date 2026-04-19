@@ -3,7 +3,12 @@ plugins {
 }
 
 kotlin {
+    sourceSets.androidMain.dependencies {
+        implementation(libs.androidx.appcompat)
+    }
     sourceSets.commonMain.dependencies {
+        implementation(libs.kotlinx.coroutines.core)
+        implementation(libs.kotlinx.serialization.core)
         implementation(libs.androidx.lifecycle.viewmodelCompose)
         implementation(libs.androidx.navigation3.runtime)
         implementation(libs.androidx.lifecycle.viewmodel.navigation3)

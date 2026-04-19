@@ -12,11 +12,7 @@ val pokemonListTopLevelDestination = TopLevelDestinationSpec(
     route = PokemonList,
     icon = Res.drawable.pokeball,
     label = Res.string.home,
-    content = { navigator: AppNavigator ->
-        PokemonListDestination(
-            onOpenPokemon = { name ->
-                navigator.navigate(PokemonDetails(pokemonName = name))
-            },
-        )
+    content = {
+        PokemonListDestination()
     },
 )

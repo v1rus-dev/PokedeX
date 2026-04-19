@@ -4,6 +4,7 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
+        implementation(projects.core.common)
         implementation(projects.features.pokemon.api)
         implementation(projects.features.pokemon.impl.domain)
     }

@@ -1,47 +1,56 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import kotlinx.coroutines.flow.flowOf
+import org.jetbrains.compose.resources.stringResource
+import pokedex.core.resources.generated.resources.Res
+import pokedex.core.resources.generated.resources.pokedex
+import yegor.cheprasov.pokedex.core.design.composable.toolbars.RootPokedexTopAppBar
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListStateUi
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.models.PokemonUiModel
 
 @Composable
 internal fun PokemonListScreen(
-    state: PokemonListStateUi,
+    listState: LazyListState,
+    lazyPagingItems: LazyPagingItems<PokemonUiModel>,
     onAction: (PokemonListActionUi) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Scaffold(
+        topBar = {
+            RootPokedexTopAppBar(title = stringResource(Res.string.pokedex))
+        }
     ) {
-        Text(
-            text = "Pokedex tab",
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = "This screen lives inside the root Scaffold and nested Navigation 3 host.",
-            textAlign = TextAlign.Center,
-        )
-        Button(
-            modifier = Modifier.padding(top = 16.dp),
-            onClick = {
-                onAction(PokemonListActionUi.ClickPokemon(name = "Bulbasaur"))
-            },
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize().padding(it),
         ) {
-            Text("Open full screen")
+            items(
+                count = lazyPagingItems.itemCount,
+                key = lazyPagingItems.itemKey { pokemon -> pokemon.name },
+            ) { index ->
+                lazyPagingItems[index]?.let { pokemon ->
+                    PokemonItem(pokemon = pokemon, onAction = onAction)
+                }
+            }
         }
     }
+}
+
+@Preview
+@Composable
+private fun PokemonListScreenPreview() {
+    PokemonListScreen(
+        listState = rememberLazyListState(), lazyPagingItems = flowOf<PagingData<PokemonUiModel>>().collectAsLazyPagingItems(), onAction = {})
 }

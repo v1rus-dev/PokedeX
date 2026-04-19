@@ -10,9 +10,11 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.napier)
         }
 
-        iosMain.dependencies {
+        findByName("iosMain")?.dependencies {
             implementation(libs.ktor.engine.darwin)
         }
 

@@ -1,7 +1,8 @@
-import extensions.commonMainDependencies
 import extensions.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class KmpDataConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -10,10 +11,14 @@ class KmpDataConfigPlugin : Plugin<Project> {
                 apply("pokedex.kmp.base.config.plugin")
             }
 
-            commonMainDependencies {
-                implementation(project(":core:database"))
-                implementation(project(":core:network:api"))
-                implementation(libs.koin.core)
+            extensions.configure<KotlinMultiplatformExtension> {
+                sourceSets.getByName("commonMain").dependencies {
+                    implementation(project(":core:database"))
+                    implementation(project(":core:network:api"))
+                    implementation(libs.koin.core)
+                    implementation(libs.kotlinx.coroutines.core)
+                    implementation(libs.kotlinx.serialization.json)
+                }
             }
         }
     }

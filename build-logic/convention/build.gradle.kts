@@ -8,22 +8,13 @@ plugins {
 
 group = "yegor.cheprasov.pokedex.buildlogic.convention"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
-    }
-}
-
 dependencies {
     implementation(libs.gradleplugin.android)
     implementation(libs.gradleplugin.kotlin)
+    implementation(libs.gradleplugin.kotlinSerialization)
+    implementation(libs.gradleplugin.compose)
+    implementation(libs.gradleplugin.composeCompiler)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-    implementation(libs.gradleplugin.base)
 }
 
 private val projectJavaVersion: JavaVersion = JavaVersion.toVersion(libs.versions.javaConvention.get())
@@ -39,21 +30,9 @@ tasks.withType<KotlinCompile>().configureEach {
 
 gradlePlugin {
     plugins {
-        register("pokedex.android.application.plugin") {
-            id = "pokedex.android.application.plugin"
-            implementationClass = "AndroidApplicationPlugin"
-        }
-        register("pokedex.android.library.plugin") {
-            id = "pokedex.android.library.plugin"
-            implementationClass = "AndroidLibraryPlugin"
-        }
         register("pokedex.kmp.base.config.plugin") {
             id = "pokedex.kmp.base.config.plugin"
             implementationClass = "KmpBaseConfigPlugin"
-        }
-        register("pokedex.kmp.feature.base.config.plugin") {
-            id = "pokedex.kmp.feature.base.config.plugin"
-            implementationClass = "KmpFeatureBaseConfigPlugin"
         }
         register("pokedex.kmp.compose.config.plugin") {
             id = "pokedex.kmp.compose.config.plugin"

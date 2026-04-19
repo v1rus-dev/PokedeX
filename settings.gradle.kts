@@ -30,12 +30,14 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-includeBuild("build-logic/base")
 includeBuild("build-logic/convention")
 
+include(":androidApp")
 include(":composeApp")
 
 /** Core */
+include(":core:common")
+include(":core:config")
 include(":core:database")
 include(":core:network:api")
 include(":core:network:impl")

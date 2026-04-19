@@ -4,6 +4,14 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val enableIosTargets = providers.gradleProperty("pokedex.enableIosTargets")
+    .map(String::toBoolean)
+    .orElse(
+        providers.systemProperty("os.name")
+            .map { it.startsWith("Mac", ignoreCase = true) }
+    )
+    .get()
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
@@ -19,8 +27,10 @@ kotlin {
 
 dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    if (enableIosTargets) {
+        add("kspIosArm64", libs.androidx.room.compiler)
+        add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    }
 }
 
 room {

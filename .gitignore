@@ -1,19 +1,111 @@
-*.iml
-.kotlin
-.gradle
+# =======================
+# Gradle
+# =======================
+.gradle/
+.gradle*/
+.android/
+build/
 **/build/
-xcuserdata
-!src/**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
 local.properties
-.idea
+
+# =======================
+# Android
+# =======================
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+*.keystore
+!debug.keystore
+proguard/
+lint/
+
+# =======================
+# iOS / Xcode
+# =======================
+*.xcworkspace/
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+Pods/
+.symlinks/
+Podfile.lock
+*.xcarchive/
+export_options.plist
+
+# =======================
+# CocoaPods
+# =======================
+Pods/
+Podfile.lock
+.cocoapods/
+
+# =======================
+# IntelliJ IDEA / Android Studio
+# =======================
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/deploymentTargetDropDown.xml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# =======================
+# Kotlin / KMP
+# =======================
+.kotlin/
+**/generated/
+
+# =======================
+# Environment / Secrets
+# =======================
+*.env
+*.env.local
+google-services.json
+GoogleService-Info.plist
+keystore.properties
+signing.properties
+secrets.properties
+
+# =======================
+# macOS
+# =======================
 .DS_Store
-captures
-.externalNativeBuild
-.cxx
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-**/xcshareddata/WorkspaceSettings.xcsettings
-node_modules/
+.AppleDouble
+._*
+
+# =======================
+# Windows
+# =======================
+Thumbs.db
+Desktop.ini

@@ -3,6 +3,11 @@ plugins {
 }
 
 kotlin {
+    android {
+        androidResources {
+            enable = true
+        }
+    }
     sourceSets.commonMain.dependencies {
         api(libs.compose.components.resources)
     }

@@ -1,14 +1,25 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.data.repositories_impl
 
-import io.ktor.client.HttpClient
-import yegor.cheprasov.pokedex.core.network.NetworkResult
-import yegor.cheprasov.pokedex.core.network.safeRequest
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import yegor.cheprasov.pokedex.features.pokemon.list.data.paging.PokemonListPagingSource
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.repositories.PokemonListRepository
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
+import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingData
 
 class PokemonListRepositoryImpl(
-    private val httpClient: HttpClient,
+    private val pagingSourceFactory: () -> PokemonListPagingSource,
 ) : PokemonListRepository {
-    override suspend fun getPokemonList(): NetworkResult<Unit> = httpClient.safeRequest {
-        TODO("Implement Pokemon list request")
+    override fun getPokemonList(pageSize: Int): Flow<PagingData<PokemonModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                initialLoadSize = pageSize,
+                prefetchDistance = pageSize / 2,
+                enablePlaceholders = false,
+            ),
+            pagingSourceFactory = pagingSourceFactory,
+        ).flow
     }
 }

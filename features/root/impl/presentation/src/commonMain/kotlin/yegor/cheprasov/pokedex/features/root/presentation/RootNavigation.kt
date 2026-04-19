@@ -25,7 +25,7 @@ fun rootEntryProvider(
 ): (NavKey) -> NavEntry<NavKey> {
     return entryProvider {
         entry<RootTabs> {
-            RootScreen(
+            RootDestination(
                 navigator = navigator,
                 topLevelDestinations = topLevelDestinations,
             )
