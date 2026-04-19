@@ -1,7 +1,8 @@
 package yegor.cheprasov.pokedex
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +20,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.core.design.navigation.navigationConfiguration
 import yegor.cheprasov.pokedex.core.design.navigation.rememberAppNavigationState
+import yegor.cheprasov.pokedex.core.design.animation.ProvideLocalSharedTransitionScope
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.favorites.presentation.favoritesTopLevelDestination
 import yegor.cheprasov.pokedex.features.home.presentation.homeTopLevelDestination
@@ -29,9 +31,11 @@ import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSeri
 import yegor.cheprasov.pokedex.features.settings.domain.use_cases.ObserveThemeModeUseCase
 import yegor.cheprasov.pokedex.features.settings.presentation.settingsTopLevelNavigation
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(
+    KoinExperimentalAPI::class,
+    ExperimentalSharedTransitionApi::class,
+)
 @Composable
-@Preview
 fun PokedexApp() {
     val mainViewModel: MainViewModel = koinViewModel()
     val state by mainViewModel.uiState.collectAsState()
@@ -75,16 +79,18 @@ fun PokedexApp() {
             navigator.setNavigationState(navigationState)
         }
 
-        Box(
+        SharedTransitionLayout(
             modifier = Modifier
                 .background(PokedexTheme.colors.appBackground)
                 .fillMaxSize(),
         ) {
-            NavDisplay(
-                entries = navigationState.toEntries(entryProvider),
-                modifier = Modifier.fillMaxSize(),
-                onBack = navigator::goBack,
-            )
+            ProvideLocalSharedTransitionScope(sharedTransitionScope = this) {
+                NavDisplay(
+                    entries = navigationState.toEntries(entryProvider),
+                    modifier = Modifier.fillMaxSize(),
+                    onBack = navigator::goBack,
+                )
+            }
         }
     }
 }

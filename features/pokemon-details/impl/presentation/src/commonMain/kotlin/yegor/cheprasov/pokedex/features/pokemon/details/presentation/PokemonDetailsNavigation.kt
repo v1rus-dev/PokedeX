@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
+import yegor.cheprasov.pokedex.core.design.animation.ProvideLocalAnimatedScope
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
@@ -24,10 +25,12 @@ import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
 val pokemonDetailsPresentationModule = module {
     navigation<PokemonDetails> { route ->
         val navigator = get<AppNavigator>()
-        PokemonDetailsDestination(
-            route = route,
-            onBack = navigator::goBack,
-        )
+        ProvideLocalAnimatedScope {
+            PokemonDetailsDestination(
+                route = route,
+                onBack = navigator::goBack,
+            )
+        }
     }
 }
 
