@@ -3,4 +3,14 @@
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
     <string name="pokedex">Pokedex</string>
+    <string name="app_appearance">App appearance</string>
+    <string name="choose_theme">Choose how the app theme should behave across devices and restarts.</string>
+    <string name="theme_mode">Theme mode</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system_description">Follow the current device appearance automatically.</string>
+    <string name="theme_light_description">Always use the bright Pokedex palette.</string>
+    <string name="theme_dark_description">Always use the dark Pokedex palette.</string>
+    <string name="search_pokemon">Search Pokemon</string>
 </resources>

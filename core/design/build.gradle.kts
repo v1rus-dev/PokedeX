@@ -5,6 +5,7 @@ plugins {
 kotlin {
     sourceSets.androidMain.dependencies {
         implementation(libs.androidx.appcompat)
+        implementation(libs.androidx.core.ktx)
     }
     sourceSets.commonMain.dependencies {
         implementation(libs.kotlinx.coroutines.core)
@@ -14,5 +15,9 @@ kotlin {
         implementation(libs.androidx.lifecycle.viewmodel.navigation3)
         implementation(libs.koin.navigation3)
         implementation(projects.core.resources)
+        implementation(projects.features.settings.api)
+    }
+    sourceSets.commonTest.dependencies {
+        implementation(libs.kotlin.test)
     }
 }

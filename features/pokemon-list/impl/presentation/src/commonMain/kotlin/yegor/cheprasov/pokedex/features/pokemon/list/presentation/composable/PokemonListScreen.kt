@@ -1,5 +1,7 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.pokedex
-import yegor.cheprasov.pokedex.core.design.composable.toolbars.RootPokedexTopAppBar
+import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
+import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.models.PokemonUiModel
 
@@ -27,21 +30,26 @@ internal fun PokemonListScreen(
     lazyPagingItems: LazyPagingItems<PokemonUiModel>,
     onAction: (PokemonListActionUi) -> Unit
 ) {
+    val colors = PokedexTheme.colors
     Scaffold(
+        containerColor = colors.appBackground,
         topBar = {
-            RootPokedexTopAppBar(title = stringResource(Res.string.pokedex))
-        }
+            PokedexTopAppBar(title = stringResource(Res.string.pokedex))
+        },
+        contentWindowInsets = WindowInsets()
     ) {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize().padding(it),
-        ) {
-            items(
-                count = lazyPagingItems.itemCount,
-                key = lazyPagingItems.itemKey { pokemon -> pokemon.name },
-            ) { index ->
-                lazyPagingItems[index]?.let { pokemon ->
-                    PokemonItem(pokemon = pokemon, onAction = onAction)
+        Column(modifier = Modifier.fillMaxSize().padding(it)) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                items(
+                    count = lazyPagingItems.itemCount,
+                    key = lazyPagingItems.itemKey { pokemon -> pokemon.name },
+                ) { index ->
+                    lazyPagingItems[index]?.let { pokemon ->
+                        PokemonItem(pokemon = pokemon, onAction = onAction)
+                    }
                 }
             }
         }

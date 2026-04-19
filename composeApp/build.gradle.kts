@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.compose)
             implementation(libs.koin.navigation3)
+            implementation(libs.koin.compose.viewmodel)
             implementation(libs.napier)
 
             /** Core dependencies */
@@ -64,13 +65,11 @@ kotlin {
 
             /** Feature dependencies */
             implementation(projects.features.root.impl.presentation)
+            implementation(projects.features.home.api)
+            implementation(projects.features.home.impl.presentation)
             implementation(projects.features.pokemon.api)
             implementation(projects.features.pokemon.impl.data)
             implementation(projects.features.pokemon.impl.domain)
-            implementation(projects.features.pokemonList.api)
-            implementation(projects.features.pokemonList.impl.data)
-            implementation(projects.features.pokemonList.impl.domain)
-            implementation(projects.features.pokemonList.impl.presentation)
             implementation(projects.features.pokemonDetails.api)
             implementation(projects.features.pokemonDetails.impl.data)
             implementation(projects.features.pokemonDetails.impl.domain)

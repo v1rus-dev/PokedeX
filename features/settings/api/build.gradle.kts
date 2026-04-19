@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     commonMainImplementation(libs.androidx.navigation3.runtime)
+    commonMainImplementation(libs.kotlinx.serialization.core)
 }

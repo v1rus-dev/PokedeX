@@ -35,7 +35,9 @@ abstract class MviViewModel<
     )
     override val uiEvents: Flow<Event> = _uiEvents.asSharedFlow()
 
-    abstract override fun onAction(action: Action)
+    override fun onAction(action: Action) {
+        //TODO: Override if needed
+    }
 
     protected inline fun updateState(transform: State.() -> State): State {
         return uiStateMutable.updateAndGet { current ->

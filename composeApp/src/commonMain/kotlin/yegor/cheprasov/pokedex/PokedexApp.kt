@@ -3,35 +3,43 @@ package yegor.cheprasov.pokedex
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.ui.NavDisplay
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.core.design.navigation.navigationConfiguration
 import yegor.cheprasov.pokedex.core.design.navigation.rememberAppNavigationState
+import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.favorites.presentation.favoritesTopLevelDestination
+import yegor.cheprasov.pokedex.features.home.presentation.homeTopLevelDestination
 import yegor.cheprasov.pokedex.features.pokemon.details.api.pokemonDetailsSerializersModule
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.pokemonListTopLevelDestination
 import yegor.cheprasov.pokedex.features.root.presentation.RootTabs
 import yegor.cheprasov.pokedex.features.root.presentation.rootEntryProvider
 import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSerializersModule
+import yegor.cheprasov.pokedex.features.settings.domain.use_cases.ObserveThemeModeUseCase
 import yegor.cheprasov.pokedex.features.settings.presentation.settingsTopLevelNavigation
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
 fun PokedexApp() {
-    MaterialTheme {
+    val mainViewModel: MainViewModel = koinViewModel()
+    val state by mainViewModel.uiState.collectAsState()
+
+    PokedexTheme(themeMode = state.themeMode) {
         val topLevelDestinations = remember {
             listOf(
-                pokemonListTopLevelDestination,
+                homeTopLevelDestination,
                 favoritesTopLevelDestination,
                 settingsTopLevelNavigation
             )
@@ -69,7 +77,7 @@ fun PokedexApp() {
 
         Box(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
+                .background(PokedexTheme.colors.appBackground)
                 .fillMaxSize(),
         ) {
             NavDisplay(

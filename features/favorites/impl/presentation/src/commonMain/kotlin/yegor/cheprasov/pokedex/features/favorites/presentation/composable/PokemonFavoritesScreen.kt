@@ -9,13 +9,16 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.favorites
-import yegor.cheprasov.pokedex.core.design.composable.toolbars.RootPokedexTopAppBar
+import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
+import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 
 @Composable
 internal fun PokemonFavoritesScreen() {
+    val colors = PokedexTheme.colors
     Scaffold(
+        containerColor = colors.appBackground,
         topBar = {
-            RootPokedexTopAppBar(title = stringResource(Res.string.favorites))
+            PokedexTopAppBar(title = stringResource(Res.string.favorites))
         }
     ) { paddingValues ->
         Column(
