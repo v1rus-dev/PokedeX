@@ -7,7 +7,7 @@ import yegor.cheprasov.pokedex.MainViewModel
 import yegor.cheprasov.pokedex.features.favorites.presentation.di.favoritesPresentationModule
 import yegor.cheprasov.pokedex.features.home.presentation.di.homePresentationModule
 import yegor.cheprasov.pokedex.features.pokemon.data.di.pokemonDataModule
-import yegor.cheprasov.pokedex.features.pokemon.details.presentation.pokemonDetailsPresentationModule
+import yegor.cheprasov.pokedex.features.pokemon.details.presentation.di.pokemonDetailsPresentationModule
 import yegor.cheprasov.pokedex.features.pokemon.domain.di.pokemonDomainModule
 import yegor.cheprasov.pokedex.features.search.data.di.pokemonSearchDataModule
 import yegor.cheprasov.pokedex.features.search.domain.di.pokemonSearchDomainModule

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.IconButton
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pokedex.ui.theme.LocalPokedexColors
 import yegor.cheprasov.pokedex.core.design.composable.icons.BackIcon
 import yegor.cheprasov.pokedex.core.design.composable.utils.ToolbarIndicator
 import yegor.cheprasov.pokedex.core.design.ext.roundedCornerTo
@@ -92,7 +90,7 @@ fun PokedexTopAppBar(
                 close()
             }
 
-            drawPath(path = path, color = colors.topAppBar)
+            drawPath(path = path, color = colors.primary)
         }
 
         Row(
@@ -105,7 +103,7 @@ fun PokedexTopAppBar(
         ) {
             onBack?.let {
                 IconButton(onClick = it) {
-                    BackIcon(color = LocalPokedexColors.current.topAppBarIcon)
+                    BackIcon(color = PokedexTheme.colors.iconOnPrimary)
                 }
 
                 Spacer(modifier = Modifier.width(4.dp))
@@ -113,7 +111,7 @@ fun PokedexTopAppBar(
 
             Text(
                 text = title,
-                color = colors.onTopAppBar,
+                color = Color.White,
                 style = typography.headlineMedium,
             )
         }
@@ -128,9 +126,9 @@ fun PokedexTopAppBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             listOf(
-                colors.toolbarIndicatorBlue,
-                colors.toolbarIndicatorYellow,
-                colors.toolbarIndicatorGreen,
+                PokedexTheme.colors.indicatorBlue,
+                PokedexTheme.colors.indicatorYellow,
+                PokedexTheme.colors.indicatorGreen,
             ).forEach { color ->
                 ToolbarIndicator(color, size = 12.dp)
             }

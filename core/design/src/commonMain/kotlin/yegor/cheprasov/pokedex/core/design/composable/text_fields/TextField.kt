@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,7 +16,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,12 +40,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.pokedex.ui.theme.LocalPokedexColors
 import org.jetbrains.compose.resources.painterResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.ic_close
@@ -56,6 +55,7 @@ data class TextFieldColors(
     val unfocusedBorderColor: Color,
     val focusedTextColor: Color,
     val unfocusedTextColor: Color,
+    val backgroundColor: Color,
     val hintColor: Color,
     val clearIconColor: Color,
 )
@@ -63,17 +63,19 @@ data class TextFieldColors(
 object TextFieldDefaults {
     @Composable
     fun colors(
-        focusedBorderColor: Color = LocalPokedexColors.current.cardBorder,
-        unfocusedBorderColor: Color = Color.Black.copy(alpha = 0.12f),
-        focusedTextColor: Color = Color.Black,
-        unfocusedTextColor: Color = Color.Black,
-        hintColor: Color = Color.Black.copy(alpha = 0.38f),
-        clearIconColor: Color = Color.Black.copy(alpha = 0.38f),
+        focusedBorderColor: Color = PokedexTheme.colors.surfaceBorder,
+        unfocusedBorderColor: Color = PokedexTheme.colors.surfaceBorder,
+        focusedTextColor: Color = PokedexTheme.colors.textPrimary,
+        unfocusedTextColor: Color = PokedexTheme.colors.textPrimary,
+        backgroundColor: Color = PokedexTheme.colors.textFieldBackground,
+        hintColor: Color = PokedexTheme.colors.textTertiary,
+        clearIconColor: Color = PokedexTheme.colors.iconMuted,
     ) = TextFieldColors(
         focusedBorderColor = focusedBorderColor,
         unfocusedBorderColor = unfocusedBorderColor,
         focusedTextColor = focusedTextColor,
         unfocusedTextColor = unfocusedTextColor,
+        backgroundColor = backgroundColor,
         hintColor = hintColor,
         clearIconColor = clearIconColor,
     )
@@ -86,7 +88,7 @@ fun TextField(
     hint: String = "",
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
-    textStyle: TextStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Normal),
+    textStyle: TextStyle = PokedexTheme.typography.bodyMedium,
     hintTextStyle: TextStyle = textStyle,
     colors: TextFieldColors = TextFieldDefaults.colors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -98,16 +100,14 @@ fun TextField(
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-    val borderColor by animateColorAsState(
-        targetValue = if (isFocused) colors.focusedBorderColor else colors.unfocusedBorderColor,
-    )
     val textColor by animateColorAsState(
         targetValue = if (isFocused) colors.focusedTextColor else colors.unfocusedTextColor,
     )
 
     BasicTextField(
         state = textFieldState,
-        modifier = modifier.height(56.dp),
+        modifier = modifier
+            .heightIn(min = 52.dp),
         textStyle = textStyle.merge(TextStyle(color = textColor)),
         enabled = enabled,
         keyboardOptions = keyboardOptions,
@@ -117,13 +117,21 @@ fun TextField(
         decorator = { innerTextField ->
             Row(
                 modifier = Modifier
-                    .border(1.dp, borderColor, RoundedCornerShape(16.dp))
+                    .heightIn(min = 52.dp)           // минимальная высота, не фиксированная —
+                    // если textStyle крупный, поле вырастет
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.backgroundColor)
                     .then(
-                        if (!enabled && onClick != null) Modifier.clip(RoundedCornerShape(16.dp))
+                        if (!enabled && onClick != null) Modifier
+                            .clip(RoundedCornerShape(12.dp))
                             .clickable(onClick = onClick)
                         else Modifier
                     )
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .then(
+                        if (isFocused) Modifier.border(1.dp, colors.focusedBorderColor, RoundedCornerShape(12.dp))
+                        else Modifier
+                    )
+                    .padding(horizontal = 16.dp, vertical = 0.dp),  // vertical = 0, высота через heightIn
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 leadingIcon?.let {
@@ -152,9 +160,10 @@ fun TextField(
                     enter = fadeIn() + scaleIn(initialScale = 0.7f),
                     exit = fadeOut() + scaleOut(targetScale = 0.7f),
                 ) {
+                    Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         onClick = { textFieldState.clearText() },
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(24.dp),
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_close),
@@ -175,6 +184,7 @@ fun TextField(
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun TextFieldPreview() {
     PokedexTheme {

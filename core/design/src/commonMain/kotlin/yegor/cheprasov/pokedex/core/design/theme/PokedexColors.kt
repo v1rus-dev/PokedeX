@@ -1,37 +1,149 @@
-package com.example.pokedex.ui.theme
+package yegor.cheprasov.pokedex.core.design.theme
 
-import androidx.compose.material3.ColorScheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Brand / base palette
+// Brand palette
 // ─────────────────────────────────────────────────────────────────────────────
 
 internal val BrandRed = Color(0xFFDC0A2D)
 
-private val LightBackground       = Color(0xFFFFFFFF)
-private val LightSurface          = Color(0xFFFFFBFA)
-private val LightSurfaceVariant   = Color(0xFFF4DFE2)
-private val LightOutline          = Color(0xFFD4B5BC)
-private val LightBottomBar        = Color(0xFFA61C38)
+// ─────────────────────────────────────────────────────────────────────────────
+// Extended color tokens
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Immutable
+data class PokedexColors(
+
+    // ── App bars ──────────────────────────────────────────────────────────────
+    val primary: Color,
+    val onPrimary: Color,
+    val primaryIcon: Color,
+
+    // ── Bottom navigation ─────────────────────────────────────────────────────
+    val navBar: Color,
+    val navBarActive: Color,
+    val navBarInactive: Color,
+
+    // ── Backgrounds / Surfaces ────────────────────────────────────────────────
+    val background: Color,
+    val surface: Color,
+    val surfaceBorder: Color,
+
+    // ── List items ────────────────────────────────────────────────────────────
+    val listSurface: Color,
+    val listAccent: Color,
+
+    // ── Text ──────────────────────────────────────────────────────────────────
+    /** Основной контент: названия, заголовки */
+    val textPrimary: Color,
+    /** Вторичный: подзаголовки, лейблы, описания */
+    val textSecondary: Color,
+    /** Третичный: хинты, плейсхолдеры, timestamps */
+    val textTertiary: Color,
+    val textFieldBackground: Color,
+
+    // ── Icons ─────────────────────────────────────────────────────────────────
+    /** Иконки поверх primary (TopAppBar, FAB) */
+    val iconOnPrimary: Color,
+    /** Иконки на обычных поверхностях */
+    val iconOnSurface: Color,
+    /** Приглушённые / вспомогательные иконки */
+    val iconMuted: Color,
+
+    // ── Toolbar indicators ────────────────────────────────────────────────────
+    val indicatorBlue: Color,
+    val indicatorYellow: Color,
+    val indicatorGreen: Color,
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Light theme
+// ─────────────────────────────────────────────────────────────────────────────
+
+private val LightBackground        = Color(0xFFFFFFFF)
+private val LightSurface           = Color(0xFFFFFBFA)
+private val LightBottomBar         = Color(0xFFA61C38)
 private val LightBottomBarInactive = Color(0xFFFFDDE3)
 
-private val DarkBackground        = Color(0xFF170F12)
-private val DarkSurface           = Color(0xFF22171B)
-private val DarkSurfaceVariant    = Color(0xFF39282E)
-private val DarkOutline           = Color(0xFF77565E)
-private val DarkBottomBar         = Color(0xFF6D1326)
-private val DarkBottomBarInactive  = Color(0xFFF2BAC6)
+internal val LightPokedexColors = PokedexColors(
+    primary              = BrandRed,
+    onPrimary            = Color.White,
+    primaryIcon          = Color.White,
+
+    navBar               = LightBottomBar,
+    navBarActive         = Color.White,
+    navBarInactive       = LightBottomBarInactive,
+
+    background           = LightBackground,
+    surface              = LightSurface,
+    surfaceBorder        = Color(0xFFE7C9CF),
+
+    listSurface          = Color(0xFFFFFDFC),
+    listAccent           = Color(0xFFFFE5E6),
+
+    textPrimary          = Color(0xFF291B1E),
+    textSecondary        = Color(0xFF6B4A50),
+    textTertiary         = Color(0xFFB09499),
+    textFieldBackground = Color(0xFFF4F4F4),
+
+    iconOnPrimary        = Color.White,
+    iconOnSurface        = Color(0xFF5E4349),
+    iconMuted            = Color(0xFFB09499),
+
+    indicatorBlue        = Color(0xFF52C5F7),
+    indicatorYellow      = Color(0xFFFFD447),
+    indicatorGreen       = Color(0xFF56D57A),
+)
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Material 3 ColorScheme
+// Dark theme (navy)
 // ─────────────────────────────────────────────────────────────────────────────
 
-internal val LightPokedexColorScheme: ColorScheme = lightColorScheme(
+internal val DarkPokedexColors = PokedexColors(
+    primary              = Color(0xFFBF2F3A),
+    onPrimary            = Color(0xFFFFE8EA),
+    primaryIcon          = Color(0xFFFFE8EA),
+
+    navBar               = Color(0xFF141F38),
+    navBarActive         = Color(0xFFC8D6F5),
+    navBarInactive       = Color(0xFF2A3A5C),
+
+    background           = Color(0xFF0F1729),
+    surface              = Color(0xFF162039),
+    surfaceBorder        = Color(0xFF2A3A5C),
+
+    listSurface          = Color(0xFF192242),
+    listAccent           = Color(0xFF3D1A2E),
+
+    textPrimary          = Color(0xFFC8D6F5),
+    textSecondary        = Color(0xFF8898C0),
+    textTertiary         = Color(0xFF4A5E88),
+    textFieldBackground = Color(0xFF162039),
+
+    iconOnPrimary        = Color.White,
+    iconOnSurface        = Color(0xFFA8B8D8),
+    iconMuted            = Color(0xFF5C7099),
+
+    indicatorBlue        = Color(0xFF4DAFEC),
+    indicatorYellow      = Color(0xFFF0C040),
+    indicatorGreen       = Color(0xFF4ACF7A),
+)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Material 3 ColorScheme (внутренняя деталь — для стандартных M3 компонентов)
+// ─────────────────────────────────────────────────────────────────────────────
+
+val LightM3Scheme = lightColorScheme(
     primary              = BrandRed,
     onPrimary            = Color.White,
     primaryContainer     = Color(0xFFFFDAD9),
@@ -46,128 +158,31 @@ internal val LightPokedexColorScheme: ColorScheme = lightColorScheme(
     onBackground         = Color(0xFF24181B),
     surface              = LightSurface,
     onSurface            = Color(0xFF24181B),
-    surfaceVariant       = LightSurfaceVariant,
+    surfaceVariant       = Color(0xFFF4DFE2),
     onSurfaceVariant     = Color(0xFF5E4349),
-    outline              = LightOutline,
+    outline              = Color(0xFFD4B5BC),
     outlineVariant       = Color(0xFFE9CDD2),
 )
 
-internal val DarkPokedexColorScheme: ColorScheme = darkColorScheme(
-    primary              = Color(0xFFFFB3B6),
-    onPrimary            = Color(0xFF680016),
-    primaryContainer     = Color(0xFF9C1730),
+val DarkM3Scheme = darkColorScheme(
+    primary              = Color(0xFFBF2F3A),
+    onPrimary            = Color(0xFFFFE8EA),
+    primaryContainer     = Color(0xFF3D1A2E),
     onPrimaryContainer   = Color(0xFFFFDADB),
-    secondary            = Color(0xFFFFB2C3),
-    onSecondary          = Color(0xFF561321),
-    secondaryContainer   = Color(0xFF70303D),
-    onSecondaryContainer = Color(0xFFFFD9E0),
-    tertiary             = Color(0xFFA9D5E4),
-    onTertiary           = Color(0xFF003645),
-    background           = DarkBackground,
-    onBackground         = Color(0xFFF5DEE2),
-    surface              = DarkSurface,
-    onSurface            = Color(0xFFF5DEE2),
-    surfaceVariant       = DarkSurfaceVariant,
-    onSurfaceVariant     = Color(0xFFE2C1C8),
-    outline              = DarkOutline,
-    outlineVariant       = Color(0xFF543A42),
-)
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Extended color system
-// ─────────────────────────────────────────────────────────────────────────────
-
-@Immutable
-data class PokedexColors(
-    // ── App bars ──────────────────────────────────────────────────────────────
-    val topAppBar: Color,
-    val onTopAppBar: Color,
-    /** Иконки в TopAppBar: «назад», «меню», действия */
-    val topAppBarIcon: Color,
-
-    // ── Bottom navigation ─────────────────────────────────────────────────────
-    val bottomBar: Color,
-    val onBottomBar: Color,
-    val bottomBarInactive: Color,
-
-    // ── Backgrounds ───────────────────────────────────────────────────────────
-    val appBackground: Color,
-    val cardBackground: Color,
-    val cardBorder: Color,
-
-    // ── List items ────────────────────────────────────────────────────────────
-    val listItemBackground: Color,
-    val listItemAccent: Color,
-    val listItemText: Color,
-
-    // ── Icons ─────────────────────────────────────────────────────────────────
-    /** Иконки на обычных поверхностях (карточки, списки) */
-    val iconOnSurface: Color,
-    /** Иконки поверх BrandRed (кнопки, FAB) */
-    val iconOnPrimary: Color,
-    /** Вспомогательные / задизейбленные иконки */
-    val iconSubdued: Color,
-
-    // ── Toolbar indicator lights ───────────────────────────────────────────────
-    val toolbarIndicatorBlue: Color,
-    val toolbarIndicatorYellow: Color,
-    val toolbarIndicatorGreen: Color,
-)
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Instances
-// ─────────────────────────────────────────────────────────────────────────────
-
-internal val LightPokedexColors = PokedexColors(
-    topAppBar              = BrandRed,
-    onTopAppBar            = Color.White,
-    topAppBarIcon          = Color.White,
-
-    bottomBar              = LightBottomBar,
-    onBottomBar            = Color.White,
-    bottomBarInactive      = LightBottomBarInactive,
-
-    appBackground          = LightBackground,
-    cardBackground         = LightSurface,
-    cardBorder             = Color(0xFFE7C9CF),
-
-    listItemBackground     = Color(0xFFFFFDFC),
-    listItemAccent         = Color(0xFFFFE5E6),
-    listItemText           = Color(0xFF291B1E),
-
-    iconOnSurface          = Color(0xFF5E4349),   // = onSurfaceVariant
-    iconOnPrimary          = Color.White,
-    iconSubdued            = Color(0xFFB09499),
-
-    toolbarIndicatorBlue   = Color(0xFF52C5F7),
-    toolbarIndicatorYellow = Color(0xFFFFD447),
-    toolbarIndicatorGreen  = Color(0xFF56D57A),
-)
-
-internal val DarkPokedexColors = PokedexColors(
-    topAppBar              = BrandRed,
-    onTopAppBar            = Color.White,
-    topAppBarIcon          = Color.White,
-
-    bottomBar              = DarkBottomBar,
-    onBottomBar            = Color(0xFFFFE2E8),
-    bottomBarInactive      = DarkBottomBarInactive,
-
-    appBackground          = DarkBackground,
-    cardBackground         = Color(0xFF21161A),
-    cardBorder             = Color(0xFF49343B),
-
-    listItemBackground     = Color(0xFF281B20),
-    listItemAccent         = Color(0xFF4E1825),
-    listItemText           = Color(0xFFFFE6EA),
-
-    iconOnSurface          = Color(0xFFE2C1C8),   // = onSurfaceVariant
-    iconOnPrimary          = Color.White,
-    iconSubdued            = Color(0xFF8F7178),
-
-    toolbarIndicatorBlue   = Color(0xFF6CD6FF),
-    toolbarIndicatorYellow = Color(0xFFFFDA5B),
-    toolbarIndicatorGreen  = Color(0xFF6EED96),
+    secondary            = Color(0xFF8898C0),
+    onSecondary          = Color(0xFF162039),
+    secondaryContainer   = Color(0xFF192242),
+    onSecondaryContainer = Color(0xFFC8D6F5),
+    tertiary             = Color(0xFF4DAFEC),
+    onTertiary           = Color(0xFF0F1729),
+    background           = Color(0xFF0F1729),
+    onBackground         = Color(0xFFC8D6F5),
+    surface              = Color(0xFF162039),
+    onSurface            = Color(0xFFC8D6F5),
+    surfaceVariant       = Color(0xFF192242),
+    onSurfaceVariant     = Color(0xFFA8B8D8),
+    outline              = Color(0xFF2A3A5C),
+    outlineVariant       = Color(0xFF2A3A5C),
 )
 
 // ─────────────────────────────────────────────────────────────────────────────

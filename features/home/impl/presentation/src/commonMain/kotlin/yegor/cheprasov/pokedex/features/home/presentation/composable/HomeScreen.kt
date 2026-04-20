@@ -29,7 +29,7 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
         topBar = {
             PokedexTopAppBar(title = stringResource(Res.string.pokedex))
         },
-        containerColor = PokedexTheme.colors.appBackground,
+        containerColor = PokedexTheme.colors.background,
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState)) {
             Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.large))

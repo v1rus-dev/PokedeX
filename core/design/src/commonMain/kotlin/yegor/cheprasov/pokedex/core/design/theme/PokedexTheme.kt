@@ -13,12 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.example.pokedex.ui.theme.DarkPokedexColorScheme
-import com.example.pokedex.ui.theme.DarkPokedexColors
-import com.example.pokedex.ui.theme.LightPokedexColorScheme
-import com.example.pokedex.ui.theme.LightPokedexColors
-import com.example.pokedex.ui.theme.LocalPokedexColors
-import com.example.pokedex.ui.theme.PokedexColors
 import yegor.cheprasov.pokedex.features.settings.api.ThemeMode
 
 @Composable
@@ -33,7 +27,7 @@ fun PokedexTheme(
     val spacing = remember { PokedexSpacing() }
     val radii = remember { PokedexRadii() }
     val typography = rememberPokedexTypography()
-    val colorScheme = if (isDarkTheme) DarkPokedexColorScheme else LightPokedexColorScheme
+    val m3Scheme = if (isDarkTheme) DarkM3Scheme else LightM3Scheme
     val pokedexColors = if (isDarkTheme) DarkPokedexColors else LightPokedexColors
     val shapes = remember(radii) {
         Shapes(
@@ -44,10 +38,10 @@ fun PokedexTheme(
     }
     val systemBarsStyle = remember(pokedexColors, isDarkTheme) {
         PokedexSystemBarsStyle(
-            statusBarColor = pokedexColors.topAppBar,
-            navigationBarColor = pokedexColors.bottomBar,
-            preferLightStatusBarIcons = shouldUseLightSystemBarIcons(pokedexColors.topAppBar),
-            preferLightNavigationBarIcons = shouldUseLightSystemBarIcons(pokedexColors.bottomBar),
+            statusBarColor = pokedexColors.primary,
+            navigationBarColor = pokedexColors.navBar,
+            preferLightStatusBarIcons = shouldUseLightSystemBarIcons(pokedexColors.primary),
+            preferLightNavigationBarIcons = shouldUseLightSystemBarIcons(pokedexColors.navBar),
         )
     }
 
@@ -57,15 +51,15 @@ fun PokedexTheme(
         LocalPokedexColors provides pokedexColors,
     ) {
         MaterialTheme(
-            colorScheme = colorScheme,
+            colorScheme = m3Scheme,
             typography = typography,
             shapes = shapes,
         ) {
             PokedexSystemBarsEffect(style = systemBarsStyle)
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = pokedexColors.appBackground,
-                contentColor = colorScheme.onBackground,
+                color = pokedexColors.background,
+                contentColor = pokedexColors.textPrimary,
             ) {
                 content()
             }

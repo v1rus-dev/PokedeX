@@ -43,7 +43,7 @@ internal fun PokemonSearchScreen(
                 },
             )
         },
-        containerColor = PokedexTheme.colors.appBackground
+        containerColor = PokedexTheme.colors.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -63,7 +63,7 @@ internal fun PokemonSearchScreen(
             Text(
                 text = "Pokemon search module is connected. Domain and data layers are ready for implementation.",
                 style = PokedexTheme.typography.bodyLarge,
-                color = PokedexTheme.colors.listItemText,
+                color = PokedexTheme.colors.textPrimary,
                 textAlign = TextAlign.Start,
             )
         }

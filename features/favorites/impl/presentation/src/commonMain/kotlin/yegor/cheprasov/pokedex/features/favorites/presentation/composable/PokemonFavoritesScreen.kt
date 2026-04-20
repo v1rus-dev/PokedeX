@@ -16,7 +16,7 @@ import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 internal fun PokemonFavoritesScreen() {
     val colors = PokedexTheme.colors
     Scaffold(
-        containerColor = colors.appBackground,
+        containerColor = colors.background,
         topBar = {
             PokedexTopAppBar(title = stringResource(Res.string.favorites))
         }

@@ -4,4 +4,6 @@ import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 
 interface PokemonRepository {
     suspend fun getPokemon(pokemonName: String): Result<PokemonModel>
+
+    suspend fun getAllPokemonsFromNetwork(): Result<List<PokemonModel>>
 }

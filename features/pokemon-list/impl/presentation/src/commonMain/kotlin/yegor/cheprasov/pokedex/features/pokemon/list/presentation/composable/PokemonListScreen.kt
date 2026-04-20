@@ -32,7 +32,7 @@ internal fun PokemonListScreen(
 ) {
     val colors = PokedexTheme.colors
     Scaffold(
-        containerColor = colors.appBackground,
+        containerColor = colors.background,
         topBar = {
             PokedexTopAppBar(title = stringResource(Res.string.pokedex))
         }
