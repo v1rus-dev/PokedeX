@@ -1,3 +1,5 @@
+import extensions.hasIosTargets
+
 plugins {
     alias(libs.plugins.pokedex.kmp.base.config.plugin)
 }
@@ -14,8 +16,10 @@ kotlin {
             implementation(libs.napier)
         }
 
-        findByName("iosMain")?.dependencies {
-            implementation(libs.ktor.engine.darwin)
+        if (hasIosTargets()) {
+            iosMain.dependencies {
+                implementation(libs.ktor.engine.darwin)
+            }
         }
 
         androidMain.dependencies {

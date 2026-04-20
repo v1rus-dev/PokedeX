@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -48,14 +47,17 @@ kotlin {
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.core)
+            implementation(libs.koin.core.viewmodel)
             implementation(libs.koin.compose)
-            implementation(libs.koin.navigation3)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.navigation3)
             implementation(libs.napier)
 
             /** Core dependencies */

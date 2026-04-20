@@ -4,7 +4,6 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
-        implementation(libs.koin.core.viewmodel)
         implementation(libs.koin.compose.viewmodel)
         implementation(projects.features.favorites.api)
     }

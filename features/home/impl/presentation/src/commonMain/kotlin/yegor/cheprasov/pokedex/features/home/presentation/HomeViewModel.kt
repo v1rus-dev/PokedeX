@@ -7,5 +7,9 @@ class HomeViewModel :
         initialState = HomeStateUi,
     ) {
 
-    override fun onAction(action: HomeActionUi) = Unit
+    override fun onAction(action: HomeActionUi) {
+        when(action) {
+            HomeActionUi.OnSearchClick -> sendEvent(HomeEventUi.OpenSearchScreen)
+        }
+    }
 }

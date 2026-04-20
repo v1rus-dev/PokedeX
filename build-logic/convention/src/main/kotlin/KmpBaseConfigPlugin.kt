@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import extensions.hasIosTargets
 import extensions.libs
 import extensions.projectJavaVersion
 import org.gradle.api.Plugin
@@ -14,15 +15,8 @@ class KmpBaseConfigPlugin : Plugin<Project> {
             pluginManager.apply("com.android.kotlin.multiplatform.library")
             pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
-            val enableIosTargets = providers.gradleProperty("pokedex.enableIosTargets")
-                .map(String::toBoolean)
-                .orElse(
-                    providers.systemProperty("os.name")
-                        .map { it.startsWith("Mac", ignoreCase = true) }
-                )
-
             extensions.configure<KotlinMultiplatformExtension> {
-                if (enableIosTargets.get()) {
+                if (hasIosTargets()) {
                     iosArm64()
                     iosSimulatorArm64()
                 }

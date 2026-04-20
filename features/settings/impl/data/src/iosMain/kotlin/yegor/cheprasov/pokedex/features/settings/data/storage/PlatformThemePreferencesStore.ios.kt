@@ -1,8 +1,8 @@
 package yegor.cheprasov.pokedex.features.settings.data.storage
 
-import Foundation.NSUserDefaults
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import platform.Foundation.NSUserDefaults
 import yegor.cheprasov.pokedex.features.settings.api.ThemeMode
 
 actual class PlatformThemePreferencesStore actual constructor() : ThemePreferencesStore {

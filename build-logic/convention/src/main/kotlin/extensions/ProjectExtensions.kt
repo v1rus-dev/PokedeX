@@ -1,5 +1,6 @@
 package extensions
 
+import com.sun.tools.attach.spi.AttachProvider.providers
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -10,3 +11,12 @@ val Project.libs: LibrariesForLibs
 
 val Project.projectJavaVersion: JavaVersion
     get() = JavaVersion.toVersion(libs.versions.javaConvention.get().toInt())
+
+fun Project.hasIosTargets(): Boolean {
+    return providers.gradleProperty("pokedex.enableIosTargets")
+        .map(String::toBoolean)
+        .orElse(
+            providers.systemProperty("os.name")
+                .map { it.startsWith("Mac", ignoreCase = true) }
+        ).get()
+}

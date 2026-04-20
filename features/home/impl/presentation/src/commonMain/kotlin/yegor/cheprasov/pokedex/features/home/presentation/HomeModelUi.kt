@@ -10,4 +10,6 @@ sealed interface HomeActionUi : ActionUi {
     data object OnSearchClick : HomeActionUi
 }
 
-sealed interface HomeEventUi : EventUi
+sealed interface HomeEventUi : EventUi {
+    data object OpenSearchScreen : HomeEventUi
+}
