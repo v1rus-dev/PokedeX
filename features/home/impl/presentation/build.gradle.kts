@@ -6,5 +6,6 @@ kotlin {
     sourceSets.commonMain.dependencies {
         implementation(libs.koin.compose.viewmodel)
         implementation(projects.features.home.api)
+        implementation(projects.features.search.api)
     }
 }

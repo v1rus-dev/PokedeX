@@ -26,6 +26,7 @@ import yegor.cheprasov.pokedex.features.pokemon.details.api.pokemonDetailsSerial
 import yegor.cheprasov.pokedex.features.root.presentation.RootTabs
 import yegor.cheprasov.pokedex.features.root.presentation.rootEntryProvider
 import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSerializersModule
+import yegor.cheprasov.pokedex.features.search.api.pokemonSearchNavigationSerializersModule
 import yegor.cheprasov.pokedex.features.settings.presentation.settingsTopLevelNavigation
 
 @OptIn(
@@ -58,6 +59,7 @@ fun PokedexApp() {
                 listOf(
                     rootTabsNavigationSerializersModule,
                     pokemonDetailsSerializersModule,
+                    pokemonSearchNavigationSerializersModule,
                 ),
             ),
         )

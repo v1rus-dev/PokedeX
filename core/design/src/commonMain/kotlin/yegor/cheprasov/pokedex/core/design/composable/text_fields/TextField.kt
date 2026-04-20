@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -118,7 +119,8 @@ fun TextField(
                 modifier = Modifier
                     .border(1.dp, borderColor, RoundedCornerShape(16.dp))
                     .then(
-                        if (!enabled && onClick != null) Modifier.clickable(onClick = onClick)
+                        if (!enabled && onClick != null) Modifier.clip(RoundedCornerShape(16.dp))
+                            .clickable(onClick = onClick)
                         else Modifier
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp),
