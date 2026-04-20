@@ -2,7 +2,6 @@ package yegor.cheprasov.pokedex.features.home.presentation.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -31,7 +30,6 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
             PokedexTopAppBar(title = stringResource(Res.string.pokedex))
         },
         containerColor = PokedexTheme.colors.appBackground,
-        contentWindowInsets = WindowInsets()
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState)) {
             Spacer(modifier = Modifier.padding(top = 16.dp))

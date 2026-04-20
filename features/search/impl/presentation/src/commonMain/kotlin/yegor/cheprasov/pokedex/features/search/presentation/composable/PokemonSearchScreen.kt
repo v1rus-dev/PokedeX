@@ -28,7 +28,6 @@ import yegor.cheprasov.pokedex.features.search.presentation.PokemonSearchStateUi
 @Composable
 internal fun PokemonSearchScreen(
     state: PokemonSearchStateUi,
-    onBack: () -> Unit,
     onAction: (PokemonSearchActionUi) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -38,11 +37,12 @@ internal fun PokemonSearchScreen(
         topBar = {
             PokedexTopAppBar(
                 title = stringResource(Res.string.search_pokemon),
-                onBack = onBack,
+                onBack = {
+                    onAction.invoke(PokemonSearchActionUi.OnBackClicked)
+                },
             )
         },
-        containerColor = PokedexTheme.colors.appBackground,
-        contentWindowInsets = WindowInsets()
+        containerColor = PokedexTheme.colors.appBackground
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -76,7 +76,6 @@ private fun PokemonSearchScreenPreview() {
     PokedexTheme {
         PokemonSearchScreen(
             state = PokemonSearchStateUi,
-            onBack = {},
             onAction = {},
         )
     }

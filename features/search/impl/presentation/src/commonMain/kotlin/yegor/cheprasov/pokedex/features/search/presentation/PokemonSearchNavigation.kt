@@ -13,12 +13,8 @@ val pokemonSearchPresentationModule = module {
     viewModelOf(::PokemonSearchViewModel)
 
     navigation<PokemonSearch> {
-        val navigator = get<AppNavigator>()
-
         ProvideLocalAnimatedScope {
-            PokemonSearchDestination(
-                onBack = navigator::goBack,
-            )
+            PokemonSearchDestination()
         }
     }
 }

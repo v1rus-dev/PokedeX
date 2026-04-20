@@ -35,8 +35,7 @@ internal fun PokemonListScreen(
         containerColor = colors.appBackground,
         topBar = {
             PokedexTopAppBar(title = stringResource(Res.string.pokedex))
-        },
-        contentWindowInsets = WindowInsets()
+        }
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(it)) {
             LazyColumn(

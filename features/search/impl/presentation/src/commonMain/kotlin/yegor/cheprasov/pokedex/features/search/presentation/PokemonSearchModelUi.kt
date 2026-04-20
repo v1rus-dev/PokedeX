@@ -6,6 +6,10 @@ import yegor.cheprasov.pokedex.core.design.mvi.StateUi
 
 data object PokemonSearchStateUi : StateUi
 
-sealed interface PokemonSearchActionUi : ActionUi
+sealed interface PokemonSearchActionUi : ActionUi {
+    data object OnBackClicked : PokemonSearchActionUi
+}
 
-sealed interface PokemonSearchEventUi : EventUi
+sealed interface PokemonSearchEventUi : EventUi {
+    data object CloseScreen : PokemonSearchEventUi
+}

@@ -5,7 +5,9 @@ import androidx.navigation3.runtime.NavKey
 interface AppNavigator {
     val state: AppNavigationState
     fun navigate(route: NavKey)
-    fun goBack()
+    fun popBackStack()
+
+    fun replaceCurrent(route: NavKey)
 
     fun setNavigationState(state: AppNavigationState)
 }
@@ -19,7 +21,16 @@ class AppNavigatorImpl : AppNavigator {
         state.backStack.add(route)
     }
 
-    override fun goBack() {
+    override fun replaceCurrent(route: NavKey) {
+        if (state.backStack.isEmpty()) {
+            navigate(route)
+        } else {
+            state.backStack.removeLastOrNull()
+            navigate(route)
+        }
+    }
+
+    override fun popBackStack() {
         if (state.backStack.size > 1) {
             state.backStack.removeLastOrNull()
         }

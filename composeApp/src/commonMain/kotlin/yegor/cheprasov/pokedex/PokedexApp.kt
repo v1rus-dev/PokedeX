@@ -87,7 +87,7 @@ fun PokedexApp() {
                 NavDisplay(
                     entries = navigationState.toEntries(entryProvider),
                     modifier = Modifier.fillMaxSize(),
-                    onBack = navigator::goBack,
+                    onBack = navigator::popBackStack,
                 )
             }
         }

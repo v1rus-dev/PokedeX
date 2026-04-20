@@ -190,4 +190,3 @@ private fun PokedexTopAppBarWithOnBackPreview() {
         }
     }
 }
-

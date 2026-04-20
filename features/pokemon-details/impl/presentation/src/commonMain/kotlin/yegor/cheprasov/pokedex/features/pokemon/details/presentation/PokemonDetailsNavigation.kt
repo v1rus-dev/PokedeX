@@ -28,7 +28,7 @@ val pokemonDetailsPresentationModule = module {
         ProvideLocalAnimatedScope {
             PokemonDetailsDestination(
                 route = route,
-                onBack = navigator::goBack,
+                onBack = navigator::popBackStack,
             )
         }
     }
