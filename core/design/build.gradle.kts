@@ -18,7 +18,4 @@ kotlin {
         implementation(projects.core.resources)
         implementation(projects.features.settings.api)
     }
-    sourceSets.commonTest.dependencies {
-        implementation(libs.kotlin.test)
-    }
 }

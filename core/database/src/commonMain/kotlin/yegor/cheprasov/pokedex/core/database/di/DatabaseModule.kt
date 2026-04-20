@@ -21,10 +21,6 @@ val databaseModule: Module = module {
     }
 
     single {
-        get<PokedexDatabase>().favoritePokemonDao()
-    }
-
-    single {
         get<PokedexDatabase>().pokemonDao()
     }
 }

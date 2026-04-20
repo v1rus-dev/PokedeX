@@ -1,0 +1,39 @@
+package yegor.cheprasov.pokedex.features.pokemon.models
+
+sealed interface SyncAllPokemonsState {
+    val percent: Int
+
+    data class Started(
+        val total: Int,
+    ) : SyncAllPokemonsState {
+        override val percent: Int = 0
+    }
+
+    data class InProgress(
+        val completed: Int,
+        val total: Int,
+    ) : SyncAllPokemonsState {
+        override val percent: Int = calculatePercent(completed = completed, total = total)
+    }
+
+    data class Success(
+        val savedCount: Int,
+    ) : SyncAllPokemonsState {
+        override val percent: Int = 100
+    }
+
+    data class Error(
+        val completed: Int,
+        val total: Int,
+        val throwable: Throwable,
+    ) : SyncAllPokemonsState {
+        override val percent: Int = calculatePercent(completed = completed, total = total)
+    }
+
+    companion object {
+        internal fun calculatePercent(
+            completed: Int,
+            total: Int,
+        ): Int = if (total <= 0) 0 else (completed * 100) / total
+    }
+}

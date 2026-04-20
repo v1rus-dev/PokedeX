@@ -5,10 +5,32 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PokemonResponse(
-    @SerialName("name")
-    val name: String,
     @SerialName("id")
     val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("height")
+    val height: Int,
+    @SerialName("weight")
+    val weight: Int,
+    @SerialName("base_experience")
+    val baseExperience: Int,
     @SerialName("sprites")
-    val sprites: PokemonSpritesResponse
+    val sprites: PokemonSpritesResponse,
+    @SerialName("types")
+    val types: List<PokemonTypeSlotResponse>,
+)
+
+@Serializable
+data class PokemonTypeSlotResponse(
+    @SerialName("slot")
+    val slot: Int,
+    @SerialName("type")
+    val type: NamedApiResourceResponse,
+)
+
+@Serializable
+data class NamedApiResourceResponse(
+    @SerialName("name")
+    val name: String,
 )

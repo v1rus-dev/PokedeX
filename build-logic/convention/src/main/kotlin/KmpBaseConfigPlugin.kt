@@ -20,6 +20,10 @@ class KmpBaseConfigPlugin : Plugin<Project> {
                     iosArm64()
                     iosSimulatorArm64()
                 }
+
+                sourceSets.getByName("commonMain").dependencies {
+                    implementation(libs.napier)
+                }
             }
 
             pluginManager.withPlugin("com.android.kotlin.multiplatform.library") {
@@ -31,7 +35,6 @@ class KmpBaseConfigPlugin : Plugin<Project> {
                         )
                         compileSdk = libs.versions.android.compileSdk.get().toInt()
                         minSdk = libs.versions.android.minSdk.get().toInt()
-                        withHostTest {}
                         compilerOptions {
                             jvmTarget.set(JvmTarget.fromTarget(projectJavaVersion.toString()))
                             freeCompilerArgs.add("-Xjdk-release=${projectJavaVersion}")

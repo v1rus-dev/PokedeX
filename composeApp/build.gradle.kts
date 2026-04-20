@@ -21,7 +21,6 @@ kotlin {
         namespace = "yegor.cheprasov.pokedex.composeapp"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
-        withHostTest {}
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
         }
@@ -88,9 +87,6 @@ kotlin {
             implementation(projects.features.settings.impl.data)
             implementation(projects.features.settings.impl.domain)
             implementation(projects.features.settings.impl.presentation)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
         }
     }
 }

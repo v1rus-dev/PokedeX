@@ -4,6 +4,7 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
+        implementation(projects.features.pokemon.api)
         implementation(libs.koin.compose.viewmodel)
         implementation(projects.features.home.api)
         implementation(projects.features.search.api)
