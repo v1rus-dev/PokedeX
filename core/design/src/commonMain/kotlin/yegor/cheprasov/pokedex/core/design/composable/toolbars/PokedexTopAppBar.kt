@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.IconButton
@@ -22,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,8 +45,13 @@ fun PokedexTopAppBar(
     val spacing = PokedexTheme.spacing
     val colors = PokedexTheme.colors
     val typography = PokedexTheme.typography
-    val largeHeight = 64.dp
-    val smallHeight = 36.dp
+
+    val statusBarHeight = with(LocalDensity.current) {
+        WindowInsets.statusBars.getTop(LocalDensity.current).toDp()
+    }
+
+    val largeHeight = statusBarHeight + 64.dp
+    val smallHeight = statusBarHeight + 36.dp
 
     Box(
         modifier = modifier
@@ -91,7 +100,7 @@ fun PokedexTopAppBar(
             modifier = Modifier.padding(
                 start = if (onBack == null)
                     spacing.large else spacing.small,
-                top = if (onBack == null) spacing.large else spacing.medium
+                top = (if (onBack == null) spacing.large else spacing.medium) + statusBarHeight
             )
         ) {
             onBack?.let {
@@ -113,7 +122,7 @@ fun PokedexTopAppBar(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(
-                    top = spacing.medium,
+                    top = spacing.medium + statusBarHeight,
                     end = spacing.large,
                 ),
             horizontalArrangement = Arrangement.spacedBy(8.dp)

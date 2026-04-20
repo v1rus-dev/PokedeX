@@ -13,4 +13,5 @@
     <string name="theme_light_description">Always use the bright Pokedex palette.</string>
     <string name="theme_dark_description">Always use the dark Pokedex palette.</string>
     <string name="search_pokemon">Search Pokemon</string>
+    <string name="search">Search</string>
 </resources>

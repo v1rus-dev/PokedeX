@@ -3,13 +3,16 @@ package yegor.cheprasov.pokedex
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation3.ui.NavDisplay
 import org.koin.compose.koinInject
 import org.koin.compose.navigation3.koinEntryProvider
@@ -79,14 +82,12 @@ fun PokedexApp() {
         }
 
         SharedTransitionLayout(
-            modifier = Modifier
-                .background(PokedexTheme.colors.appBackground)
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             ProvideLocalSharedTransitionScope(sharedTransitionScope = this) {
                 NavDisplay(
                     entries = navigationState.toEntries(entryProvider),
-                    modifier = Modifier.fillMaxSize(),
+                    sharedTransitionScope = this,
                     onBack = navigator::popBackStack,
                 )
             }

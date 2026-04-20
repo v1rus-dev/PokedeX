@@ -32,11 +32,11 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
         containerColor = PokedexTheme.colors.appBackground,
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState)) {
-            Spacer(modifier = Modifier.padding(top = 16.dp))
+            Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.large))
             TextField(
                 enabled = false,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = PokedexTheme.spacing.large)
                     .localSharedElement(key = "home-search-text-field"),
                 onClick = {
                     onAction.invoke(HomeActionUi.OnSearchClick)

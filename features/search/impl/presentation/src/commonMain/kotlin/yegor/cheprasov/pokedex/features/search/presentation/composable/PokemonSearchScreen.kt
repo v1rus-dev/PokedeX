@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
+import pokedex.core.resources.generated.resources.search
 import pokedex.core.resources.generated.resources.search_pokemon
 import yegor.cheprasov.pokedex.core.design.animation.localSharedElement
 import yegor.cheprasov.pokedex.core.design.composable.text_fields.TextField
@@ -36,7 +37,7 @@ internal fun PokemonSearchScreen(
     Scaffold(
         topBar = {
             PokedexTopAppBar(
-                title = stringResource(Res.string.search_pokemon),
+                title = stringResource(Res.string.search),
                 onBack = {
                     onAction.invoke(PokemonSearchActionUi.OnBackClicked)
                 },
@@ -50,9 +51,8 @@ internal fun PokemonSearchScreen(
                 .padding(innerPadding)
                 .padding(horizontal = PokedexTheme.spacing.large)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(PokedexTheme.spacing.medium),
         ) {
-            Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.medium))
+            Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.large))
 
             TextField(
                 modifier = Modifier.localSharedElement(key = "home-search-text-field"),

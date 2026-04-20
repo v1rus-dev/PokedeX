@@ -1,13 +1,18 @@
 package yegor.cheprasov.pokedex.features.root.presentation
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import yegor.cheprasov.pokedex.core.design.navigation.TopLevelDestinationSpec
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
@@ -18,7 +23,6 @@ import yegor.cheprasov.pokedex.features.root.presentation.navigation.rememberRoo
 fun RootScreen(
     topLevelDestinations: List<TopLevelDestinationSpec>,
 ) {
-    val colors = PokedexTheme.colors
     val rootNavigator = rememberRootNavigator(
         startRoute = topLevelDestinations.first().route,
         topLevelRoutes = topLevelDestinations.map(TopLevelDestinationSpec::route),
@@ -26,7 +30,8 @@ fun RootScreen(
     val currentDestination = topLevelDestinations.first { it.route == rootNavigator.selectedRoute }
 
     Scaffold(
-        containerColor = colors.appBackground,
+        containerColor = Color.Blue,
+        contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -38,7 +43,8 @@ fun RootScreen(
             BottomBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .padding(horizontal = 16.dp)
+                    .safeDrawingPadding()
                     .fillMaxWidth(),
                 topLevelDestinations = topLevelDestinations, currentDestination = currentDestination
             ) {
