@@ -11,6 +11,8 @@ interface PokemonRepository {
 
     fun observeAllPokemons(): Flow<List<PokemonModel>>
 
+    suspend fun getAllPokemons(): Result<List<PokemonModel>>
+
     fun searchPokemonsByName(search: String): Flow<List<PokemonModel>>
 
     fun syncAllPokemons(): Flow<SyncAllPokemonsState>

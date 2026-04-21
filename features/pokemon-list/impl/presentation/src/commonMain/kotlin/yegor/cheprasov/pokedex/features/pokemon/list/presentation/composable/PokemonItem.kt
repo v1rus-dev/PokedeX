@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
@@ -38,6 +37,7 @@ internal fun PokemonItem(
     val spacing = PokedexTheme.spacing
     val radii = PokedexTheme.radii
     val colors = PokedexTheme.colors
+    val typography = PokedexTheme.typography
 
     Surface(
         shape = RoundedCornerShape(radii.large),
@@ -83,13 +83,13 @@ internal fun PokemonItem(
             Column {
                 Text(
                     text = pokemon.name.replaceFirstChar { char -> char.uppercase() },
-                    style = MaterialTheme.typography.titleMedium,
+                    style = typography.titleMedium,
                 )
                 Text(
                     modifier = Modifier.padding(top = spacing.xSmall),
                     text = "Tap to open details",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = typography.bodyMedium,
+                    color = colors.textSecondary,
                 )
             }
         }

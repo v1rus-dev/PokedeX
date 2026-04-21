@@ -1,4 +1,4 @@
-package yegor.cheprasov.pokedex.features.pokemon.data.repository_impl
+package yegor.cheprasov.pokedex.features.pokemon.data.repositories
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -49,6 +49,10 @@ class PokemonRepositoryImpl(
         return localDatasource.observeAllPokemons().map { entities ->
             entities.map(pokemonEntityMapper::map)
         }
+    }
+
+    override suspend fun getAllPokemons(): Result<List<PokemonModel>> = localDatasource.getAllPokemons().map { entities ->
+        entities.map(pokemonEntityMapper::map)
     }
 
     override fun searchPokemonsByName(search: String): Flow<List<PokemonModel>> =

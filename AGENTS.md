@@ -116,6 +116,9 @@ Compose rules:
 - Event handlers used by composables should be explicit and readable (named lambdas/functions where it improves clarity).
 - Prefer Material 3 components and ripple-enabled interactions by default.
 - Use application theme `PokedexTheme` for colors, typography, spacings.
+- Access app typography through `PokedexTheme.typography` only; do not read `MaterialTheme.typography` directly in feature or shared UI code.
+- Use `Inter` as the default UI font family with only `Regular`, `Medium`, `SemiBold`, and `Bold` font resources kept in the project.
+- Reserve the Pokemon display font for the largest branded titles such as top app bar headings; use `Inter` for the rest of the UI text.
 - Use plain text click handlers without heavy button chrome only for text-like actions.
 - UI layer sends `ActionUi` to `ViewModel`; one-shot behaviors come back as `EventUi`.
 

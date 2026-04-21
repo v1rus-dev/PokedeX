@@ -20,6 +20,10 @@ interface PokemonDao {
     fun observeAll(): Flow<List<PokemonWithTypesEntity>>
 
     @Transaction
+    @Query("SELECT * FROM pokemons ORDER BY id ASC")
+    suspend fun getAllPokemons(): List<PokemonWithTypesEntity>
+
+    @Transaction
     @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :pokemonName || '%' ORDER BY name ASC")
     fun searchByName(pokemonName: String): Flow<List<PokemonWithTypesEntity>>
 

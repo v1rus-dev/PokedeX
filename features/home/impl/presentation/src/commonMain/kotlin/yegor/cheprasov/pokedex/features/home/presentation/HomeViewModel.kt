@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
 import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
+import yegor.cheprasov.pokedex.features.home.domain.use_cases.GetRandomPokemonsUseCase
 import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemonsStateModelUi
 import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.HasPokemonsInDatabaseUseCase
@@ -14,6 +15,7 @@ import yegor.cheprasov.pokedex.features.pokemon.use_cases.SyncPokemonsUseCase
 
 class HomeViewModel(
     private val hasPokemonsInDatabaseUseCase: HasPokemonsInDatabaseUseCase,
+    private val getRandomPokemonsUseCase: GetRandomPokemonsUseCase,
     private val syncPokemonsUseCase: SyncPokemonsUseCase,
     private val syncAllPokemonsStateToModelUiMapper: Mapper<SyncAllPokemonsState, SyncAllPokemonsStateModelUi>
 ) : MviViewModel<HomeStateUi, HomeActionUi, HomeEventUi>(
@@ -24,6 +26,13 @@ class HomeViewModel(
         syncPokemons()
     }
 
+    override fun onAction(action: HomeActionUi) {
+        when (action) {
+            HomeActionUi.OnSearchClick -> sendEvent(HomeEventUi.OpenSearchScreen)
+            HomeActionUi.OnRefreshPokemons -> syncPokemons(false)
+            HomeActionUi.OnSeeMorePokemonClick -> Unit
+        }
+    }
 
     private fun syncPokemons(checkDatabase: Boolean = true) {
         viewModelScope.launch {
@@ -33,13 +42,6 @@ class HomeViewModel(
                     Napier.d("Sync pokemon use case: $state", tag = "myTag")
                     updateState { copy(syncAllPokemonsStateModelUi = state) }
                 }
-        }
-    }
-
-    override fun onAction(action: HomeActionUi) {
-        when (action) {
-            HomeActionUi.OnSearchClick -> sendEvent(HomeEventUi.OpenSearchScreen)
-            HomeActionUi.OnRefreshPokemons -> syncPokemons(false)
         }
     }
 }

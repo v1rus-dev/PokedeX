@@ -25,10 +25,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import yegor.cheprasov.pokedex.core.design.composable.icons.BackIcon
 import yegor.cheprasov.pokedex.core.design.composable.utils.ToolbarIndicator
 import yegor.cheprasov.pokedex.core.design.ext.roundedCornerTo
@@ -156,8 +154,7 @@ private fun PokedexTopAppBarPreview() {
                         ) {
                             Text(
                                 text = "Item $index",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
+                                style = PokedexTheme.typography.titleMedium,
                             )
                         }
                     }
@@ -187,8 +184,7 @@ private fun PokedexTopAppBarWithOnBackPreview() {
                         ) {
                             Text(
                                 text = "Item $index",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
+                                style = PokedexTheme.typography.titleMedium,
                             )
                         }
                     }

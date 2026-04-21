@@ -6,7 +6,7 @@ import yegor.cheprasov.pokedex.features.pokemon.data.datasource.LocalPokemonData
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.NetworkPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonResponseMapper
-import yegor.cheprasov.pokedex.features.pokemon.data.repository_impl.PokemonRepositoryImpl
+import yegor.cheprasov.pokedex.features.pokemon.data.repositories.PokemonRepositoryImpl
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
 
 val pokemonDataModule: Module = module {

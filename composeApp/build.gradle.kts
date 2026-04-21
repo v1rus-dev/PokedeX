@@ -68,6 +68,8 @@ kotlin {
             implementation(projects.features.root.impl.presentation)
             implementation(projects.features.home.api)
             implementation(projects.features.home.impl.presentation)
+            implementation(projects.features.home.impl.data)
+            implementation(projects.features.home.impl.domain)
             implementation(projects.features.pokemon.api)
             implementation(projects.features.pokemon.impl.data)
             implementation(projects.features.pokemon.impl.domain)

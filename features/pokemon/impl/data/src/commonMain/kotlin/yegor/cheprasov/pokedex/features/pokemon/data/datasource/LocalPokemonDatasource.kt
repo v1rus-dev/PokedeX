@@ -32,6 +32,12 @@ class LocalPokemonDatasource(
             }
         }
 
+    suspend fun getAllPokemons(): Result<List<PokemonWithTypesEntity>> = withContext(Dispatchers.IO) {
+        runCatching {
+            pokemonDao.getAllPokemons()
+        }
+    }
+
     suspend fun replaceAllPokemons(list: List<PokemonLocalModel>): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             transactionProvider.runAsTransaction {

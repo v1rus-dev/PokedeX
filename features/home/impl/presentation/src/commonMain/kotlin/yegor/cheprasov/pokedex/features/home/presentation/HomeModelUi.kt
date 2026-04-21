@@ -13,8 +13,9 @@ data class HomeStateUi(
 
 sealed interface HomeActionUi : ActionUi {
     data object OnSearchClick : HomeActionUi
-
+    data object OnSeeMorePokemonClick : HomeActionUi
     data object OnRefreshPokemons : HomeActionUi
+
 }
 
 sealed interface HomeEventUi : EventUi {

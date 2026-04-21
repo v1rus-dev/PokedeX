@@ -49,6 +49,7 @@ fun PokedexTheme(
         LocalPokedexSpacing provides spacing,
         LocalPokedexRadii provides radii,
         LocalPokedexColors provides pokedexColors,
+        LocalPokedexTypography provides typography,
     ) {
         MaterialTheme(
             colorScheme = m3Scheme,
@@ -86,7 +87,7 @@ object PokedexTheme {
     val typography
         @Composable
         @ReadOnlyComposable
-        get() = MaterialTheme.typography
+        get() = LocalPokedexTypography.current
 }
 
 internal fun resolveDarkTheme(
