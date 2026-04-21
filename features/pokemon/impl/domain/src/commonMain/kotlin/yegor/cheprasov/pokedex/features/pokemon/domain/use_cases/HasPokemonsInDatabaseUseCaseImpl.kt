@@ -6,5 +6,5 @@ import yegor.cheprasov.pokedex.features.pokemon.use_cases.HasPokemonsInDatabaseU
 class HasPokemonsInDatabaseUseCaseImpl(
     private val repository: PokemonRepository,
 ) : HasPokemonsInDatabaseUseCase {
-    override suspend fun invoke(): Boolean = repository.hasPokemons()
+    override suspend fun invoke(): Boolean = repository.hasPokemons().getOrDefault(false)
 }

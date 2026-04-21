@@ -13,6 +13,7 @@ class KmpDomainConfigPlugin : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
                 sourceSets.getByName("commonMain").dependencies {
+                    implementation(project(":core:common"))
                     implementation(libs.koin.core)
                     implementation(libs.kotlinx.coroutines.core)
                 }

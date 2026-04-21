@@ -10,6 +10,7 @@ kotlin {
 
         // Projects
         implementation(projects.features.pokemon.api)
+        implementation(projects.features.pokemon.ui)
         implementation(projects.features.pokemonDetails.api)
         implementation(projects.features.pokemonList.impl.domain)
         implementation(projects.features.pokemonList.api)

@@ -14,7 +14,7 @@ data class PokemonResponse(
     @SerialName("weight")
     val weight: Int,
     @SerialName("base_experience")
-    val baseExperience: Int,
+    val baseExperience: Int?,
     @SerialName("sprites")
     val sprites: PokemonSpritesResponse,
     @SerialName("types")

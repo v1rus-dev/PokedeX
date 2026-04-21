@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.models.PokemonUiModel
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 @Composable
 internal fun PokemonItem(
@@ -41,12 +41,12 @@ internal fun PokemonItem(
 
     Surface(
         shape = RoundedCornerShape(radii.large),
-        color = colors.listItemBackground,
-        contentColor = colors.listItemText,
+        color = colors.listSurface,
+        contentColor = colors.textPrimary,
         tonalElevation = spacing.xSmall,
         border = androidx.compose.foundation.BorderStroke(
             width = 1.dp,
-            color = colors.cardBorder,
+            color = colors.surfaceBorder,
         ),
         modifier = modifier
             .fillMaxWidth()
@@ -69,7 +69,7 @@ internal fun PokemonItem(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape)
-                    .background(colors.listItemAccent),
+                    .background(colors.listAccent),
                 contentAlignment = Alignment.Center,
             ) {
                 AsyncImage(

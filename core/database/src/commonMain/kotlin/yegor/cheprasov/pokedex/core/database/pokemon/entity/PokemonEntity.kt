@@ -1,4 +1,4 @@
-package yegor.cheprasov.pokedex.core.database.pokemon
+package yegor.cheprasov.pokedex.core.database.pokemon.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -29,10 +29,6 @@ data class PokemonEntity(
     val weight: Int,
     @ColumnInfo(name = "base_experience")
     val baseExperience: Int?,
-    @ColumnInfo(name = "primary_type")
-    val primaryType: String,
-    @ColumnInfo(name = "secondary_type")
-    val secondaryType: String?,
 ) {
     companion object {
         const val TABLE_NAME = "pokemons"

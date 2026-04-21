@@ -1,3 +1,5 @@
+import extensions.libs
+
 plugins {
     alias(libs.plugins.pokedex.kmp.base.config.plugin)
     alias(libs.plugins.androidx.room)
@@ -21,6 +23,7 @@ kotlin {
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.androidx.room.runtime)
         implementation(libs.androidx.sqlite.bundled)
+        implementation(libs.kotlinx.serialization.json)
         implementation(libs.koin.core)
     }
 }

@@ -5,11 +5,13 @@ import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
 
 interface PokemonRepository {
-    suspend fun hasPokemons(): Boolean
+    suspend fun hasPokemons(): Result<Boolean>
 
     suspend fun getPokemon(pokemonName: String): Result<PokemonModel>
 
     fun observeAllPokemons(): Flow<List<PokemonModel>>
+
+    fun searchPokemonsByName(search: String): Flow<List<PokemonModel>>
 
     fun syncAllPokemons(): Flow<SyncAllPokemonsState>
 }

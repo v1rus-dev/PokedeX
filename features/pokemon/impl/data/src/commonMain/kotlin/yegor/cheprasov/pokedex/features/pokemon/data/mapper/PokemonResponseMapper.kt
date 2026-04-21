@@ -1,11 +1,14 @@
 package yegor.cheprasov.pokedex.features.pokemon.data.mapper
 
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
-import yegor.cheprasov.pokedex.core.database.pokemon.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
+import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonResponse
 
-class PokemonResponseMapper : Mapper<PokemonResponse, PokemonEntity> {
-    override fun map(input: PokemonResponse): PokemonEntity {
+class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
+    override fun map(input: PokemonResponse): PokemonLocalModel {
         return map(
             input = input,
             isFavorite = false,
@@ -15,10 +18,9 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonEntity> {
     fun map(
         input: PokemonResponse,
         isFavorite: Boolean,
-    ): PokemonEntity {
+    ): PokemonLocalModel {
         val sortedTypes = input.types.sortedBy { it.slot }
-
-        return PokemonEntity(
+        val pokemonEntity = PokemonEntity(
             id = input.id,
             name = input.name,
             isFavorite = isFavorite,
@@ -29,8 +31,22 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonEntity> {
             height = input.height,
             weight = input.weight,
             baseExperience = input.baseExperience,
-            primaryType = sortedTypes.firstOrNull()?.type?.name.orEmpty(),
-            secondaryType = sortedTypes.getOrNull(1)?.type?.name,
+        )
+        val types = sortedTypes.map { typeSlot ->
+            PokemonTypeEntity(name = typeSlot.type.name.lowercase())
+        }
+        val typeLinks = sortedTypes.map { typeSlot ->
+            PokemonTypeCrossRefEntity(
+                pokemonId = input.id,
+                typeName = typeSlot.type.name.lowercase(),
+                slot = typeSlot.slot,
+            )
+        }
+
+        return PokemonLocalModel(
+            pokemon = pokemonEntity,
+            types = types,
+            typeLinks = typeLinks,
         )
     }
 }

@@ -22,7 +22,7 @@ import pokedex.core.resources.generated.resources.pokedex
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.models.PokemonUiModel
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 @Composable
 internal fun PokemonListScreen(

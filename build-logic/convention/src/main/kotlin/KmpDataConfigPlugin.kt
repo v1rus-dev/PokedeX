@@ -14,6 +14,7 @@ class KmpDataConfigPlugin : Plugin<Project> {
             extensions.configure<KotlinMultiplatformExtension> {
                 sourceSets.getByName("commonMain").dependencies {
                     implementation(project(":core:database"))
+                    implementation(project(":core:common"))
                     implementation(project(":core:network:api"))
                     implementation(libs.koin.core)
                     implementation(libs.kotlinx.coroutines.core)

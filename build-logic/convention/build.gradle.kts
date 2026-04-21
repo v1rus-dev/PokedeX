@@ -30,6 +30,10 @@ tasks.withType<KotlinCompile>().configureEach {
 
 gradlePlugin {
     plugins {
+        register("pokedex.kmp.compose.base.config.plugin") {
+            id = "pokedex.kmp.compose.base.config.plugin"
+            implementationClass = "KmpComposeBaseConfigPlugin"
+        }
         register("pokedex.kmp.base.config.plugin") {
             id = "pokedex.kmp.base.config.plugin"
             implementationClass = "KmpBaseConfigPlugin"
@@ -37,6 +41,10 @@ gradlePlugin {
         register("pokedex.kmp.compose.config.plugin") {
             id = "pokedex.kmp.compose.config.plugin"
             implementationClass = "KmpComposeConfigPlugin"
+        }
+        register("pokedex.kmp.ui.config.plugin") {
+            id = "pokedex.kmp.ui.config.plugin"
+            implementationClass = "KmpUiConfigPlugin"
         }
         register("pokedex.kmp.presentation.config.plugin") {
             id = "pokedex.kmp.presentation.config.plugin"

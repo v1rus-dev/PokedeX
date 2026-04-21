@@ -46,6 +46,7 @@ include(":core:resources")
 
 /** Features */
 include(":features:pokemon:api")
+include(":features:pokemon:ui")
 include(":features:pokemon:impl:data")
 include(":features:pokemon:impl:domain")
 include(":features:pokemon-list:api")

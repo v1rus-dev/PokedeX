@@ -13,7 +13,10 @@ sealed interface SyncAllPokemonsStateModelUi {
         val completed: Int,
         val total: Int,
     ) : SyncAllPokemonsStateModelUi {
-        override val percent: Int = calculatePercent(completed = completed, total = total)
+        override val percent: Int = calculatePercent(
+            completed = completed,
+            total = total,
+        )
     }
 
     data class Success(
@@ -27,11 +30,14 @@ sealed interface SyncAllPokemonsStateModelUi {
         val total: Int,
         val throwable: Throwable,
     ) : SyncAllPokemonsStateModelUi {
-        override val percent: Int = calculatePercent(completed = completed, total = total)
+        override val percent: Int = calculatePercent(
+            completed = completed,
+            total = total,
+        )
     }
 
     companion object {
-        internal fun calculatePercent(
+        private fun calculatePercent(
             completed: Int,
             total: Int,
         ): Int = if (total <= 0) 0 else (completed * 100) / total

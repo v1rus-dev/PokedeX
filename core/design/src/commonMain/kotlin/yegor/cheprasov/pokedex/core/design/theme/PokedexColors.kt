@@ -64,6 +64,8 @@ data class PokedexColors(
     val indicatorBlue: Color,
     val indicatorYellow: Color,
     val indicatorGreen: Color,
+
+    val loadingFillColor: Color
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -103,6 +105,7 @@ internal val LightPokedexColors = PokedexColors(
     indicatorBlue        = Color(0xFF52C5F7),
     indicatorYellow      = Color(0xFFFFD447),
     indicatorGreen       = Color(0xFF56D57A),
+    loadingFillColor = Color(0xFFF8D46E)
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -137,6 +140,7 @@ internal val DarkPokedexColors = PokedexColors(
     indicatorBlue        = Color(0xFF4DAFEC),
     indicatorYellow      = Color(0xFFF0C040),
     indicatorGreen       = Color(0xFF4ACF7A),
+    loadingFillColor = Color(0xFFF8D46E)
 )
 
 // ─────────────────────────────────────────────────────────────────────────────

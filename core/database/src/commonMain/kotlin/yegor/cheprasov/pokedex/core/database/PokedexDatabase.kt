@@ -4,17 +4,26 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
-import yegor.cheprasov.pokedex.core.database.pokemon.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.PokemonTypeDao
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
 
 @Database(
-    entities = [PokemonEntity::class],
+    entities = [
+        PokemonEntity::class,
+        PokemonTypeEntity::class,
+        PokemonTypeCrossRefEntity::class,
+    ],
     version = 1,
     exportSchema = true,
 )
 @ConstructedBy(PokedexDatabaseConstructor::class)
 abstract class PokedexDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao
+
+    abstract fun pokemonTypeDao(): PokemonTypeDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT", "KotlinNoActualForExpect")

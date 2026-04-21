@@ -6,53 +6,56 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
-import yegor.cheprasov.pokedex.core.database.pokemon.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.network.asResult
+import yegor.cheprasov.pokedex.features.pokemon.data.datasource.LocalPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.NetworkPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonResponseMapper
+import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
+import java.util.concurrent.atomic.AtomicInteger
 
 class PokemonRepositoryImpl(
-    private val pokemonDao: PokemonDao,
-    private val datasource: NetworkPokemonDatasource,
+    private val networkDatasource: NetworkPokemonDatasource,
+    private val localDatasource: LocalPokemonDatasource,
     private val pokemonResponseMapper: PokemonResponseMapper,
     private val pokemonEntityMapper: PokemonEntityMapper,
 ) : PokemonRepository {
-    override suspend fun hasPokemons(): Boolean = pokemonDao.hasPokemons()
+    override suspend fun hasPokemons(): Result<Boolean> = localDatasource.hasPokemons()
 
     override suspend fun getPokemon(pokemonName: String): Result<PokemonModel> {
-        val existingEntity = pokemonDao.getByName(pokemonName)
-        existingEntity?.let { entity ->
-            return Result.success(pokemonEntityMapper.map(entity))
-        }
+        val normalizedName = pokemonName.lowercase()
 
-        val response = datasource.getPokemon(pokemonName)
-            .asResult()
-            .getOrElse { throwable ->
-                return Result.failure(throwable)
-            }
-        val entity = pokemonResponseMapper.map(
-            input = response,
-            isFavorite = existingEntity?.isFavorite == true,
+        return localDatasource.getPokemonByName(normalizedName).fold(
+            onSuccess = { existingEntity ->
+                if (existingEntity != null) {
+                    Result.success(pokemonEntityMapper.map(existingEntity))
+                } else {
+                    fetchAndCachePokemon(pokemonName = normalizedName)
+                }
+            },
+            onFailure = { throwable ->
+                Result.failure(throwable)
+            },
         )
-        pokemonDao.upsert(entity)
-        return Result.success(pokemonEntityMapper.map(entity))
     }
 
     override fun observeAllPokemons(): Flow<List<PokemonModel>> {
-        return pokemonDao.observeAll().map { entities ->
+        return localDatasource.observeAllPokemons().map { entities ->
             entities.map(pokemonEntityMapper::map)
         }
     }
 
+    override fun searchPokemonsByName(search: String): Flow<List<PokemonModel>> =
+        localDatasource.observePokemonsBySearch(search).map { entities ->
+            entities.map(pokemonEntityMapper::map)
+        }
+
     override fun syncAllPokemons(): Flow<SyncAllPokemonsState> = channelFlow {
-        val listResult = datasource.getAllPokemonList().asResult()
+        val listResult = networkDatasource.getAllPokemonList().asResult()
         val listResponse = listResult.getOrNull()
         if (listResponse == null) {
             send(
@@ -65,63 +68,95 @@ class PokemonRepositoryImpl(
             return@channelFlow
         }
 
-        val total = minOf(listResponse.count, listResponse.results.size)
-        val pokemonNames = listResponse.results
-            .take(total)
-            .map { it.name }
-
-        send(SyncAllPokemonsState.Started(total = total))
+        val pokemonNames = listResponse.results.map { it.name }
+        val total = pokemonNames.size
 
         if (total == 0) {
             send(SyncAllPokemonsState.Success(savedCount = 0))
             return@channelFlow
         }
 
-        val progressLock = Mutex()
-        var completed = 0
-        val existingFavoritesByName = pokemonDao.getAll()
-            .associateBy(PokemonEntity::name, PokemonEntity::isFavorite)
+        send(SyncAllPokemonsState.Started(total = total))
+
+        val completed = AtomicInteger(0)
+        val existingFavorites: Set<String> = try {
+            localDatasource.getFavoritePokemons().getOrThrow().map(PokemonEntity::name).toSet()
+        } catch (e: Exception) {
+            emptySet()
+        }
 
         try {
-            val entities = mutableListOf<PokemonEntity>()
+            val entities = mutableListOf<PokemonLocalModel>()
 
             for (batch in pokemonNames.chunked(MAX_CONCURRENT_REQUESTS)) {
                 val batchEntities = coroutineScope {
                     batch.map { name ->
                         async {
-                            val response = datasource.getPokemon(name)
+                            val response = networkDatasource.getPokemon(name)
                                 .asResult()
-                                .getOrThrow()
+                                .getOrNull() ?: return@async null
+
                             val entity = pokemonResponseMapper.map(
                                 input = response,
-                                isFavorite = existingFavoritesByName[name] == true,
+                                isFavorite = name in existingFavorites,
                             )
-                            val progressState = progressLock.withLock {
-                                completed += 1
-                                SyncAllPokemonsState.InProgress(
-                                    completed = completed,
-                                    total = total,
-                                )
-                            }
-                            send(progressState)
+
+                            val current = completed.incrementAndGet()
+                            send(SyncAllPokemonsState.InProgress(
+                                completed = current,
+                                total = total,
+                            ))
+
                             entity
                         }
-                    }.awaitAll()
+                    }.awaitAll().filterNotNull()
                 }
                 entities += batchEntities
             }
 
-            pokemonDao.replaceAll(entities.sortedBy { it.id })
-            send(SyncAllPokemonsState.Success(savedCount = entities.size))
+            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.id }).getOrThrow()
+
+            val savedCount = entities.size
+            val failedCount = total - savedCount
+
+            if (failedCount > 0) {
+                send(SyncAllPokemonsState.PartialSuccess(
+                    savedCount = savedCount,
+                    failedCount = failedCount,
+                ))
+            } else {
+                send(SyncAllPokemonsState.Success(savedCount = savedCount))
+            }
         } catch (throwable: Throwable) {
             send(
                 SyncAllPokemonsState.Error(
-                    completed = completed,
+                    completed = completed.get(),
                     total = total,
                     throwable = throwable,
                 )
             )
         }
+    }
+
+    private suspend fun fetchAndCachePokemon(pokemonName: String): Result<PokemonModel> {
+        return networkDatasource.getPokemon(pokemonName)
+            .asResult()
+            .map { response ->
+                pokemonResponseMapper.map(
+                    input = response,
+                    isFavorite = false,
+                )
+            }
+            .mapCatching { localModel ->
+                localDatasource.upsert(localModel).getOrThrow()
+
+                val cachedPokemon = localDatasource.getPokemonByName(localModel.pokemon.name).getOrThrow()
+                requireNotNull(cachedPokemon) {
+                    "Pokemon ${localModel.pokemon.name} was not found after local cache update."
+                }
+
+                pokemonEntityMapper.map(cachedPokemon)
+            }
     }
 
     private companion object {

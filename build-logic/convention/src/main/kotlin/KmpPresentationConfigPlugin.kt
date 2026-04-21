@@ -13,6 +13,7 @@ class KmpPresentationConfigPlugin : Plugin<Project> {
 
             extensions.configure<KotlinMultiplatformExtension> {
                 sourceSets.getByName("commonMain").dependencies {
+                    implementation(project(":core:common"))
                     implementation(project(":core:design"))
                     implementation(project(":core:resources"))
                     implementation(libs.kotlinx.coroutines.core)

@@ -1,4 +1,4 @@
-package yegor.cheprasov.pokedex.features.pokemon.list.presentation.models
+package yegor.cheprasov.pokedex.features.pokemon.ui.models
 
 import androidx.compose.runtime.Stable
 
@@ -10,7 +10,7 @@ data class PokemonUiModel(
     companion object {
         val PREVIEW = PokemonUiModel(
             name = "Charmander",
-            url = ""
+            url = "",
         )
     }
 }

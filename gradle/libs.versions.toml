@@ -139,6 +139,7 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 # Convention plugins
 pokedex-kmp-base-config-plugin = { id = "pokedex.kmp.base.config.plugin" }
 pokedex-kmp-compose-config-plugin = { id = "pokedex.kmp.compose.config.plugin" }
+pokedex-kmp-ui-config-plugin = { id = "pokedex.kmp.ui.config.plugin" }
 pokedex-kmp-presentation-config-plugin = { id = "pokedex.kmp.presentation.config.plugin" }
 pokedex-kmp-data-config-plugin = { id = "pokedex.kmp.data.config.plugin" }
 pokedex-kmp-domain-config-plugin = { id = "pokedex.kmp.domain.config.plugin" }

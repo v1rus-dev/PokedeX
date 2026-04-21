@@ -22,6 +22,16 @@ sealed interface SyncAllPokemonsState {
         override val percent: Int = 100
     }
 
+    data class PartialSuccess(
+        val savedCount: Int,
+        val failedCount: Int,
+    ) : SyncAllPokemonsState {
+        override val percent: Int = calculatePercent(
+            completed = savedCount,
+            total = savedCount + failedCount,
+        )
+    }
+
     data class Error(
         val completed: Int,
         val total: Int,

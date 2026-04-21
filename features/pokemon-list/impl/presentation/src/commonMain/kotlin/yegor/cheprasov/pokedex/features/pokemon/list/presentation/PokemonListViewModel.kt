@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.map
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
 import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonListUseCase
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.models.PokemonUiModel
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 class PokemonListViewModel(
     private val getPokemonListUseCase: GetPokemonListUseCase,
