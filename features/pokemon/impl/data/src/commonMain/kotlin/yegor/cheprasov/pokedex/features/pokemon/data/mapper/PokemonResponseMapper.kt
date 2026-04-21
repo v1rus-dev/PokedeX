@@ -2,6 +2,7 @@ package yegor.cheprasov.pokedex.features.pokemon.data.mapper
 
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonAbilityCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
@@ -19,10 +20,12 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
         input: PokemonResponse,
         isFavorite: Boolean,
     ): PokemonLocalModel {
+        val normalizedPokemonName = input.name.lowercase()
         val sortedTypes = input.types.sortedBy { it.slot }
+        val sortedAbilities = input.abilities.sortedBy { it.slot }
         val pokemonEntity = PokemonEntity(
             id = input.id,
-            name = input.name,
+            name = normalizedPokemonName,
             isFavorite = isFavorite,
             frontDefault = input.sprites.frontDefault,
             backDefault = input.sprites.backDefault,
@@ -42,11 +45,20 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
                 slot = typeSlot.slot,
             )
         }
+        val abilityLinks = sortedAbilities.map { abilitySlot ->
+            PokemonAbilityCrossRefEntity(
+                pokemonName = normalizedPokemonName,
+                abilityName = abilitySlot.ability.name.lowercase(),
+                slot = abilitySlot.slot,
+                isHidden = abilitySlot.isHidden,
+            )
+        }
 
         return PokemonLocalModel(
             pokemon = pokemonEntity,
             types = types,
             typeLinks = typeLinks,
+            abilityLinks = abilityLinks,
         )
     }
 }

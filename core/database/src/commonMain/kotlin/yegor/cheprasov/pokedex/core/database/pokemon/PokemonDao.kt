@@ -8,7 +8,7 @@ import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
-import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithTypesEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 
 @Dao
 interface PokemonDao {
@@ -17,22 +17,22 @@ interface PokemonDao {
 
     @Transaction
     @Query("SELECT * FROM pokemons ORDER BY id ASC")
-    fun observeAll(): Flow<List<PokemonWithTypesEntity>>
+    fun observeAll(): Flow<List<PokemonWithRelationsEntity>>
 
     @Transaction
     @Query("SELECT * FROM pokemons ORDER BY id ASC")
-    suspend fun getAllPokemons(): List<PokemonWithTypesEntity>
+    suspend fun getAllPokemons(): List<PokemonWithRelationsEntity>
 
     @Transaction
     @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :pokemonName || '%' ORDER BY name ASC")
-    fun searchByName(pokemonName: String): Flow<List<PokemonWithTypesEntity>>
+    fun searchByName(pokemonName: String): Flow<List<PokemonWithRelationsEntity>>
 
     @Query("SELECT * FROM pokemons WHERE is_favorite = 1")
     suspend fun getFavoritePokemons(): List<PokemonEntity>
 
     @Transaction
     @Query("SELECT * FROM pokemons WHERE name = :name LIMIT 1")
-    suspend fun getByName(name: String): PokemonWithTypesEntity?
+    suspend fun getByName(name: String): PokemonWithRelationsEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertPokemon(entity: PokemonEntity)

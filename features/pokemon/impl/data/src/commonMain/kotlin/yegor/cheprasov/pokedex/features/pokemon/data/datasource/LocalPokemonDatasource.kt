@@ -6,17 +6,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.core.database.TransactionProvider
+import yegor.cheprasov.pokedex.core.database.ability.AbilityDao
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonTypeDao
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
-import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithTypesEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 
 class LocalPokemonDatasource(
     private val transactionProvider: TransactionProvider,
     private val pokemonDao: PokemonDao,
     private val pokemonTypeDao: PokemonTypeDao,
+    private val abilityDao: AbilityDao,
 ) {
 
     suspend fun hasPokemons(): Result<Boolean> = withContext(Dispatchers.IO) {
@@ -25,14 +27,14 @@ class LocalPokemonDatasource(
         }
     }
 
-    suspend fun getPokemonByName(pokemonName: String): Result<PokemonWithTypesEntity?> =
+    suspend fun getPokemonByName(pokemonName: String): Result<PokemonWithRelationsEntity?> =
         withContext(Dispatchers.IO) {
             runCatching {
                 pokemonDao.getByName(pokemonName.lowercase())
             }
         }
 
-    suspend fun getAllPokemons(): Result<List<PokemonWithTypesEntity>> = withContext(Dispatchers.IO) {
+    suspend fun getAllPokemons(): Result<List<PokemonWithRelationsEntity>> = withContext(Dispatchers.IO) {
         runCatching {
             pokemonDao.getAllPokemons()
         }
@@ -57,6 +59,16 @@ class LocalPokemonDatasource(
                 if (typeLinks.isNotEmpty()) {
                     pokemonDao.upsertTypeLinks(typeLinks)
                 }
+
+                val pokemonNames = list.map { it.pokemon.name }
+                if (pokemonNames.isNotEmpty()) {
+                    abilityDao.deletePokemonLinksByPokemonNames(pokemonNames)
+                }
+
+                val abilityLinks = list.flatMap(PokemonLocalModel::abilityLinks)
+                if (abilityLinks.isNotEmpty()) {
+                    abilityDao.upsertPokemonLinks(abilityLinks)
+                }
             }
         }
     }
@@ -67,9 +79,14 @@ class LocalPokemonDatasource(
                 pokemonDao.upsertPokemon(entity.pokemon)
                 pokemonTypeDao.upsertAll(entity.types)
                 pokemonDao.deleteTypeLinksByPokemonId(entity.pokemon.id)
+                abilityDao.deletePokemonLinksByPokemonName(entity.pokemon.name)
 
                 if (entity.typeLinks.isNotEmpty()) {
                     pokemonDao.upsertTypeLinks(entity.typeLinks)
+                }
+
+                if (entity.abilityLinks.isNotEmpty()) {
+                    abilityDao.upsertPokemonLinks(entity.abilityLinks)
                 }
             }
         }
@@ -81,10 +98,10 @@ class LocalPokemonDatasource(
         }
     }
 
-    fun observeAllPokemons(): Flow<List<PokemonWithTypesEntity>> =
+    fun observeAllPokemons(): Flow<List<PokemonWithRelationsEntity>> =
         pokemonDao.observeAll().flowOn(Dispatchers.IO)
 
-    fun observePokemonsBySearch(search: String): Flow<List<PokemonWithTypesEntity>> =
+    fun observePokemonsBySearch(search: String): Flow<List<PokemonWithRelationsEntity>> =
         pokemonDao.searchByName(search).flowOn(
             Dispatchers.IO
         )

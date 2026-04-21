@@ -1,5 +1,6 @@
 package yegor.cheprasov.pokedex.features.home.domain.use_cases
 
+import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetAllPokemonsUseCase
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import kotlin.collections.emptyList
 
@@ -10,7 +11,7 @@ interface GetRandomPokemonsUseCase {
 }
 
 class GetRandomPokemonsUseCaseImpl(
-    private val getAllPokemonsUseCase: GetRandomPokemonsUseCase
+    private val getAllPokemonsUseCase: GetAllPokemonsUseCase,
 ) : GetRandomPokemonsUseCase {
     override suspend fun invoke(count: Int): Result<List<PokemonModel>> = getAllPokemonsUseCase().map { list ->
         if (list.isEmpty()) {

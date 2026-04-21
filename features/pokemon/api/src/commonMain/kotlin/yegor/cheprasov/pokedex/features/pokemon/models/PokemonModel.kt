@@ -8,6 +8,7 @@ data class PokemonModel(
     val weight: Int,
     val baseExperience: Int?,
     val types: List<PokemonType>,
+    val abilities: List<PokemonAbilityModel>,
     val sprites: PokemonSprites,
 ) {
     val imageUrl: String? = sprites.frontDefault ?: sprites.backDefault

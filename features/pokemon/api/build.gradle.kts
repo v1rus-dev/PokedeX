@@ -5,5 +5,6 @@ plugins {
 kotlin {
     sourceSets.commonMain.dependencies {
         implementation(libs.kotlinx.coroutines.core)
+        implementation(projects.features.ability.api)
     }
 }

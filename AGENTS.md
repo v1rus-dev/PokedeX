@@ -11,6 +11,7 @@ Use feature-first organization and preserve module boundaries.
 
 - Keep code explicit so comments are rarely needed.
 - Add comments only for non-obvious decisions or tricky constraints.
+- Do not add tests; tests are not required in this project.
 
 ### Updating this document
 

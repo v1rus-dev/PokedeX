@@ -28,6 +28,10 @@ val databaseModule: Module = module {
     single {
         get<PokedexDatabase>().pokemonTypeDao()
     }
+
+    single {
+        get<PokedexDatabase>().abilityDao()
+    }
 }
 
 internal expect val platformDatabaseModule: Module

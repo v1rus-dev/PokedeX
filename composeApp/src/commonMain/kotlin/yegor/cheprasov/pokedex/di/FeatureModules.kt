@@ -3,7 +3,9 @@ package yegor.cheprasov.pokedex.di
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import yegor.cheprasov.pokedex.features.ability.data.di.abilityDataModule
 import yegor.cheprasov.pokedex.MainViewModel
+import yegor.cheprasov.pokedex.features.ability.domain.di.abilityDomainModule
 import yegor.cheprasov.pokedex.features.favorites.presentation.di.favoritesPresentationModule
 import yegor.cheprasov.pokedex.features.home.data.di.homeDataModule
 import yegor.cheprasov.pokedex.features.home.domain.di.homeDomainModule
@@ -24,6 +26,8 @@ val composeAppModule: Module = module {
 
 val featureModules: List<Module> = listOf(
     composeAppModule,
+    abilityDataModule,
+    abilityDomainModule,
     homeDataModule,
     homeDomainModule,
     homePresentationModule,
