@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,28 +22,36 @@ import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.home.presentation.HomeActionUi
 import yegor.cheprasov.pokedex.features.home.presentation.HomeStateUi
+import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemonsStateModelUi
 
 @Composable
 internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
     val scrollState = rememberScrollState()
+    val pullToRefreshState = rememberPullToRefreshState()
     Scaffold(
         topBar = {
             PokedexTopAppBar(title = stringResource(Res.string.pokedex))
         },
         containerColor = PokedexTheme.colors.background,
     ) {
-        Column(modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState)) {
-            Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.large))
-            TextField(
-                enabled = false,
-                modifier = Modifier
-                    .padding(horizontal = PokedexTheme.spacing.large)
-                    .localSharedElement(key = "home-search-text-field"),
-                onClick = {
-                    onAction.invoke(HomeActionUi.OnSearchClick)
-                },
-                hint = stringResource(Res.string.search_pokemon)
-            )
+        PullToRefreshBox(
+            isRefreshing = state.syncAllPokemonsStateModelUi is SyncAllPokemonsStateModelUi.InProgress,
+            onRefresh = { onAction(HomeActionUi.OnRefreshPokemons) },
+            state = pullToRefreshState
+        ) {
+            Column(modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState)) {
+                Spacer(modifier = Modifier.padding(top = PokedexTheme.spacing.large))
+                TextField(
+                    enabled = false,
+                    modifier = Modifier
+                        .padding(horizontal = PokedexTheme.spacing.large)
+                        .localSharedElement(key = "home-search-text-field"),
+                    onClick = {
+                        onAction.invoke(HomeActionUi.OnSearchClick)
+                    },
+                    hint = stringResource(Res.string.search_pokemon)
+                )
+            }
         }
     }
 }
@@ -50,6 +60,6 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
 @Composable
 private fun HomeScreenPreview() {
     PokedexTheme {
-        HomeScreen(state = HomeStateUi, onAction = {})
+        HomeScreen(state = HomeStateUi(), onAction = {})
     }
 }
