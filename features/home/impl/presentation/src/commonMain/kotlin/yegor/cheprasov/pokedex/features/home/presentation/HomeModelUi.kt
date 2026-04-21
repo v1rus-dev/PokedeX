@@ -9,20 +9,7 @@ import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemons
 @Stable
 data class HomeStateUi(
     val syncAllPokemonsStateModelUi: SyncAllPokemonsStateModelUi? = null,
-) : StateUi {
-    val syncProgressPercent: Int
-        get() = syncAllPokemonsStateModelUi?.percent ?: 0
-
-    val isSyncInProgress: Boolean
-        get() = syncAllPokemonsStateModelUi is SyncAllPokemonsStateModelUi.InProgress
-
-    @Deprecated(
-        message = "Use syncProgressPercent",
-        replaceWith = ReplaceWith("syncProgressPercent"),
-    )
-    val retainetProgress: Int
-        get() = syncProgressPercent
-}
+) : StateUi
 
 sealed interface HomeActionUi : ActionUi {
     data object OnSearchClick : HomeActionUi

@@ -9,12 +9,18 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 import yegor.cheprasov.pokedex.core.database.PokedexDatabase
+import yegor.cheprasov.pokedex.core.database.TransactionProvider
+import yegor.cheprasov.pokedex.core.database.TransactionProviderIosImpl
 
 internal actual val platformDatabaseModule: Module = module {
     single<RoomDatabase.Builder<PokedexDatabase>> {
         Room.databaseBuilder<PokedexDatabase>(
             name = documentDirectory() + "/$DATABASE_FILE_NAME",
         )
+    }
+
+    factory<TransactionProvider> {
+        TransactionProviderIosImpl(get())
     }
 }
 

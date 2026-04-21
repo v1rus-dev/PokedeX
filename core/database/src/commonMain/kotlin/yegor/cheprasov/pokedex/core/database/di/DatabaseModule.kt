@@ -8,7 +8,6 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 import yegor.cheprasov.pokedex.core.database.PokedexDatabase
 import yegor.cheprasov.pokedex.core.database.TransactionProvider
-import yegor.cheprasov.pokedex.core.database.TransactionProviderImpl
 
 internal const val DATABASE_FILE_NAME: String = "pokedex.db"
 
@@ -28,10 +27,6 @@ val databaseModule: Module = module {
 
     single {
         get<PokedexDatabase>().pokemonTypeDao()
-    }
-
-    factory<TransactionProvider> {
-        TransactionProviderImpl(get())
     }
 }
 

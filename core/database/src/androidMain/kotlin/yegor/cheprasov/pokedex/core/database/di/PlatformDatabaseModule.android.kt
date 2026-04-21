@@ -6,6 +6,8 @@ import androidx.room.RoomDatabase
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import yegor.cheprasov.pokedex.core.database.PokedexDatabase
+import yegor.cheprasov.pokedex.core.database.TransactionProvider
+import yegor.cheprasov.pokedex.core.database.TransactionProviderAndroidImpl
 
 internal actual val platformDatabaseModule: Module = module {
     single<RoomDatabase.Builder<PokedexDatabase>> {
@@ -17,5 +19,9 @@ internal actual val platformDatabaseModule: Module = module {
             context = appContext,
             name = dbFile.absolutePath,
         )
+    }
+
+    factory<TransactionProvider> {
+        TransactionProviderAndroidImpl(get())
     }
 }

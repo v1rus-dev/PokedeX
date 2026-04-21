@@ -16,7 +16,9 @@ import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
-import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.concurrent.atomics.incrementAndFetch
 
 class PokemonRepositoryImpl(
     private val networkDatasource: NetworkPokemonDatasource,
@@ -54,6 +56,7 @@ class PokemonRepositoryImpl(
             entities.map(pokemonEntityMapper::map)
         }
 
+    @OptIn(ExperimentalAtomicApi::class)
     override fun syncAllPokemons(): Flow<SyncAllPokemonsState> = channelFlow {
         val listResult = networkDatasource.getAllPokemonList().asResult()
         val listResponse = listResult.getOrNull()
@@ -78,7 +81,7 @@ class PokemonRepositoryImpl(
 
         send(SyncAllPokemonsState.Started(total = total))
 
-        val completed = AtomicInteger(0)
+        val completed = AtomicInt(0)
         val existingFavorites: Set<String> = try {
             localDatasource.getFavoritePokemons().getOrThrow().map(PokemonEntity::name).toSet()
         } catch (e: Exception) {
@@ -101,7 +104,7 @@ class PokemonRepositoryImpl(
                                 isFavorite = name in existingFavorites,
                             )
 
-                            val current = completed.incrementAndGet()
+                            val current = completed.incrementAndFetch()
                             send(SyncAllPokemonsState.InProgress(
                                 completed = current,
                                 total = total,
@@ -130,7 +133,7 @@ class PokemonRepositoryImpl(
         } catch (throwable: Throwable) {
             send(
                 SyncAllPokemonsState.Error(
-                    completed = completed.get(),
+                    completed = completed.load(),
                     total = total,
                     throwable = throwable,
                 )

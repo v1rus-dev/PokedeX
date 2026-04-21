@@ -1,5 +1,7 @@
 package yegor.cheprasov.pokedex.features.home.presentation.models
 
+import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
+
 sealed interface SyncAllPokemonsStateModelUi {
     val percent: Int
 
@@ -23,6 +25,16 @@ sealed interface SyncAllPokemonsStateModelUi {
         val savedCount: Int,
     ) : SyncAllPokemonsStateModelUi {
         override val percent: Int = 100
+    }
+
+    data class PartialSuccess(
+        val savedCount: Int,
+        val failedCount: Int,
+    ) : SyncAllPokemonsStateModelUi {
+        override val percent: Int = calculatePercent(
+            completed = savedCount,
+            total = savedCount + failedCount,
+        )
     }
 
     data class Error(

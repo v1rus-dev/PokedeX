@@ -1,6 +1,7 @@
 package yegor.cheprasov.pokedex.features.pokemon.data.datasource
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
