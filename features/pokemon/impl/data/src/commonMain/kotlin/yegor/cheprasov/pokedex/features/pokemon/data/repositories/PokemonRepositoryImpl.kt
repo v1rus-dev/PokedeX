@@ -1,17 +1,18 @@
 package yegor.cheprasov.pokedex.features.pokemon.data.repositories
 
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
-import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 import yegor.cheprasov.pokedex.core.network.asResult
+import yegor.cheprasov.pokedex.features.ability.data.datasource.LocalAbilityDatasource
 import yegor.cheprasov.pokedex.features.ability.data.datasource.NetworkAbilityDatasource
 import yegor.cheprasov.pokedex.features.ability.data.mapper.AbilityResponseMapper
-import yegor.cheprasov.pokedex.features.ability.data.repositories.AbilityRepository
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.LocalPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.NetworkPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
@@ -31,7 +32,7 @@ class PokemonRepositoryImpl(
     private val pokemonEntityMapper: PokemonEntityMapper,
     private val abilityNetworkDatasource: NetworkAbilityDatasource,
     private val abilityResponseMapper: AbilityResponseMapper,
-    private val abilityRepository: AbilityRepository,
+    private val localAbilityDatasource: LocalAbilityDatasource,
 ) : PokemonRepository {
     override suspend fun hasPokemons(): Result<Boolean> = localDatasource.hasPokemons()
 
@@ -128,7 +129,13 @@ class PokemonRepositoryImpl(
                 entities += batchEntities
             }
 
-            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.id }).getOrThrow()
+            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.name })
+                .onSuccess {
+                    Napier.v("Successfully saved pokemons: ${entities.size}", tag = TAG)
+                }
+                .onFailure {
+                    Napier.v("Can't updating pokemons with error: $it", tag = TAG)
+                }
 
             val savedCount = entities.size
             val failedCount = total - savedCount
@@ -200,12 +207,14 @@ class PokemonRepositoryImpl(
                     .map(abilityResponseMapper::map)
                     .getOrThrow()
 
-                abilityRepository.upsertAbility(ability).getOrThrow()
+                localAbilityDatasource.upsert(ability).getOrThrow()
             }
         }
     }
 
     private companion object {
         const val MAX_CONCURRENT_REQUESTS = 64
+
+        private const val TAG = "PokemonRepository"
     }
 }

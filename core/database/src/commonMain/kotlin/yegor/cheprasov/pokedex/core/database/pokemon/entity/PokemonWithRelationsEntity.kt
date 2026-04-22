@@ -9,8 +9,8 @@ data class PokemonWithRelationsEntity(
     @Embedded
     val pokemon: PokemonEntity,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "pokemon_id",
+        parentColumn = "name",
+        entityColumn = "pokemon_name",
     )
     val typeLinks: List<PokemonTypeCrossRefEntity>,
     @Relation(

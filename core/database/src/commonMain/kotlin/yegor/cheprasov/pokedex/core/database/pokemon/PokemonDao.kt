@@ -16,11 +16,11 @@ interface PokemonDao {
     suspend fun hasPokemons(): Boolean
 
     @Transaction
-    @Query("SELECT * FROM pokemons ORDER BY id ASC")
+    @Query("SELECT * FROM pokemons ORDER BY name ASC")
     fun observeAll(): Flow<List<PokemonWithRelationsEntity>>
 
     @Transaction
-    @Query("SELECT * FROM pokemons ORDER BY id ASC")
+    @Query("SELECT * FROM pokemons ORDER BY name ASC")
     suspend fun getAllPokemons(): List<PokemonWithRelationsEntity>
 
     @Transaction
@@ -46,8 +46,8 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertTypeLinks(entities: List<PokemonTypeCrossRefEntity>)
 
-    @Query("DELETE FROM pokemon_type_links WHERE pokemon_id = :pokemonId")
-    suspend fun deleteTypeLinksByPokemonId(pokemonId: Int)
+    @Query("DELETE FROM pokemon_type_links WHERE pokemon_name = :pokemonName")
+    suspend fun deleteTypeLinksByPokemonName(pokemonName: String)
 
     @Query("DELETE FROM pokemon_type_links")
     suspend fun clearAllTypeLinks()

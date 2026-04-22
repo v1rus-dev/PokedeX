@@ -10,6 +10,7 @@ import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.HasPokemonsInDatabaseUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.ObserveAllPokemonsUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.SyncPokemonsUseCase
+import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataUseCase
 
 val pokemonDomainModule: Module = module {
     factory<GetPokemonUseCase> {
@@ -18,6 +19,10 @@ val pokemonDomainModule: Module = module {
 
     factory<SyncPokemonsUseCase> {
         SyncPokemonsUseCaseImpl(get())
+    }
+
+    factory<SyncDataUseCase> {
+        get<SyncPokemonsUseCase>()
     }
 
     factory<HasPokemonsInDatabaseUseCase> {

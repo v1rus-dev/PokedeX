@@ -8,6 +8,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 import yegor.cheprasov.pokedex.core.database.PokedexDatabase
 import yegor.cheprasov.pokedex.core.database.TransactionProvider
+import yegor.cheprasov.pokedex.core.database.TransactionProviderImpl
 
 internal const val DATABASE_FILE_NAME: String = "pokedex.db"
 
@@ -18,6 +19,7 @@ val databaseModule: Module = module {
         get<RoomDatabase.Builder<PokedexDatabase>>()
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
+            .fallbackToDestructiveMigrationFrom(true, 1, 2)
             .build()
     }
 
@@ -31,6 +33,10 @@ val databaseModule: Module = module {
 
     single {
         get<PokedexDatabase>().abilityDao()
+    }
+
+    factory<TransactionProvider> {
+        TransactionProviderImpl(get())
     }
 }
 

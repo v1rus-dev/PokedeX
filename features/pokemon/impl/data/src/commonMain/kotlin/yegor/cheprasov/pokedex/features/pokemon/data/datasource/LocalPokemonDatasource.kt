@@ -78,7 +78,7 @@ class LocalPokemonDatasource(
             transactionProvider.runAsTransaction {
                 pokemonDao.upsertPokemon(entity.pokemon)
                 pokemonTypeDao.upsertAll(entity.types)
-                pokemonDao.deleteTypeLinksByPokemonId(entity.pokemon.id)
+                pokemonDao.deleteTypeLinksByPokemonName(entity.pokemon.name)
                 abilityDao.deletePokemonLinksByPokemonName(entity.pokemon.name)
 
                 if (entity.typeLinks.isNotEmpty()) {

@@ -20,9 +20,7 @@ import yegor.cheprasov.pokedex.features.settings.data.di.settingsDataModule
 import yegor.cheprasov.pokedex.features.settings.domain.di.settingsDomainModule
 import yegor.cheprasov.pokedex.features.settings.presentation.di.settingsPresentationModule
 
-val composeAppModule: Module = module {
-    viewModelOf(::MainViewModel)
-}
+
 
 val featureModules: List<Module> = listOf(
     composeAppModule,

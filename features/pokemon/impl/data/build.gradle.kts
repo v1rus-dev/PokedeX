@@ -8,6 +8,7 @@ kotlin {
         implementation(projects.features.ability.api)
         implementation(projects.features.ability.impl.data)
         implementation(projects.features.pokemon.api)
+        implementation(projects.features.syncData.api)
         implementation(projects.features.pokemon.impl.domain)
     }
 }

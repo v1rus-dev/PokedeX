@@ -84,3 +84,5 @@ include(":features:pokemon-details:api")
 include(":features:pokemon-details:impl:data")
 include(":features:pokemon-details:impl:domain")
 include(":features:pokemon-details:impl:presentation")
+// Sync data
+include(":features:sync-data:api")

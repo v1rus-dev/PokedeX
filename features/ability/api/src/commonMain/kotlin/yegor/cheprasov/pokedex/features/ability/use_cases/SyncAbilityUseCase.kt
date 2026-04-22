@@ -1,8 +1,5 @@
 package yegor.cheprasov.pokedex.features.ability.use_cases
 
-import kotlinx.coroutines.flow.Flow
-import yegor.cheprasov.pokedex.features.ability.models.SyncAllAbilitiesState
+import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataUseCase
 
-interface SyncAbilityUseCase {
-    operator fun invoke(): Flow<SyncAllAbilitiesState>
-}
+interface SyncAbilityUseCase : SyncDataUseCase

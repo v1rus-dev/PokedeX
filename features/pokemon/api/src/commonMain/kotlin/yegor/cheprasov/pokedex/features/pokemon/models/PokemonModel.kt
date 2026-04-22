@@ -1,7 +1,6 @@
 package yegor.cheprasov.pokedex.features.pokemon.models
 
 data class PokemonModel(
-    val id: Int,
     val name: String,
     val isFavorite: Boolean,
     val height: Int,

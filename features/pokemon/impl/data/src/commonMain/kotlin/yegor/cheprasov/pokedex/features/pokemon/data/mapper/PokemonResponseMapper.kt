@@ -24,7 +24,6 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
         val sortedTypes = input.types.sortedBy { it.slot }
         val sortedAbilities = input.abilities.sortedBy { it.slot }
         val pokemonEntity = PokemonEntity(
-            id = input.id,
             name = normalizedPokemonName,
             isFavorite = isFavorite,
             frontDefault = input.sprites.frontDefault,
@@ -40,7 +39,7 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
         }
         val typeLinks = sortedTypes.map { typeSlot ->
             PokemonTypeCrossRefEntity(
-                pokemonId = input.id,
+                pokemonName = normalizedPokemonName,
                 typeName = typeSlot.type.name.lowercase(),
                 slot = typeSlot.slot,
             )

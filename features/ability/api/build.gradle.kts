@@ -4,6 +4,7 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
+        implementation(projects.features.syncData.api)
         implementation(libs.kotlinx.coroutines.core)
     }
 }

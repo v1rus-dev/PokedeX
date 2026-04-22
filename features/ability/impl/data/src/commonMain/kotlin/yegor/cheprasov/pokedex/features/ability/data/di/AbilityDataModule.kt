@@ -25,6 +25,8 @@ val abilityDataModule: Module = module {
         AbilityRepositoryImpl(
             localDatasource = get(),
             abilityEntityMapper = get(),
+            networkDatasource = get(),
+            abilityResponseMapper = get(),
         )
     }
 }

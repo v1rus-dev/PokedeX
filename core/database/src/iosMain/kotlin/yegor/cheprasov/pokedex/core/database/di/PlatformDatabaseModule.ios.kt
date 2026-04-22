@@ -19,9 +19,9 @@ internal actual val platformDatabaseModule: Module = module {
         )
     }
 
-    factory<TransactionProvider> {
-        TransactionProviderIosImpl(get())
-    }
+//    factory<TransactionProvider> {
+//        TransactionProviderIosImpl(get())
+//    }
 }
 
 @OptIn(ExperimentalForeignApi::class)

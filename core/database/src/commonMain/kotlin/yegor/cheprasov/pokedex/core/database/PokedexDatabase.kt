@@ -21,7 +21,7 @@ import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
         AbilityEntity::class,
         PokemonAbilityCrossRefEntity::class,
     ],
-    version = 2,
+    version = 1,
     exportSchema = true,
 )
 @ConstructedBy(PokedexDatabaseConstructor::class)

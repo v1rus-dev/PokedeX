@@ -21,14 +21,12 @@ class PokemonEntityMapper : Mapper<PokemonWithRelationsEntity, PokemonModel> {
                 abilityByName[abilityLink.abilityName]?.let { ability ->
                     PokemonAbilityModel(
                         ability = ability.toAbilityModel(),
-                        slot = abilityLink.slot,
                         isHidden = abilityLink.isHidden,
                     )
                 }
             }
 
         return PokemonModel(
-            id = input.pokemon.id,
             name = input.pokemon.name,
             isFavorite = input.pokemon.isFavorite,
             height = input.pokemon.height,
