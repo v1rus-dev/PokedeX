@@ -11,6 +11,7 @@ Use feature-first organization and preserve module boundaries.
 
 - Keep code explicit so comments are rarely needed.
 - Add comments only for non-obvious decisions or tricky constraints.
+- Do not add tests; tests are not required in this project.
 
 ### Updating this document
 
@@ -76,12 +77,14 @@ Destination flow pattern:
 - Keep `<feature>/ui` reusable and presentation-focused: it may depend on `core:design`, but it must not contain screen-level `StateUi`/`ActionUi`/`EventUi`, navigation orchestration, or feature DI modules.
 - Cross-feature navigation uses typed `NavKey` contracts, never internal implementation classes.
 - Do not add new global business layers in ad-hoc root packages; place logic inside the owning feature or a dedicated `core` module.
+- Cross-feature data synchronization should use contracts from `features/sync-data/api`; each feature-specific sync use case decides whether to skip based on local data state, while orchestration calls a single sync entry point and may pass `force = true` for manual full refresh.
 
 ## Dependency Injection
 
 - Use Koin like DI solution.
 - Prefer constructor injection.
 - Keep DI bindings close to their feature (`features/<feature>/impl/(data/domain/presentation)/di/`).
+- If multiple implementations must be resolved via `getAll<Interface>()`, do not register several unqualified definitions with the same interface as the primary type. Register each implementation with its own primary type and expose shared contracts through `bind<Interface>()`.
 
 ## ViewModel & MVI
 

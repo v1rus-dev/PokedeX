@@ -45,6 +45,9 @@ include(":core:design")
 include(":core:resources")
 
 /** Features */
+include(":features:ability:api")
+include(":features:ability:impl:data")
+include(":features:ability:impl:domain")
 include(":features:pokemon:api")
 include(":features:pokemon:ui")
 include(":features:pokemon:impl:data")
@@ -81,3 +84,5 @@ include(":features:pokemon-details:api")
 include(":features:pokemon-details:impl:data")
 include(":features:pokemon-details:impl:domain")
 include(":features:pokemon-details:impl:presentation")
+// Sync data
+include(":features:sync-data:api")

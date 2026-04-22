@@ -5,5 +5,7 @@ plugins {
 kotlin {
     sourceSets.commonMain.dependencies {
         implementation(projects.features.pokemon.api)
+        implementation(projects.features.syncData.api)
     }
 }
+

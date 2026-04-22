@@ -5,7 +5,5 @@ import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetAllPokemonsUseCase
 
 class GetAllPokemonsUseCaseImpl(private val repository: PokemonRepository) : GetAllPokemonsUseCase {
-    override suspend fun invoke(): Result<List<PokemonModel>> {
-
-    }
+    override suspend fun invoke(): Result<List<PokemonModel>> = repository.getAllPokemons()
 }

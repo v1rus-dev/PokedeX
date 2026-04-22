@@ -36,4 +36,6 @@
     <string name="type_unknown">Unknown</string>
     <string name="see_more">See More</string>
     <string name="pokemons">Pokemons</string>
+    <string name="abilities">Abilities</string>
+    <string name="location">Locations</string>
 </resources>

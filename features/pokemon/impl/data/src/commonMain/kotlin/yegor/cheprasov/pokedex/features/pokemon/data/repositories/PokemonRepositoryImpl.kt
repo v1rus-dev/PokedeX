@@ -1,5 +1,6 @@
 package yegor.cheprasov.pokedex.features.pokemon.data.repositories
 
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -7,7 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 import yegor.cheprasov.pokedex.core.network.asResult
+import yegor.cheprasov.pokedex.features.ability.data.datasource.LocalAbilityDatasource
+import yegor.cheprasov.pokedex.features.ability.data.datasource.NetworkAbilityDatasource
+import yegor.cheprasov.pokedex.features.ability.data.mapper.AbilityResponseMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.LocalPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.NetworkPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
@@ -25,6 +30,9 @@ class PokemonRepositoryImpl(
     private val localDatasource: LocalPokemonDatasource,
     private val pokemonResponseMapper: PokemonResponseMapper,
     private val pokemonEntityMapper: PokemonEntityMapper,
+    private val abilityNetworkDatasource: NetworkAbilityDatasource,
+    private val abilityResponseMapper: AbilityResponseMapper,
+    private val localAbilityDatasource: LocalAbilityDatasource,
 ) : PokemonRepository {
     override suspend fun hasPokemons(): Result<Boolean> = localDatasource.hasPokemons()
 
@@ -34,7 +42,7 @@ class PokemonRepositoryImpl(
         return localDatasource.getPokemonByName(normalizedName).fold(
             onSuccess = { existingEntity ->
                 if (existingEntity != null) {
-                    Result.success(pokemonEntityMapper.map(existingEntity))
+                    hydratePokemonAbilitiesIfNeeded(existingEntity).map(pokemonEntityMapper::map)
                 } else {
                     fetchAndCachePokemon(pokemonName = normalizedName)
                 }
@@ -121,7 +129,13 @@ class PokemonRepositoryImpl(
                 entities += batchEntities
             }
 
-            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.id }).getOrThrow()
+            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.name })
+                .onSuccess {
+                    Napier.v("Successfully saved pokemons: ${entities.size}", tag = TAG)
+                }
+                .onFailure {
+                    Napier.v("Can't updating pokemons with error: $it", tag = TAG)
+                }
 
             val savedCount = entities.size
             val failedCount = total - savedCount
@@ -156,6 +170,8 @@ class PokemonRepositoryImpl(
             }
             .mapCatching { localModel ->
                 localDatasource.upsert(localModel).getOrThrow()
+                val abilityNames = localModel.abilityLinks.map { it.abilityName }.distinct()
+                hydrateAbilities(abilityNames).getOrThrow()
 
                 val cachedPokemon = localDatasource.getPokemonByName(localModel.pokemon.name).getOrThrow()
                 requireNotNull(cachedPokemon) {
@@ -166,7 +182,39 @@ class PokemonRepositoryImpl(
             }
     }
 
+    private suspend fun hydratePokemonAbilitiesIfNeeded(
+        pokemon: PokemonWithRelationsEntity,
+    ): Result<PokemonWithRelationsEntity> {
+        val missingAbilityNames = pokemon.abilityLinks.map { it.abilityName }.toSet() -
+            pokemon.abilities.map { it.name }.toSet()
+        if (missingAbilityNames.isEmpty()) {
+            return Result.success(pokemon)
+        }
+
+        return hydrateAbilities(missingAbilityNames).mapCatching {
+            val refreshedPokemon = localDatasource.getPokemonByName(pokemon.pokemon.name).getOrThrow()
+            requireNotNull(refreshedPokemon) {
+                "Pokemon ${pokemon.pokemon.name} was not found after ability hydration."
+            }
+        }
+    }
+
+    private suspend fun hydrateAbilities(abilityNames: Collection<String>): Result<Unit> {
+        return runCatching {
+            abilityNames.distinct().forEach { abilityName ->
+                val ability = abilityNetworkDatasource.getAbility(abilityName)
+                    .asResult()
+                    .map(abilityResponseMapper::map)
+                    .getOrThrow()
+
+                localAbilityDatasource.upsert(ability).getOrThrow()
+            }
+        }
+    }
+
     private companion object {
         const val MAX_CONCURRENT_REQUESTS = 64
+
+        private const val TAG = "PokemonRepository"
     }
 }

@@ -21,7 +21,7 @@ internal actual val platformDatabaseModule: Module = module {
         )
     }
 
-    factory<TransactionProvider> {
-        TransactionProviderAndroidImpl(get())
-    }
+//    factory<TransactionProvider> {
+//        TransactionProviderAndroidImpl(get())
+//    }
 }

@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -17,16 +21,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.shape.RoundedCornerShape
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import pokedex.core.resources.generated.resources.Res
+import pokedex.core.resources.generated.resources.ic_pokeball_bg_icon
+import pokedex.core.resources.generated.resources.pokemons
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
+import yegor.cheprasov.pokedex.features.home.presentation.models.HomeMainCardModelUi
+import yegor.cheprasov.pokedex.features.home.presentation.models.HomeMainCardTypeUi
 
 @Composable
 internal fun HomeCard(
-    title: String,
-    backgroundColor: Color,
+    model: HomeMainCardModelUi,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -34,21 +43,18 @@ internal fun HomeCard(
     val radii = PokedexTheme.radii
     val typography = PokedexTheme.typography
     val interactionSource = remember { MutableInteractionSource() }
-    val shape = RoundedCornerShape(radii.large)
+    val shape = RoundedCornerShape(radii.medium)
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(104.dp)
+            .height(80.dp)
             .clip(shape)
-            .background(backgroundColor)
+            .background(model.backgroundColor)
             .drawWithCache {
                 val primaryCircleColor = colors.background.copy(alpha = 0.18f)
-                val secondaryCircleColor = colors.background.copy(alpha = 0.11f)
-                val largeRadius = size.minDimension * 0.52f
+
                 val topLeftRadius = size.minDimension * 0.6f
-                val mediumRadius = size.minDimension * 0.3f
-                val smallRadius = size.minDimension * 0.18f
 
                 onDrawWithContent {
                     drawCircle(
@@ -59,30 +65,6 @@ internal fun HomeCard(
                             y = -topLeftRadius * 0.15f,
                         ),
                     )
-                    drawCircle(
-                        color = primaryCircleColor,
-                        radius = largeRadius,
-                        center = Offset(
-                            x = size.width * 0.88f,
-                            y = size.height * 0.18f,
-                        ),
-                    )
-                    drawCircle(
-                        color = secondaryCircleColor,
-                        radius = mediumRadius,
-                        center = Offset(
-                            x = size.width * 0.72f,
-                            y = size.height * 0.78f,
-                        ),
-                    )
-                    drawCircle(
-                        color = secondaryCircleColor,
-                        radius = smallRadius,
-                        center = Offset(
-                            x = size.width * 0.93f,
-                            y = size.height * 0.64f,
-                        ),
-                    )
                     drawContent()
                 }
             }
@@ -91,11 +73,23 @@ internal fun HomeCard(
                 indication = ripple(),
                 onClick = onClick,
             ),
-        contentAlignment = Alignment.BottomStart,
     ) {
+        Icon(
+            painter = painterResource(model.icon),
+            contentDescription = null,
+            tint = colors.background.copy(alpha = 0.18f),
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .offset(x = 26.dp, y = (-2).dp)
+                .size(92.dp)
+                .rotate(model.iconRotation)
+        )
+
         Text(
-            text = title,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            text = stringResource(model.label),
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             style = typography.titleLarge.copy(color = colors.onPrimary),
         )
     }
@@ -109,8 +103,12 @@ private fun HomeCardPreview() {
             modifier = Modifier.padding(16.dp),
         ) {
             HomeCard(
-                title = "Pokemons",
-                backgroundColor = PokedexTheme.colors.primary,
+                model = HomeMainCardModelUi(
+                    type = HomeMainCardTypeUi.POKEMONS,
+                    label = Res.string.pokemons,
+                    icon = Res.drawable.ic_pokeball_bg_icon,
+                    backgroundColor = PokedexTheme.colors.primary,
+                ),
                 modifier = Modifier.padding(16.dp),
                 onClick = {},
             )

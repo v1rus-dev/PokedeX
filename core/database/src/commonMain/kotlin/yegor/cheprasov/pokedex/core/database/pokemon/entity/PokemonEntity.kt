@@ -2,18 +2,11 @@ package yegor.cheprasov.pokedex.core.database.pokemon.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = PokemonEntity.TABLE_NAME,
-    indices = [
-        Index(value = ["name"], unique = true),
-    ],
-)
+@Entity(tableName = PokemonEntity.TABLE_NAME)
 data class PokemonEntity(
     @PrimaryKey
-    val id: Int,
     val name: String,
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean,

@@ -1,7 +1,5 @@
 package yegor.cheprasov.pokedex.features.home.presentation.models
 
-import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
-
 sealed interface SyncAllPokemonsStateModelUi {
     val percent: Int
 
