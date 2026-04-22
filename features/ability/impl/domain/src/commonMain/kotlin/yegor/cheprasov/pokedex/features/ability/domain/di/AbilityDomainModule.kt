@@ -1,5 +1,7 @@
 package yegor.cheprasov.pokedex.features.ability.domain.di
 
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import yegor.cheprasov.pokedex.features.ability.domain.use_cases.HasAbilitiesInDatabaseUseCaseImpl
 import yegor.cheprasov.pokedex.features.ability.domain.use_cases.SyncAbilityUseCaseImpl
@@ -12,11 +14,8 @@ val abilityDomainModule = module {
         HasAbilitiesInDatabaseUseCaseImpl(get())
     }
 
-    factory<SyncAbilityUseCase> {
-        SyncAbilityUseCaseImpl(get())
-    }
-
-    factory<SyncDataUseCase> {
-        get<SyncAbilityUseCase>()
+    factoryOf(::SyncAbilityUseCaseImpl) {
+        bind<SyncAbilityUseCase>()
+        bind<SyncDataUseCase>()
     }
 }

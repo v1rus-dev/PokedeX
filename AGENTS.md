@@ -84,6 +84,7 @@ Destination flow pattern:
 - Use Koin like DI solution.
 - Prefer constructor injection.
 - Keep DI bindings close to their feature (`features/<feature>/impl/(data/domain/presentation)/di/`).
+- If multiple implementations must be resolved via `getAll<Interface>()`, do not register several unqualified definitions with the same interface as the primary type. Register each implementation with its own primary type and expose shared contracts through `bind<Interface>()`.
 
 ## ViewModel & MVI
 

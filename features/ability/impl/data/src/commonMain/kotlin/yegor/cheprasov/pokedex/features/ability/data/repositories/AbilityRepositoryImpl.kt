@@ -65,7 +65,6 @@ class AbilityRepositoryImpl(
         val completed = AtomicInt(0)
 
         try {
-            Napier.v("Enter to try ability sync", tag = "myTag")
             val abilities = mutableListOf<AbilityLocalModel>()
 
             for (batch in abilityNames.chunked(MAX_CONCURRENT_REQUESTS)) {
@@ -95,10 +94,10 @@ class AbilityRepositoryImpl(
 
             localDatasource.replaceAllAbilities(abilities)
                 .onSuccess {
-                    Napier.v("Successfully saving abilities", tag = "myTag")
+                    Napier.v("Successfully saving abilities", tag = TAG)
                 }
                 .onFailure {
-                    Napier.v("Can't save abilities with error: $it", tag = "myTag")
+                    Napier.v("Can't save abilities with error: $it", tag = TAG)
                 }
 
             val savedCount = abilities.size

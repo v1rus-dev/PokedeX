@@ -1,6 +1,8 @@
 package yegor.cheprasov.pokedex.features.pokemon.domain.di
 
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.GetPokemonUseCaseImpl
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.HasPokemonsInDatabaseUseCaseImpl
@@ -17,12 +19,9 @@ val pokemonDomainModule: Module = module {
         GetPokemonUseCaseImpl(get())
     }
 
-    factory<SyncPokemonsUseCase> {
-        SyncPokemonsUseCaseImpl(get())
-    }
-
-    factory<SyncDataUseCase> {
-        get<SyncPokemonsUseCase>()
+    factoryOf(::SyncPokemonsUseCaseImpl) {
+        bind<SyncPokemonsUseCase>()
+        bind<SyncDataUseCase>()
     }
 
     factory<HasPokemonsInDatabaseUseCase> {
