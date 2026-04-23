@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import yegor.cheprasov.pokedex.core.common.platform.currentPlatform
 import yegor.cheprasov.pokedex.core.common.platform.isAndroid
 import yegor.cheprasov.pokedex.core.design.navigation.TopLevelDestinationSpec
-import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.root.presentation.composable.BottomBar
 import yegor.cheprasov.pokedex.features.root.presentation.navigation.rememberRootNavigator
 

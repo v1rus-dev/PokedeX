@@ -7,12 +7,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,9 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,11 +50,10 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.ic_close
-import yegor.cheprasov.pokedex.core.design.composable.icons.BackIcon
+import yegor.cheprasov.pokedex.core.design.composable.buttons.BackButton
 import yegor.cheprasov.pokedex.core.design.composable.text_fields.TextField
 import yegor.cheprasov.pokedex.core.design.composable.text_fields.TextFieldColors
 import yegor.cheprasov.pokedex.core.design.composable.text_fields.TextFieldDefaults
-import yegor.cheprasov.pokedex.core.design.ext.roundedCornerTo
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 
 @Composable
@@ -85,62 +79,24 @@ fun PokedexSearchTopAppBar(
     val largeHeight = statusBarHeight + 64.dp
     val smallHeight = statusBarHeight + 36.dp
 
-    Box(modifier = modifier.fillMaxWidth().height(largeHeight).background(Color.Transparent)) {
-
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val largeHeightPx = largeHeight.toPx()
-            val smallHeightPx = smallHeight.toPx()
-
-            val leftBottom = Offset(0f, largeHeightPx)
-            val firstCorner = Offset(35.dp.toPx(), largeHeightPx)
-            val secondCorner = Offset(80.dp.toPx(), smallHeightPx)
-            val rightBottom = Offset(size.width, smallHeightPx)
-            val cornerRadius = 12.dp.toPx()
-
-            val path = Path().apply {
-                moveTo(0f, 0f)
-                lineTo(0f, largeHeightPx)
-
-                roundedCornerTo(
-                    previous = leftBottom,
-                    corner = firstCorner,
-                    next = secondCorner,
-                    radius = cornerRadius
-                )
-
-                roundedCornerTo(
-                    previous = firstCorner,
-                    corner = secondCorner,
-                    next = rightBottom,
-                    radius = cornerRadius
-                )
-
-                lineTo(rightBottom.x, rightBottom.y)
-                lineTo(size.width, 0f)
-                close()
-            }
-
-            drawPath(path = path, color = colors.primary)
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize().padding(horizontal = spacing.small)
-        ) {
-            IconButton(onClick = onBack) {
-                BackIcon(color = PokedexTheme.colors.iconOnPrimary)
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            TextField(
-                textFieldState = textFieldState,
-                hint = hint,
-                textStyle = textStyle,
-                hintTextStyle = hintTextStyle,
-                keyboardOptions = keyboardOptions,
-                onKeyboardAction = onKeyboardAction,
-                scrollState = scrollState
-            )
-        }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().height(largeHeight)
+            .background(PokedexTheme.colors.primary)
+            .padding(horizontal = spacing.small)
+            .padding(top = statusBarHeight)
+    ) {
+        BackButton(onClick = onBack)
+        Spacer(modifier = Modifier.width(12.dp))
+        TextField(
+            textFieldState = textFieldState,
+            hint = hint,
+            textStyle = textStyle,
+            hintTextStyle = hintTextStyle,
+            keyboardOptions = keyboardOptions,
+            onKeyboardAction = onKeyboardAction,
+            scrollState = scrollState
+        )
     }
 }
 

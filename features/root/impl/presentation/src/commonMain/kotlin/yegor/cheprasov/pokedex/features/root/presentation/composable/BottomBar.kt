@@ -34,14 +34,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.launch
@@ -52,6 +56,7 @@ import pokedex.core.resources.generated.resources.home
 import pokedex.core.resources.generated.resources.pokeball
 import pokedex.core.resources.generated.resources.pokeball_settings
 import pokedex.core.resources.generated.resources.settings
+import yegor.cheprasov.pokedex.core.design.composable.cardSurface
 import yegor.cheprasov.pokedex.core.design.navigation.TopLevelDestinationSpec
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.favorites.api.Favorites
@@ -96,10 +101,17 @@ internal fun BottomBar(
             .onGloballyPositioned { coords ->
                 boxRootX = coords.positionInRoot().x
             }
-            .clip(shape)
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f), shape)
-            .border(0.5.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f), shape)
-            .height(64.dp),
+            .cardSurface(shape = shape)
+            //            .dropShadow(shape, Shadow(
+//                radius = 4.dp,
+//                offset = DpOffset(x = 0.dp, y = 4.dp),
+//                color = Color.Black.copy(alpha = 0.05f),
+//                spread = 0.dp
+//            ))
+//            .border(0.5.dp, Color.Black.copy(alpha = 0.06f), shape)
+//            .clip(shape)
+//            .background(PokedexTheme.colors.surface, shape)
+            .height(64.dp)
     ) {
         Row(
             modifier = Modifier
@@ -186,6 +198,7 @@ private fun BottomBarButton(
 }
 
 @Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun BottomBarPreview() {
     val home = TopLevelDestinationSpec(
@@ -212,7 +225,7 @@ private fun BottomBarPreview() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Blue.copy(alpha = 0.1f)),
+                .background(PokedexTheme.colors.background),
         ) {
             BottomBar(
                 modifier = Modifier
