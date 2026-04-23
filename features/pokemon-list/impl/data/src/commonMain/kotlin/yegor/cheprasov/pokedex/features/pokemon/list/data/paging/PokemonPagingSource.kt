@@ -6,9 +6,10 @@ import yegor.cheprasov.pokedex.features.pokemon.list.data.datasource.LocalPokemo
 import yegor.cheprasov.pokedex.features.pokemon.list.data.mappers.PokemonMapper
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 
-class PokemonListPagingSource(
+class PokemonPagingSource(
     private val localPokemonListDatasource: LocalPokemonListDatasource,
     private val pokemonMapper: PokemonMapper,
+    private val searchQuery: String,
 ) : PagingSource<Int, PokemonModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonModel> {
@@ -16,9 +17,7 @@ class PokemonListPagingSource(
         val limit = params.loadSize
 
         return try {
-            val pokemons = localPokemonListDatasource
-                .getPokemonList(offset = offset, limit = limit)
-                .getOrThrow()
+            val pokemons = loadPokemons(offset = offset, limit = limit)
                 .map(pokemonMapper::map)
 
             LoadResult.Page(
@@ -44,6 +43,17 @@ class PokemonListPagingSource(
 
     private fun nextOffset(offset: Int, limit: Int, loadedCount: Int): Int? =
         if (loadedCount < limit) null else offset + loadedCount
+
+    private suspend fun loadPokemons(offset: Int, limit: Int) =
+        if (searchQuery.isBlank()) {
+            localPokemonListDatasource
+                .getPokemonList(offset = offset, limit = limit)
+                .getOrThrow()
+        } else {
+            localPokemonListDatasource
+                .searchPokemonList(searchQuery = searchQuery, offset = offset, limit = limit)
+                .getOrThrow()
+        }
 
     private companion object {
         const val DEFAULT_OFFSET = 0

@@ -88,7 +88,7 @@ internal fun PokemonCard(
                 style = PokedexTheme.typography.labelSmall.copy(
                     color = PokedexTheme.colors.textSecondary
                 ),
-                modifier = Modifier.width(36.dp)
+                modifier = Modifier.width(50.dp)
             )
 
             if (pokemon.imageUrl.isNotEmpty()) {
@@ -142,7 +142,7 @@ private fun PokemonCardPreview() {
         Column {
             PokemonCard(
                 pokemon = PokemonUiModel(
-                    name = "Bulbasaur", 1, imageUrl = "", pokemonTypes = listOf(
+                    name = "Bulbasaur", 103256, imageUrl = "", pokemonTypes = listOf(
                         PokemonTypeUiModel.Grass,
                         PokemonTypeUiModel.Ground
                     )

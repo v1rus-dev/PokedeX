@@ -9,6 +9,10 @@ data object PokemonListStateUi : StateUi
 sealed interface PokemonListActionUi : ActionUi {
     data object OnBackClick : PokemonListActionUi
 
+    data class SearchQueryChanged(
+        val query: String,
+    ) : PokemonListActionUi
+
     data class ClickPokemon(
         val name: String,
     ) : PokemonListActionUi

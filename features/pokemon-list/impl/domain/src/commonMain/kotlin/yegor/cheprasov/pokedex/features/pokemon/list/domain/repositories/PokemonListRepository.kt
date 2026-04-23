@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 
 interface PokemonListRepository {
-    fun getPokemonList(pageSize: Int): Flow<PagingData<PokemonModel>>
+    fun getPokemonList(searchQuery: String = "", pageSize: Int): Flow<PagingData<PokemonModel>>
 }

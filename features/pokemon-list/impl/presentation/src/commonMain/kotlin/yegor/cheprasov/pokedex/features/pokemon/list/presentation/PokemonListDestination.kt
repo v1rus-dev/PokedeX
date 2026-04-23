@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.layout.LazyLayoutCacheWindow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import org.koin.compose.koinInject
@@ -18,11 +20,13 @@ fun PokemonListDestination(
     navigator: AppNavigator = koinInject(),
     viewModel: PokemonListViewModel = koinViewModel(),
 ) {
+    val state by viewModel.uiState.collectAsState()
     val lazyPagingItems = viewModel.pokemonPagingDataFlow.collectAsLazyPagingItems()
     val cacheWindow = LazyLayoutCacheWindow(aheadFraction = 0.5f, behindFraction = 0.3f)
     val lazyListState = rememberLazyListState(cacheWindow = cacheWindow)
 
     PokemonListScreen(
+        state = state,
         listState = lazyListState,
         lazyPagingItems = lazyPagingItems,
         onAction = viewModel::onAction,

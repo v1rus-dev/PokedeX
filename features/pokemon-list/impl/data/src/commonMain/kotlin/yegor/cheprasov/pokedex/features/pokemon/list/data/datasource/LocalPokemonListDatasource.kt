@@ -13,4 +13,14 @@ class LocalPokemonListDatasource(
             pokemonDao.getPokemonsPage(limit = limit, offset = offset)
         }
     }
+
+    suspend fun searchPokemonList(
+        searchQuery: String,
+        offset: Int,
+        limit: Int,
+    ): Result<List<PokemonWithRelationsEntity>> = withContext(Dispatchers.IO) {
+        runCatching {
+            pokemonDao.searchByNamePage(pokemonName = searchQuery, limit = limit, offset = offset)
+        }
+    }
 }

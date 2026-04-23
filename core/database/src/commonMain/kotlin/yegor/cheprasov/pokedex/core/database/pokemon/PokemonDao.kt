@@ -28,6 +28,10 @@ interface PokemonDao {
     suspend fun getPokemonsPage(limit: Int, offset: Int): List<PokemonWithRelationsEntity>
 
     @Transaction
+    @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :pokemonName || '%' ORDER BY name ASC LIMIT :limit OFFSET :offset")
+    suspend fun searchByNamePage(pokemonName: String, limit: Int, offset: Int): List<PokemonWithRelationsEntity>
+
+    @Transaction
     @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :pokemonName || '%' ORDER BY name ASC")
     fun searchByName(pokemonName: String): Flow<List<PokemonWithRelationsEntity>>
 

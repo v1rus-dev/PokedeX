@@ -2,15 +2,17 @@ package yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +20,9 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
@@ -25,10 +30,13 @@ import pokedex.core.resources.generated.resources.search_pokemon
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexSearchTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListStateUi
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
+@OptIn(FlowPreview::class)
 @Composable
 internal fun PokemonListScreen(
+    state: PokemonListStateUi,
     listState: LazyListState,
     lazyPagingItems: LazyPagingItems<PokemonUiModel>,
     onAction: (PokemonListActionUi) -> Unit
@@ -36,6 +44,14 @@ internal fun PokemonListScreen(
     val colors = PokedexTheme.colors
     val scrollState = rememberScrollState()
     val textFieldState = rememberTextFieldState()
+
+    LaunchedEffect(textFieldState) {
+        snapshotFlow { textFieldState.text.toString() }
+            .distinctUntilChanged()
+            .collect { query ->
+                onAction(PokemonListActionUi.SearchQueryChanged(query))
+            }
+    }
 
     Scaffold(
         containerColor = colors.background,
@@ -75,6 +91,7 @@ internal fun PokemonListScreen(
 private fun PokemonListScreenPreview() {
     PokedexTheme {
         PokemonListScreen(
+            state = PokemonListStateUi,
             listState = rememberLazyListState(),
             lazyPagingItems = flowOf<PagingData<PokemonUiModel>>().collectAsLazyPagingItems(),
             onAction = {},
