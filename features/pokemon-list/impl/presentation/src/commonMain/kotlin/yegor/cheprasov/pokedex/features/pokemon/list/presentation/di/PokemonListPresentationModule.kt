@@ -1,18 +1,23 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.presentation.di
 
-import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import yegor.cheprasov.pokedex.core.common.mapper.Mapper
+import org.koin.dsl.navigation3.navigation
+import yegor.cheprasov.pokedex.core.design.animation.ProvideLocalAnimatedScope
+import yegor.cheprasov.pokedex.features.pokemon.list.api.PokemonList
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListDestination
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListViewModel
-import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
-import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonUiMapper
-import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
-val mappers = module {
-    factory<Mapper<PokemonModel, PokemonUiModel>> { PokemonUiMapper() }
-}
-
+@OptIn(KoinExperimentalAPI::class)
 val pokemonListPresentationModule = module {
-    includes(mappers)
-    viewModelOf(::PokemonListViewModel)
+    viewModel {
+        PokemonListViewModel(get(), get())
+    }
+
+    navigation<PokemonList> {
+        ProvideLocalAnimatedScope {
+            PokemonListDestination()
+        }
+    }
 }

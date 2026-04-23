@@ -28,20 +28,20 @@ androidx-appcompat = "1.7.1"
 androidx-core = "1.18.0"
 androidx-espresso = "3.7.0"
 androidx-lifecycle = "2.10.0"
-androidx-lifecycle-navigation3 = "2.11.0-alpha03"
-androidx-navigation3 = "1.1.0"
+androidx-lifecycle-navigation3 = "2.11.0-beta01"
+androidx-navigation3 = "1.1.1"
 androidx-material3-adaptive-navigation3 = "1.3.0-alpha10"
 androidx-testExt = "1.3.0"
 
 # Compose Multiplatform forks for shared Navigation3 UI
-jetbrains-navigation3 = "1.0.0-alpha06"
-jetbrains-adaptive-navigation3 = "1.3.0-alpha06"
+jetbrains-navigation3 = "1.1.0"
+jetbrains-adaptive-navigation3 = "1.3.0-alpha07"
 
 # Networking / DI / Serialization / Test
 junit = "4.13.2"
 koin = "4.2.1"
 coroutines = "1.10.2"
-ktor = "3.4.2"
+ktor = "3.4.3"
 kotlinx-serialization = "1.11.0"
 napier = "2.7.1"
 coil = "3.4.0"
@@ -96,6 +96,7 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 # Ktor

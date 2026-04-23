@@ -2,17 +2,13 @@ package yegor.cheprasov.pokedex.features.pokemon.list.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import io.ktor.http.Url
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import yegor.cheprasov.pokedex.features.pokemon.list.data.datasource.NetworkPokemonListDatasource
+import yegor.cheprasov.pokedex.features.pokemon.list.data.datasource.LocalPokemonListDatasource
+import yegor.cheprasov.pokedex.features.pokemon.list.data.mappers.PokemonMapper
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
-import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonUseCase
 
 class PokemonListPagingSource(
-    private val networkPokemonListDatasource: NetworkPokemonListDatasource,
-    private val getPokemonUseCase: GetPokemonUseCase,
+    private val localPokemonListDatasource: LocalPokemonListDatasource,
+    private val pokemonMapper: PokemonMapper,
 ) : PagingSource<Int, PokemonModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonModel> {
@@ -20,22 +16,15 @@ class PokemonListPagingSource(
         val limit = params.loadSize
 
         return try {
-            val response = networkPokemonListDatasource
+            val pokemons = localPokemonListDatasource
                 .getPokemonList(offset = offset, limit = limit)
                 .getOrThrow()
-
-            val pokemons = coroutineScope {
-                response.results.map { pokemonListItem ->
-                    async {
-                        getPokemonUseCase(pokemonListItem.name).getOrThrow()
-                    }
-                }.awaitAll()
-            }
+                .map(pokemonMapper::map)
 
             LoadResult.Page(
                 data = pokemons,
-                prevKey = extractOffset(response.previous),
-                nextKey = extractOffset(response.next),
+                prevKey = previousOffset(offset = offset, limit = limit),
+                nextKey = nextOffset(offset = offset, limit = limit, loadedCount = pokemons.size),
             )
         } catch (throwable: Throwable) {
             LoadResult.Error(throwable)
@@ -50,10 +39,11 @@ class PokemonListPagingSource(
             ?: closestPage.nextKey?.minus(state.config.pageSize)?.coerceAtLeast(0)
     }
 
-    private fun extractOffset(url: String?): Int? {
-        if (url == null) return null
-        return Url(url).parameters["offset"]?.toIntOrNull()
-    }
+    private fun previousOffset(offset: Int, limit: Int): Int? =
+        if (offset == DEFAULT_OFFSET) null else (offset - limit).coerceAtLeast(DEFAULT_OFFSET)
+
+    private fun nextOffset(offset: Int, limit: Int, loadedCount: Int): Int? =
+        if (loadedCount < limit) null else offset + loadedCount
 
     private companion object {
         const val DEFAULT_OFFSET = 0

@@ -25,6 +25,7 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
         val sortedAbilities = input.abilities.sortedBy { it.slot }
         val pokemonEntity = PokemonEntity(
             name = normalizedPokemonName,
+            id = input.id,
             isFavorite = isFavorite,
             frontDefault = input.sprites.frontDefault,
             backDefault = input.sprites.backDefault,

@@ -12,6 +12,9 @@ import yegor.cheprasov.pokedex.features.home.domain.di.homeDomainModule
 import yegor.cheprasov.pokedex.features.home.presentation.di.homePresentationModule
 import yegor.cheprasov.pokedex.features.pokemon.data.di.pokemonDataModule
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.di.pokemonDetailsPresentationModule
+import yegor.cheprasov.pokedex.features.pokemon.list.data.di.pokemonListDataModule
+import yegor.cheprasov.pokedex.features.pokemon.list.domain.di.pokemonListDomainModule
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.di.pokemonListPresentationModule
 import yegor.cheprasov.pokedex.features.pokemon.domain.di.pokemonDomainModule
 import yegor.cheprasov.pokedex.features.pokemon.ui.di.pokemonUiModule
 import yegor.cheprasov.pokedex.features.search.data.di.pokemonSearchDataModule
@@ -30,6 +33,9 @@ val featureModules: List<Module> = listOf(
     pokemonDataModule,
     pokemonDomainModule,
     pokemonUiModule,
+    pokemonListDataModule,
+    pokemonListDomainModule,
+    pokemonListPresentationModule,
     homeDataModule,
     homeDomainModule,
     homePresentationModule,

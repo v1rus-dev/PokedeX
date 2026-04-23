@@ -12,5 +12,6 @@ kotlin {
         implementation(projects.features.home.impl.domain)
         implementation(projects.features.syncData.api)
         implementation(projects.features.search.api)
+        implementation(projects.features.pokemonList.api)
     }
 }

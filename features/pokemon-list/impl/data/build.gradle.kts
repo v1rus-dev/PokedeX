@@ -4,6 +4,7 @@ plugins {
 
 kotlin {
     sourceSets.commonMain.dependencies {
+        implementation(projects.features.ability.api)
         implementation(projects.features.pokemon.api)
         implementation(projects.features.pokemonList.impl.domain)
         implementation(libs.androidx.paging.common)

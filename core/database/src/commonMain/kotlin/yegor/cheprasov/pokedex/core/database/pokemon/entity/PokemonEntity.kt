@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey
 data class PokemonEntity(
     @PrimaryKey
     val name: String,
+    @ColumnInfo("id")
+    val id: Int,
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean,
     @ColumnInfo(name = "front_default")

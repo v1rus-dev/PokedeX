@@ -7,6 +7,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import yegor.cheprasov.pokedex.core.design.composable.effects.CollectEventsUiEffect
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
+import yegor.cheprasov.pokedex.features.pokemon.list.api.PokemonList
 import yegor.cheprasov.pokedex.features.search.api.PokemonSearch
 import yegor.cheprasov.pokedex.features.home.presentation.composable.HomeScreen
 
@@ -22,6 +23,7 @@ fun HomeDestination(
     CollectEventsUiEffect(viewModel.uiEvents) { event ->
         when (event) {
             HomeEventUi.OpenSearchScreen -> navigator.navigate(PokemonSearch)
+            HomeEventUi.OpenPokemonListScreen -> navigator.navigate(PokemonList)
         }
     }
 }

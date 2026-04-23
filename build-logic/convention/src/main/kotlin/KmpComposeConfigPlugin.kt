@@ -15,6 +15,7 @@ class KmpComposeConfigPlugin : Plugin<Project> {
                 sourceSets.getByName("commonMain").dependencies {
                     implementation(libs.compose.material3)
                     implementation(libs.coil.compose)
+                    implementation(libs.coil.compose.core)
                     implementation(libs.coil.network.ktor3)
                     implementation(libs.androidx.lifecycle.runtimeCompose)
                 }

@@ -129,7 +129,7 @@ class PokemonRepositoryImpl(
                 entities += batchEntities
             }
 
-            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.name })
+            localDatasource.replaceAllPokemons(entities.sortedBy { it.pokemon.id })
                 .onSuccess {
                     Napier.v("Successfully saved pokemons: ${entities.size}", tag = TAG)
                 }

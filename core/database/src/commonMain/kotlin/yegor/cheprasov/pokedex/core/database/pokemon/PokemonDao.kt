@@ -16,12 +16,16 @@ interface PokemonDao {
     suspend fun hasPokemons(): Boolean
 
     @Transaction
-    @Query("SELECT * FROM pokemons ORDER BY name ASC")
+    @Query("SELECT * FROM pokemons ORDER BY id ASC")
     fun observeAll(): Flow<List<PokemonWithRelationsEntity>>
 
     @Transaction
-    @Query("SELECT * FROM pokemons ORDER BY name ASC")
+    @Query("SELECT * FROM pokemons ORDER BY id ASC")
     suspend fun getAllPokemons(): List<PokemonWithRelationsEntity>
+
+    @Transaction
+    @Query("SELECT * FROM pokemons ORDER BY id ASC LIMIT :limit OFFSET :offset")
+    suspend fun getPokemonsPage(limit: Int, offset: Int): List<PokemonWithRelationsEntity>
 
     @Transaction
     @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :pokemonName || '%' ORDER BY name ASC")

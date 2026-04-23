@@ -5,8 +5,7 @@ import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemons
 import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemonsStateModelUi.*
 import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataState
 
-class SyncDataStateToModelUiMapper :
-    Mapper<SyncDataState, SyncAllPokemonsStateModelUi> {
+class SyncDataStateToModelUiMapper : Mapper<SyncDataState, SyncAllPokemonsStateModelUi> {
     override fun map(input: SyncDataState): SyncAllPokemonsStateModelUi = when (input) {
         is SyncDataState.Error -> Error(input.completed, input.total, input.throwable)
         is SyncDataState.InProgress -> InProgress(input.completed, input.total)

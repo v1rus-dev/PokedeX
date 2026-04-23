@@ -1,7 +1,9 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -18,8 +21,8 @@ import androidx.paging.compose.itemKey
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
-import pokedex.core.resources.generated.resources.pokedex
-import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
+import pokedex.core.resources.generated.resources.search_pokemon
+import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexSearchTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
@@ -31,24 +34,36 @@ internal fun PokemonListScreen(
     onAction: (PokemonListActionUi) -> Unit
 ) {
     val colors = PokedexTheme.colors
+    val scrollState = rememberScrollState()
+    val textFieldState = rememberTextFieldState()
+
     Scaffold(
         containerColor = colors.background,
         topBar = {
-            PokedexTopAppBar(title = stringResource(Res.string.pokedex))
+            PokedexSearchTopAppBar(
+                textFieldState = textFieldState,
+                hint = stringResource(Res.string.search_pokemon),
+                scrollState = scrollState,
+                onBack = {
+                    onAction(PokemonListActionUi.OnBackClick)
+                },
+            )
         }
-    ) {
-        Column(modifier = Modifier.fillMaxSize().padding(it)) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                items(
-                    count = lazyPagingItems.itemCount,
-                    key = lazyPagingItems.itemKey { pokemon -> pokemon.name },
-                ) { index ->
-                    lazyPagingItems[index]?.let { pokemon ->
-                        PokemonItem(pokemon = pokemon, onAction = onAction)
-                    }
+    ) { innerPadding ->
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(
+                count = lazyPagingItems.itemCount,
+                key = lazyPagingItems.itemKey { pokemon -> pokemon.id },
+            ) { index ->
+                lazyPagingItems[index]?.let {
+                    PokemonCard(it, onClick = {
+                        onAction.invoke(PokemonListActionUi.ClickPokemon(it.name))
+                    })
                 }
             }
         }
@@ -58,6 +73,11 @@ internal fun PokemonListScreen(
 @Preview
 @Composable
 private fun PokemonListScreenPreview() {
-    PokemonListScreen(
-        listState = rememberLazyListState(), lazyPagingItems = flowOf<PagingData<PokemonUiModel>>().collectAsLazyPagingItems(), onAction = {})
+    PokedexTheme {
+        PokemonListScreen(
+            listState = rememberLazyListState(),
+            lazyPagingItems = flowOf<PagingData<PokemonUiModel>>().collectAsLazyPagingItems(),
+            onAction = {},
+        )
+    }
 }

@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.uiToolingPreview)
     implementation(libs.koin.android)
+    implementation(libs.coil.compose.core)
+    implementation(libs.coil.compose)
 
     debugImplementation(libs.compose.uiTooling)
 }

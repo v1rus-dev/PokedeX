@@ -21,4 +21,5 @@ sealed interface HomeActionUi : ActionUi {
 
 sealed interface HomeEventUi : EventUi {
     data object OpenSearchScreen : HomeEventUi
+    data object OpenPokemonListScreen : HomeEventUi
 }

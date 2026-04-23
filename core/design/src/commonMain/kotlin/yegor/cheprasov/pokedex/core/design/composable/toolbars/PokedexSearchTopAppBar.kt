@@ -81,7 +81,7 @@ fun PokedexSearchTopAppBar(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().height(largeHeight)
+        modifier = modifier.fillMaxWidth().height(largeHeight)
             .background(PokedexTheme.colors.primary)
             .padding(horizontal = spacing.small)
             .padding(top = statusBarHeight)

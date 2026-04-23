@@ -37,7 +37,7 @@ class HomeViewModel(
 
     private fun onMainHomeCardClick(type: HomeMainCardTypeUi) {
         when (type) {
-            HomeMainCardTypeUi.POKEMONS -> Unit
+            HomeMainCardTypeUi.POKEMONS -> sendEvent(HomeEventUi.OpenPokemonListScreen)
             HomeMainCardTypeUi.ABILITIES -> Unit
             HomeMainCardTypeUi.LOCATIONS -> Unit
         }

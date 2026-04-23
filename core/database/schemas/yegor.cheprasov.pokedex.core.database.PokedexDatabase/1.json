@@ -2,16 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1703025d2b50e7f338ed2e783b081c3f",
+    "identityHash": "0a64121be03864e35d3bbc9d3e668270",
     "entities": [
       {
         "tableName": "pokemons",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `is_favorite` INTEGER NOT NULL, `front_default` TEXT, `back_default` TEXT, `front_female` TEXT, `back_female` TEXT, `height` INTEGER NOT NULL, `weight` INTEGER NOT NULL, `base_experience` INTEGER, PRIMARY KEY(`name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `id` INTEGER NOT NULL, `is_favorite` INTEGER NOT NULL, `front_default` TEXT, `back_default` TEXT, `front_female` TEXT, `back_female` TEXT, `height` INTEGER NOT NULL, `weight` INTEGER NOT NULL, `base_experience` INTEGER, PRIMARY KEY(`name`))",
         "fields": [
           {
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -242,7 +248,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1703025d2b50e7f338ed2e783b081c3f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0a64121be03864e35d3bbc9d3e668270')"
     ]
   }
 }

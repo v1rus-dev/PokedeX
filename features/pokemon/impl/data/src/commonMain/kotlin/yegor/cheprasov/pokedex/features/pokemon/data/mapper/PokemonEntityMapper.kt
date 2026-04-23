@@ -34,6 +34,7 @@ class PokemonEntityMapper : Mapper<PokemonWithRelationsEntity, PokemonModel> {
             baseExperience = input.pokemon.baseExperience,
             types = sortedTypes,
             abilities = sortedAbilities,
+            id = input.pokemon.id,
             sprites = PokemonSprites(
                 backDefault = input.pokemon.backDefault,
                 frontDefault = input.pokemon.frontDefault,
