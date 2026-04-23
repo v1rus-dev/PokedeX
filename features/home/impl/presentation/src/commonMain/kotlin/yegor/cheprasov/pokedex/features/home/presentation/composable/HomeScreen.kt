@@ -13,13 +13,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.pokedex
-import pokedex.core.resources.generated.resources.search_pokemon
+import pokedex.core.resources.generated.resources.search
 import yegor.cheprasov.pokedex.core.design.animation.localSharedElement
 import yegor.cheprasov.pokedex.core.design.composable.pull_to_refresh.PokedexPullToRefresh
 import yegor.cheprasov.pokedex.core.design.composable.pull_to_refresh.PokedexPullToRefreshIndicator
@@ -74,7 +73,7 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
                     onClick = {
                         onAction.invoke(HomeActionUi.OnSearchClick)
                     },
-                    hint = stringResource(Res.string.search_pokemon)
+                    hint = stringResource(Res.string.search)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 FlowRow(
@@ -101,7 +100,6 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
 }
 
 @Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun HomeScreenPreview() {
     PokedexTheme {

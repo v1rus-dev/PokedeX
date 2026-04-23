@@ -1,0 +1,20 @@
+package yegor.cheprasov.pokedex.features.pokemon.ui.di
+
+import org.koin.dsl.module
+import yegor.cheprasov.pokedex.core.common.mapper.Mapper
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeUiMapper
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonUiMapper
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
+
+val pokemonUiModule = module {
+    factory<Mapper<PokemonType, PokemonTypeUiModel>> {
+        PokemonTypeUiMapper()
+    }
+
+    factory<Mapper<PokemonModel, PokemonUiModel>> {
+        PokemonUiMapper(get())
+    }
+}

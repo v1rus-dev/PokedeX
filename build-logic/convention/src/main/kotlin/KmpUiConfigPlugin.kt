@@ -16,7 +16,7 @@ class KmpUiConfigPlugin : Plugin<Project> {
                     implementation(project(":core:common"))
                     implementation(project(":core:design"))
                     implementation(project(":core:resources"))
-                    implementation(libs.compose.components.resources)
+                    implementation(libs.koin.core)
                     implementation(libs.kotlinx.coroutines.core)
                     implementation(libs.kotlinx.serialization.core)
                 }

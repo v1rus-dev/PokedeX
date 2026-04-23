@@ -96,7 +96,7 @@ internal val LightPokedexColors = PokedexColors(
     textPrimary          = Color(0xFF291B1E),
     textSecondary        = Color(0xFF6B4A50),
     textTertiary         = Color(0xFFB09499),
-    textFieldBackground = Color(0xFFF4F4F4),
+    textFieldBackground = Color(0xFFF9F9F9),
 
     iconOnPrimary        = Color.White,
     iconOnSurface        = Color(0xFF5E4349),

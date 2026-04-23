@@ -6,7 +6,4 @@ kotlin {
     sourceSets.commonMain.dependencies {
         implementation(projects.features.pokemon.api)
     }
-    sourceSets.commonTest.dependencies {
-        implementation(libs.kotlin.test)
-    }
 }

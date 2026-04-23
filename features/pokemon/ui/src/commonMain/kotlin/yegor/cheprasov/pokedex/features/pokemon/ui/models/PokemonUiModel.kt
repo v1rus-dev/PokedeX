@@ -5,12 +5,12 @@ import androidx.compose.runtime.Stable
 @Stable
 data class PokemonUiModel(
     val name: String,
-    val url: String?,
+    val pokemonTypes: List<PokemonTypeUiModel>
 ) {
     companion object {
         val PREVIEW = PokemonUiModel(
             name = "Charmander",
-            url = "",
+            pokemonTypes = listOf(PokemonTypeUiModel.Fire)
         )
     }
 }
