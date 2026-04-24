@@ -30,7 +30,7 @@ private fun PokemonDetailsScreenPreview() {
         PokemonDetailsScreen(
             state = PokemonDetailsStateUi(
                 pokemonName = "Bulbasaur",
-                pokemonType = PokemonTypeUiModel.Grass
+                pokemonType = PokemonTypeUiModel.Grass,
             ),
             onAction = {}
         )

@@ -1,7 +1,9 @@
 package yegor.cheprasov.pokedex.features.pokemon.details.presentation.composable
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import yegor.cheprasov.pokedex.core.design.composable.buttons.BackButton
+import yegor.cheprasov.pokedex.core.design.composable.buttons.FavoriteButton
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsActionUi
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsStateUi
@@ -35,8 +38,19 @@ internal fun PokemonDetailsHeader(
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )
-        BackButton(modifier = Modifier.padding(start = 16.dp, top = 16.dp + statusBarHeight)) {
-            onAction(PokemonDetailsActionUi.OnBackClick)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp + statusBarHeight),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            BackButton {
+                onAction(PokemonDetailsActionUi.OnBackClick)
+            }
+            FavoriteButton(isFavorite = state.isFavorite) {
+                onAction(PokemonDetailsActionUi.OnFavoriteClick)
+            }
         }
     }
 }

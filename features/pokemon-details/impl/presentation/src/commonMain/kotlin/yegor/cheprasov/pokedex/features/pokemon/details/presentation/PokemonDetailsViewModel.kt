@@ -27,22 +27,33 @@ class PokemonDetailsViewModel(
     }
 
     override fun onAction(action: PokemonDetailsActionUi) {
-        when(action) {
+        when (action) {
             PokemonDetailsActionUi.OnBackClick -> sendEvent(PokemonDetailsEventUi.CloseScreen)
+            PokemonDetailsActionUi.OnFavoriteClick -> onFavoriteClick()
         }
     }
 
     private fun getPokemon() {
         viewModelScope.launch {
+            updateState { copy(detailsState = PokemonDetailsLoadStateUi.Loading) }
             getPokemonUseCase.invoke(pokemonName)
                 .map(pokemonModelToUiModelMapper::map)
-                .onSuccess {
-                    Napier.v("Pokemon: ${it}")
+                .onSuccess { pokemon ->
+                    Napier.v("Pokemon: $pokemon")
+                    updateState {
+                        copy(detailsState = PokemonDetailsLoadStateUi.Success(pokemon))
+                    }
                 }
-                .onFailure {
-                    Napier.e("Failure getting pokemon: $it")
+                .onFailure { throwable ->
+                    Napier.e("Failure getting pokemon: $throwable")
+                    updateState { copy(detailsState = PokemonDetailsLoadStateUi.Failure) }
                 }
         }
     }
 
+    private fun onFavoriteClick() {
+        viewModelScope.launch {
+
+        }
+    }
 }

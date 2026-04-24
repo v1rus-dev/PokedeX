@@ -1,6 +1,7 @@
 package yegor.cheprasov.pokedex.features.pokemon.list.data.datasource
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity

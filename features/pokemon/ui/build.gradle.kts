@@ -1,3 +1,5 @@
+import extensions.libs
+
 plugins {
     alias(libs.plugins.pokedex.kmp.ui.config.plugin)
 }
@@ -5,5 +7,6 @@ plugins {
 kotlin {
     sourceSets.commonMain.dependencies {
         implementation(projects.features.pokemon.api)
+        implementation(libs.coil.compose)
     }
 }
