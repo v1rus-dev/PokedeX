@@ -17,11 +17,13 @@ import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonPagedUseCase
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonModelToUiModelMapper
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeUiModelToModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 class PokemonListViewModel(
     private val getPokemonListUseCase: GetPokemonPagedUseCase,
-    private val pokemonMapper: PokemonModelToUiModelMapper
+    private val pokemonMapper: PokemonModelToUiModelMapper,
+    private val pokemonTypeUiModelToModel: PokemonTypeUiModelToModel
 ) : MviViewModel<PokemonListStateUi, PokemonListActionUi, PokemonListEventUi>(initialState = PokemonListStateUi) {
 
     private val mutableSearchQuery = MutableStateFlow("")
@@ -43,7 +45,7 @@ class PokemonListViewModel(
         when (action) {
             PokemonListActionUi.OnBackClick -> closeScreen()
             is PokemonListActionUi.SearchQueryChanged -> updateSearchQuery(action.query)
-            is PokemonListActionUi.ClickPokemon -> clickPokemon(action.name)
+            is PokemonListActionUi.ClickPokemon -> clickPokemon(action.pokemonUiModel)
         }
     }
 
@@ -51,8 +53,13 @@ class PokemonListViewModel(
         sendEvent(PokemonListEventUi.CloseScreen)
     }
 
-    private fun clickPokemon(name: String) {
-        sendEvent(PokemonListEventUi.NavigateToPokemonDetail(name))
+    private fun clickPokemon(pokemon: PokemonUiModel) {
+        sendEvent(
+            PokemonListEventUi.NavigateToPokemonDetail(
+                pokemon.name,
+                pokemonTypeUiModelToModel.map(pokemon.mainType)
+            )
+        )
     }
 
     private fun updateSearchQuery(query: String) {

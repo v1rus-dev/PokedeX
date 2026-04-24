@@ -21,7 +21,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
@@ -78,7 +77,7 @@ internal fun PokemonListScreen(
             ) { index ->
                 lazyPagingItems[index]?.let {
                     PokemonCard(it, onClick = {
-                        onAction.invoke(PokemonListActionUi.ClickPokemon(it.name))
+                        onAction.invoke(PokemonListActionUi.ClickPokemon(it))
                     })
                 }
             }

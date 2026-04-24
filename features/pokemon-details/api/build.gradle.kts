@@ -5,5 +5,6 @@ plugins {
 kotlin {
     sourceSets.commonMain.dependencies {
         implementation(libs.androidx.navigation3.runtime)
+        implementation(projects.features.pokemon.api)
     }
 }

@@ -14,8 +14,9 @@ val pokemonDetailsPresentationModule = module {
     viewModelOf(::PokemonDetailsViewModel)
 
     navigation<PokemonDetails> { route ->
+        val pokemonName = route.pokemonName
         ProvideLocalAnimatedScope {
-            PokemonDetailsDestination()
+            PokemonDetailsDestination(pokemonName)
         }
     }
 }

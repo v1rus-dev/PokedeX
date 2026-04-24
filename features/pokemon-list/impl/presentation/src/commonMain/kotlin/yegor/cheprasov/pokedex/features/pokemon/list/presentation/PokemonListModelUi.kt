@@ -3,6 +3,8 @@ package yegor.cheprasov.pokedex.features.pokemon.list.presentation
 import yegor.cheprasov.pokedex.core.design.mvi.ActionUi
 import yegor.cheprasov.pokedex.core.design.mvi.EventUi
 import yegor.cheprasov.pokedex.core.design.mvi.StateUi
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
+import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 data object PokemonListStateUi : StateUi
 
@@ -14,7 +16,7 @@ sealed interface PokemonListActionUi : ActionUi {
     ) : PokemonListActionUi
 
     data class ClickPokemon(
-        val name: String,
+        val pokemonUiModel: PokemonUiModel
     ) : PokemonListActionUi
 }
 
@@ -23,5 +25,6 @@ sealed interface PokemonListEventUi : EventUi {
 
     data class NavigateToPokemonDetail(
         val name: String,
+        val pokemonType: PokemonType
     ) : PokemonListEventUi
 }

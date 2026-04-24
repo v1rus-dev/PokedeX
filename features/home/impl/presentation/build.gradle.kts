@@ -5,7 +5,6 @@ plugins {
 kotlin {
     sourceSets.commonMain.dependencies {
         implementation(projects.core.common)
-        implementation(libs.koin.compose.viewmodel)
 
         implementation(projects.features.pokemon.api)
         implementation(projects.features.home.api)

@@ -5,9 +5,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 
 @Serializable
-data class PokemonDetails(val pokemonName: String) : NavKey
+data class PokemonDetails(val pokemonName: String, val pokemonType: PokemonType) : NavKey
 
 val pokemonDetailsSerializersModule = SerializersModule {
     polymorphic(NavKey::class) {

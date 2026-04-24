@@ -5,6 +5,17 @@ import androidx.compose.ui.graphics.Color
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import pokedex.core.resources.generated.resources.Res
+import pokedex.core.resources.generated.resources.bug_bg_image
+import pokedex.core.resources.generated.resources.dark_bg_image
+import pokedex.core.resources.generated.resources.dragon_bg_image
+import pokedex.core.resources.generated.resources.electric_bg_image
+import pokedex.core.resources.generated.resources.fairy_bg_image
+import pokedex.core.resources.generated.resources.fighting_bg_image
+import pokedex.core.resources.generated.resources.fire_bg_image
+import pokedex.core.resources.generated.resources.flying_bg_image
+import pokedex.core.resources.generated.resources.ghost_bg_image
+import pokedex.core.resources.generated.resources.grass_bg_image
+import pokedex.core.resources.generated.resources.ground_bg_image
 import pokedex.core.resources.generated.resources.ic_bug_type_icon
 import pokedex.core.resources.generated.resources.ic_dark_type_icon
 import pokedex.core.resources.generated.resources.ic_dragon_type_icon
@@ -25,6 +36,13 @@ import pokedex.core.resources.generated.resources.ic_steel_type_icon
 import pokedex.core.resources.generated.resources.ic_stellar_type_icon
 import pokedex.core.resources.generated.resources.ic_unknown_type_icon
 import pokedex.core.resources.generated.resources.ic_water_type_icon
+import pokedex.core.resources.generated.resources.ice_bg_image
+import pokedex.core.resources.generated.resources.normal_bg_image
+import pokedex.core.resources.generated.resources.poison_bg_image
+import pokedex.core.resources.generated.resources.psychic_bg_image
+import pokedex.core.resources.generated.resources.rock_bg_image
+import pokedex.core.resources.generated.resources.steel_bg_image
+import pokedex.core.resources.generated.resources.stellar_bg_image
 import pokedex.core.resources.generated.resources.type_bug
 import pokedex.core.resources.generated.resources.type_dark
 import pokedex.core.resources.generated.resources.type_dragon
@@ -45,6 +63,8 @@ import pokedex.core.resources.generated.resources.type_steel
 import pokedex.core.resources.generated.resources.type_stellar
 import pokedex.core.resources.generated.resources.type_unknown
 import pokedex.core.resources.generated.resources.type_water
+import pokedex.core.resources.generated.resources.unknown_bg_image
+import pokedex.core.resources.generated.resources.water_bg_image
 
 @Immutable
 data class PokemonTypeColors(
@@ -60,6 +80,7 @@ enum class PokemonTypeUiModel(
     val label: StringResource,
     val icon: DrawableResource,
     val colors: PokemonTypeColors,
+    val pokemonHeaderBgImage: DrawableResource
 ) {
     Normal(
         Res.string.type_normal,
@@ -71,6 +92,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE5E7EB),
             onPrimary = Color.Black,
         ),
+        Res.drawable.normal_bg_image
     ),
     Fighting(
         Res.string.type_fighting,
@@ -82,6 +104,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFFE2E2),
             onPrimary = Color.White,
         ),
+        Res.drawable.fighting_bg_image
     ),
     Flying(
         Res.string.type_flying,
@@ -93,6 +116,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE0F2FE),
             onPrimary = Color.White,
         ),
+        Res.drawable.flying_bg_image
     ),
     Poison(
         Res.string.type_poison,
@@ -104,6 +128,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFF3E8FF),
             onPrimary = Color.White,
         ),
+        Res.drawable.poison_bg_image
     ),
     Ground(
         Res.string.type_ground,
@@ -115,6 +140,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFAE7D6),
             onPrimary = Color.Black,
         ),
+        Res.drawable.ground_bg_image
     ),
     Rock(
         Res.string.type_rock,
@@ -126,6 +152,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE7E5E4),
             onPrimary = Color.White,
         ),
+        Res.drawable.rock_bg_image
     ),
     Bug(
         Res.string.type_bug,
@@ -137,6 +164,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFECFCCB),
             onPrimary = Color.Black,
         ),
+        Res.drawable.bug_bg_image
     ),
     Ghost(
         Res.string.type_ghost,
@@ -148,6 +176,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE0E7FF),
             onPrimary = Color.White,
         ),
+        Res.drawable.ghost_bg_image
     ),
     Steel(
         Res.string.type_steel,
@@ -159,6 +188,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE2E8F0),
             onPrimary = Color.Black,
         ),
+        Res.drawable.steel_bg_image
     ),
     Fire(
         Res.string.type_fire,
@@ -170,6 +200,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFFEDD5),
             onPrimary = Color.White,
         ),
+        Res.drawable.fire_bg_image
     ),
     Water(
         Res.string.type_water,
@@ -181,6 +212,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFDBEAFE),
             onPrimary = Color.White,
         ),
+        Res.drawable.water_bg_image
     ),
     Grass(
         Res.string.type_grass,
@@ -192,6 +224,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFDCFCE7),
             onPrimary = Color.White,
         ),
+        Res.drawable.grass_bg_image
     ),
     Electric(
         Res.string.type_electric,
@@ -203,6 +236,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFEF9C3),
             onPrimary = Color.Black,
         ),
+        Res.drawable.electric_bg_image
     ),
     Psychic(
         Res.string.type_psychic,
@@ -214,6 +248,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFCE7F3),
             onPrimary = Color.White,
         ),
+        Res.drawable.psychic_bg_image
     ),
     Ice(
         Res.string.type_ice,
@@ -225,6 +260,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFCFFAFE),
             onPrimary = Color.Black,
         ),
+        Res.drawable.ice_bg_image
     ),
     Dragon(
         Res.string.type_dragon,
@@ -236,6 +272,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFEDE9FE),
             onPrimary = Color.White,
         ),
+        Res.drawable.dragon_bg_image
     ),
     Dark(
         Res.string.type_dark,
@@ -247,6 +284,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE5E7EB),
             onPrimary = Color.White,
         ),
+        Res.drawable.dark_bg_image
     ),
     Fairy(
         Res.string.type_fairy,
@@ -258,6 +296,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFFDF2F8),
             onPrimary = Color.Black,
         ),
+        Res.drawable.fairy_bg_image
     ),
     Stellar(
         Res.string.type_stellar,
@@ -269,6 +308,7 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFE0F2FE),
             onPrimary = Color.White,
         ),
+        Res.drawable.stellar_bg_image
     ),
     Unknown(
         Res.string.type_unknown,
@@ -280,5 +320,6 @@ enum class PokemonTypeUiModel(
             container = Color(0xFFF3F4F6),
             onPrimary = Color.Black,
         ),
+        Res.drawable.unknown_bg_image
     ),
 }
