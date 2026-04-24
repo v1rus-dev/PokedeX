@@ -36,7 +36,7 @@ fun PokemonListDestination(
         when(event) {
             PokemonListEventUi.CloseScreen -> navigator.popBackStack()
             is PokemonListEventUi.NavigateToPokemonDetail -> {
-                navigator.navigate(PokemonDetails(pokemonName = event.name))
+                navigator.navigate(PokemonDetails(pokemonName = event.name, pokemonType = event.pokemonType))
             }
         }
     }

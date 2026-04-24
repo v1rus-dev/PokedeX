@@ -26,6 +26,12 @@ class PokemonDetailsViewModel(
         getPokemon()
     }
 
+    override fun onAction(action: PokemonDetailsActionUi) {
+        when(action) {
+            PokemonDetailsActionUi.OnBackClick -> sendEvent(PokemonDetailsEventUi.CloseScreen)
+        }
+    }
+
     private fun getPokemon() {
         viewModelScope.launch {
             getPokemonUseCase.invoke(pokemonName)

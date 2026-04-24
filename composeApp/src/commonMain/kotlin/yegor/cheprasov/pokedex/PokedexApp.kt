@@ -26,6 +26,7 @@ import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.favorites.presentation.favoritesTopLevelDestination
 import yegor.cheprasov.pokedex.features.home.presentation.homeTopLevelDestination
 import yegor.cheprasov.pokedex.features.pokemon.details.api.pokemonDetailsSerializersModule
+import yegor.cheprasov.pokedex.features.pokemon.list.api.pokemonListNavigationSerializersModule
 import yegor.cheprasov.pokedex.features.root.presentation.RootTabs
 import yegor.cheprasov.pokedex.features.root.presentation.rootEntryProvider
 import yegor.cheprasov.pokedex.features.root.presentation.rootTabsNavigationSerializersModule
@@ -62,6 +63,7 @@ fun PokedexApp() {
                 listOf(
                     rootTabsNavigationSerializersModule,
                     pokemonDetailsSerializersModule,
+                    pokemonListNavigationSerializersModule,
                     pokemonSearchNavigationSerializersModule,
                 ),
             ),

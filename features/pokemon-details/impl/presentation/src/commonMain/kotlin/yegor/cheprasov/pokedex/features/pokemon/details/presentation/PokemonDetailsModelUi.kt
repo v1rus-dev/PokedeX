@@ -17,6 +17,10 @@ data class PokemonDetailsStateUi(
     }
 }
 
-sealed interface PokemonDetailsActionUi : ActionUi
+sealed interface PokemonDetailsActionUi : ActionUi {
+    data object OnBackClick : PokemonDetailsActionUi
+}
 
-sealed interface PokemonDetailsEventUi : EventUi
+sealed interface PokemonDetailsEventUi : EventUi {
+    data object CloseScreen : PokemonDetailsEventUi
+}

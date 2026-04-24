@@ -35,7 +35,9 @@ internal fun PokemonDetailsHeader(
             contentScale = ContentScale.Crop,
             contentDescription = null,
         )
-        BackButton(modifier = Modifier.padding(start = 16.dp, top = 16.dp + statusBarHeight)) { }
+        BackButton(modifier = Modifier.padding(start = 16.dp, top = 16.dp + statusBarHeight)) {
+            onAction(PokemonDetailsActionUi.OnBackClick)
+        }
     }
 }
 
