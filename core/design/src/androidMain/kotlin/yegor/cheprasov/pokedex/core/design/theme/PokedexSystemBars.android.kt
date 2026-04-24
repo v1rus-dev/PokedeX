@@ -3,6 +3,7 @@ package yegor.cheprasov.pokedex.core.design.theme
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -20,7 +21,7 @@ internal actual fun PokedexSystemBarsEffect(style: PokedexSystemBarsStyle) {
 
         val activity = view.context.findActivity() ?: return@SideEffect
         val window = activity.window
-        window.statusBarColor = style.statusBarColor.toArgb()
+        window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = style.navigationBarColor.toArgb()
 
         WindowCompat.getInsetsController(window, view).apply {

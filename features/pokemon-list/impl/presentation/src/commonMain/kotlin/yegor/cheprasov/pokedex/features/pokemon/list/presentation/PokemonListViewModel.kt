@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonPagedUseCase
-import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonModelToUiModelMapper
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonLiteModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeUiModelToModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 class PokemonListViewModel(
     private val getPokemonListUseCase: GetPokemonPagedUseCase,
-    private val pokemonMapper: PokemonModelToUiModelMapper,
+    private val pokemonMapper: PokemonLiteModelToUiModelMapper,
     private val pokemonTypeUiModelToModel: PokemonTypeUiModelToModel
 ) : MviViewModel<PokemonListStateUi, PokemonListActionUi, PokemonListEventUi>(initialState = PokemonListStateUi) {
 

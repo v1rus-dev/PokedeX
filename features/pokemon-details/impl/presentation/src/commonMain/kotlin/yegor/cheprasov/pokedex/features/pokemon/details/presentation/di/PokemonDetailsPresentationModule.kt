@@ -2,10 +2,8 @@ package yegor.cheprasov.pokedex.features.pokemon.details.presentation.di
 
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import org.koin.dsl.navigation3.navigation
-import org.koin.plugin.module.dsl.viewModel
 import yegor.cheprasov.pokedex.core.design.animation.ProvideLocalAnimatedScope
 import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsDestination
@@ -18,6 +16,8 @@ val pokemonDetailsPresentationModule = module {
             pokemonName = params[0],
             pokemonType = params[1],
             getPokemonUseCase = get(),
+            observePokemonFavoriteStateUseCase = get(),
+            updatePokemonFavoriteStateUseCase = get(),
             pokemonModelToUiModelMapper = get(),
             pokemonTypeMapper = get()
         )

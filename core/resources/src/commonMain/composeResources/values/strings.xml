@@ -34,6 +34,13 @@
     <string name="type_fairy">Fairy</string>
     <string name="type_stellar">Stellar</string>
     <string name="type_unknown">Unknown</string>
+    <string name="stat_hp">HP</string>
+    <string name="stat_attack">Attack</string>
+    <string name="stat_defense">Defense</string>
+    <string name="stat_special_attack">Special Attack</string>
+    <string name="stat_special_defense">Special Defense</string>
+    <string name="stat_speed">Speed</string>
+    <string name="stat_unknown">Unknown</string>
     <string name="see_more">See More</string>
     <string name="pokemons">Pokemons</string>
     <string name="abilities">Abilities</string>

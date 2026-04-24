@@ -7,11 +7,15 @@ import org.koin.dsl.module
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.GetPokemonUseCaseImpl
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.HasPokemonsInDatabaseUseCaseImpl
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.ObserveAllPokemonsUseCaseImpl
+import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.ObservePokemonFavoriteStateUseCaseImpl
 import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.SyncPokemonsUseCaseImpl
+import yegor.cheprasov.pokedex.features.pokemon.domain.use_cases.UpdatePokemonFavoriteStateUseCaseImpl
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.HasPokemonsInDatabaseUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.ObserveAllPokemonsUseCase
+import yegor.cheprasov.pokedex.features.pokemon.use_cases.ObservePokemonFavoriteStateUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.SyncPokemonsUseCase
+import yegor.cheprasov.pokedex.features.pokemon.use_cases.UpdatePokemonFavoriteStateUseCase
 import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataUseCase
 
 val pokemonDomainModule: Module = module {
@@ -30,5 +34,13 @@ val pokemonDomainModule: Module = module {
 
     factory<ObserveAllPokemonsUseCase> {
         ObserveAllPokemonsUseCaseImpl(get())
+    }
+
+    factory<ObservePokemonFavoriteStateUseCase> {
+        ObservePokemonFavoriteStateUseCaseImpl(get())
+    }
+
+    factory<UpdatePokemonFavoriteStateUseCase> {
+        UpdatePokemonFavoriteStateUseCaseImpl(get())
     }
 }

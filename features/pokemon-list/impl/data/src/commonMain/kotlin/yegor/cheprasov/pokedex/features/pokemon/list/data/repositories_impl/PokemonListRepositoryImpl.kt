@@ -6,12 +6,12 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import yegor.cheprasov.pokedex.features.pokemon.list.data.paging.PokemonPagingSource
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.repositories.PokemonListRepository
-import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonLiteModel
 
 class PokemonListRepositoryImpl(
     private val pagingSourceFactory: (String) -> PokemonPagingSource,
 ) : PokemonListRepository {
-    override fun getPokemonList(searchQuery: String, pageSize: Int): Flow<PagingData<PokemonModel>> {
+    override fun getPokemonList(searchQuery: String, pageSize: Int): Flow<PagingData<PokemonLiteModel>> {
         val normalizedSearchQuery = searchQuery.trim().lowercase()
 
         return Pager(

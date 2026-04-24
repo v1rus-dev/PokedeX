@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0a64121be03864e35d3bbc9d3e668270",
+    "identityHash": "35ba6c2b100bedfde0d50c3edc5f2e82",
     "entities": [
       {
         "tableName": "pokemons",
@@ -175,6 +175,61 @@
         ]
       },
       {
+        "tableName": "pokemon_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pokemon_name` TEXT NOT NULL, `stat` TEXT NOT NULL, `stat_value` INTEGER NOT NULL, PRIMARY KEY(`pokemon_name`, `stat`), FOREIGN KEY(`pokemon_name`) REFERENCES `pokemons`(`name`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "pokemonName",
+            "columnName": "pokemon_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stat",
+            "columnName": "stat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statValue",
+            "columnName": "stat_value",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "pokemon_name",
+            "stat"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_pokemon_stats_pokemon_name",
+            "unique": false,
+            "columnNames": [
+              "pokemon_name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_pokemon_stats_pokemon_name` ON `${TABLE_NAME}` (`pokemon_name`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "pokemons",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "pokemon_name"
+            ],
+            "referencedColumns": [
+              "name"
+            ]
+          }
+        ]
+      },
+      {
         "tableName": "abilities",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `effect` TEXT, `short_effect` TEXT, PRIMARY KEY(`id`))",
         "fields": [
@@ -248,7 +303,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0a64121be03864e35d3bbc9d3e668270')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '35ba6c2b100bedfde0d50c3edc5f2e82')"
     ]
   }
 }

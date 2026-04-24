@@ -19,6 +19,7 @@ import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonResponseMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonLiteModel
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
 import kotlin.concurrent.atomics.AtomicInt
@@ -53,19 +54,20 @@ class PokemonRepositoryImpl(
         )
     }
 
-    override fun observeAllPokemons(): Flow<List<PokemonModel>> {
+    override fun observeAllPokemons(): Flow<List<PokemonLiteModel>> {
         return localDatasource.observeAllPokemons().map { entities ->
-            entities.map(pokemonEntityMapper::map)
+            entities.map(pokemonEntityMapper::mapLite)
         }
     }
 
-    override suspend fun getAllPokemons(): Result<List<PokemonModel>> = localDatasource.getAllPokemons().map { entities ->
-        entities.map(pokemonEntityMapper::map)
-    }
+    override suspend fun getAllPokemons(): Result<List<PokemonLiteModel>> =
+        localDatasource.getAllPokemons().map { entities ->
+            entities.map(pokemonEntityMapper::mapLite)
+        }
 
-    override fun searchPokemonsByName(search: String): Flow<List<PokemonModel>> =
+    override fun searchPokemonsByName(search: String): Flow<List<PokemonLiteModel>> =
         localDatasource.observePokemonsBySearch(search).map { entities ->
-            entities.map(pokemonEntityMapper::map)
+            entities.map(pokemonEntityMapper::mapLite)
         }
 
     @OptIn(ExperimentalAtomicApi::class)
@@ -117,10 +119,12 @@ class PokemonRepositoryImpl(
                             )
 
                             val current = completed.incrementAndFetch()
-                            send(SyncAllPokemonsState.InProgress(
-                                completed = current,
-                                total = total,
-                            ))
+                            send(
+                                SyncAllPokemonsState.InProgress(
+                                    completed = current,
+                                    total = total,
+                                )
+                            )
 
                             entity
                         }
@@ -141,10 +145,12 @@ class PokemonRepositoryImpl(
             val failedCount = total - savedCount
 
             if (failedCount > 0) {
-                send(SyncAllPokemonsState.PartialSuccess(
-                    savedCount = savedCount,
-                    failedCount = failedCount,
-                ))
+                send(
+                    SyncAllPokemonsState.PartialSuccess(
+                        savedCount = savedCount,
+                        failedCount = failedCount,
+                    )
+                )
             } else {
                 send(SyncAllPokemonsState.Success(savedCount = savedCount))
             }
@@ -158,6 +164,16 @@ class PokemonRepositoryImpl(
             )
         }
     }
+
+    override fun observePokemon(pokemonName: String): Flow<PokemonModel> =
+        localDatasource.observePokemon(pokemonName).map(pokemonEntityMapper::map)
+
+    override fun observePokemonIsFavorite(pokemonName: String): Flow<Boolean> = observePokemon(pokemonName).map { it.isFavorite }
+
+    override suspend fun updateFavoriteState(
+        pokemonName: String,
+        isFavorite: Boolean
+    ): Result<Unit> = localDatasource.updateFavoriteState(pokemonName, isFavorite)
 
     private suspend fun fetchAndCachePokemon(pokemonName: String): Result<PokemonModel> {
         return networkDatasource.getPokemon(pokemonName)
@@ -173,7 +189,8 @@ class PokemonRepositoryImpl(
                 val abilityNames = localModel.abilityLinks.map { it.abilityName }.distinct()
                 hydrateAbilities(abilityNames).getOrThrow()
 
-                val cachedPokemon = localDatasource.getPokemonByName(localModel.pokemon.name).getOrThrow()
+                val cachedPokemon =
+                    localDatasource.getPokemonByName(localModel.pokemon.name).getOrThrow()
                 requireNotNull(cachedPokemon) {
                     "Pokemon ${localModel.pokemon.name} was not found after local cache update."
                 }
@@ -186,13 +203,14 @@ class PokemonRepositoryImpl(
         pokemon: PokemonWithRelationsEntity,
     ): Result<PokemonWithRelationsEntity> {
         val missingAbilityNames = pokemon.abilityLinks.map { it.abilityName }.toSet() -
-            pokemon.abilities.map { it.name }.toSet()
+                pokemon.abilities.map { it.name }.toSet()
         if (missingAbilityNames.isEmpty()) {
             return Result.success(pokemon)
         }
 
         return hydrateAbilities(missingAbilityNames).mapCatching {
-            val refreshedPokemon = localDatasource.getPokemonByName(pokemon.pokemon.name).getOrThrow()
+            val refreshedPokemon =
+                localDatasource.getPokemonByName(pokemon.pokemon.name).getOrThrow()
             requireNotNull(refreshedPokemon) {
                 "Pokemon ${pokemon.pokemon.name} was not found after ability hydration."
             }

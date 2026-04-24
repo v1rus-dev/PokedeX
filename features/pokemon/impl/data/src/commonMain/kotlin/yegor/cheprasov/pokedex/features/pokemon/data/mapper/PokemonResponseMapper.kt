@@ -3,6 +3,8 @@ package yegor.cheprasov.pokedex.features.pokemon.data.mapper
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonAbilityCrossRefEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatDbModel
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
@@ -23,6 +25,13 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
         val normalizedPokemonName = input.name.lowercase()
         val sortedTypes = input.types.sortedBy { it.slot }
         val sortedAbilities = input.abilities.sortedBy { it.slot }
+        val stats = input.stats.map { statSlot ->
+            PokemonStatEntity(
+                pokemonName = normalizedPokemonName,
+                stat = PokemonStatDbModel.fromRawNameOrUnknown(statSlot.stat.name),
+                statValue = statSlot.baseStat,
+            )
+        }
         val pokemonEntity = PokemonEntity(
             name = normalizedPokemonName,
             id = input.id,
@@ -58,6 +67,7 @@ class PokemonResponseMapper : Mapper<PokemonResponse, PokemonLocalModel> {
             pokemon = pokemonEntity,
             types = types,
             typeLinks = typeLinks,
+            stats = stats,
             abilityLinks = abilityLinks,
         )
     }

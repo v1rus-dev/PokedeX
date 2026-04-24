@@ -21,6 +21,8 @@ data class PokemonResponse(
     val types: List<PokemonTypeSlotResponse>,
     @SerialName("abilities")
     val abilities: List<PokemonAbilitySlotResponse>,
+    @SerialName("stats")
+    val stats: List<PokemonStatSlotResponse>,
 )
 
 @Serializable
@@ -35,6 +37,14 @@ data class PokemonTypeSlotResponse(
 data class NamedApiResourceResponse(
     @SerialName("name")
     val name: String,
+)
+
+@Serializable
+data class PokemonStatSlotResponse(
+    @SerialName("base_stat")
+    val baseStat: Int,
+    @SerialName("stat")
+    val stat: NamedApiResourceResponse,
 )
 
 @Serializable

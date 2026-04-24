@@ -34,44 +34,52 @@ class LocalPokemonDatasource(
             }
         }
 
-    suspend fun getAllPokemons(): Result<List<PokemonWithRelationsEntity>> = withContext(Dispatchers.IO) {
-        runCatching {
-            pokemonDao.getAllPokemons()
+    suspend fun getAllPokemons(): Result<List<PokemonWithRelationsEntity>> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                pokemonDao.getAllPokemons()
+            }
         }
-    }
 
-    suspend fun replaceAllPokemons(list: List<PokemonLocalModel>): Result<Unit> = withContext(Dispatchers.IO) {
-        runCatching {
-            transactionProvider.runAsTransaction {
-                pokemonDao.clearAllTypeLinks()
-                pokemonDao.clearAllPokemons()
-                pokemonTypeDao.clearAll()
+    suspend fun replaceAllPokemons(list: List<PokemonLocalModel>): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                transactionProvider.runAsTransaction {
+                    pokemonDao.clearAllTypeLinks()
+                    pokemonDao.clearAllStats()
+                    pokemonDao.clearAllPokemons()
+                    pokemonTypeDao.clearAll()
 
-                if (list.isEmpty()) return@runAsTransaction
+                    if (list.isEmpty()) return@runAsTransaction
 
-                pokemonDao.upsertAllPokemons(list.map(PokemonLocalModel::pokemon))
+                    pokemonDao.upsertAllPokemons(list.map(PokemonLocalModel::pokemon))
 
-                val distinctTypes = list.flatMap(PokemonLocalModel::types)
-                    .distinctBy(PokemonTypeEntity::name)
-                pokemonTypeDao.upsertAll(distinctTypes)
+                    val distinctTypes = list.flatMap(PokemonLocalModel::types)
+                        .distinctBy(PokemonTypeEntity::name)
+                    pokemonTypeDao.upsertAll(distinctTypes)
 
-                val typeLinks = list.flatMap(PokemonLocalModel::typeLinks)
-                if (typeLinks.isNotEmpty()) {
-                    pokemonDao.upsertTypeLinks(typeLinks)
-                }
+                    val typeLinks = list.flatMap(PokemonLocalModel::typeLinks)
+                    if (typeLinks.isNotEmpty()) {
+                        pokemonDao.upsertTypeLinks(typeLinks)
+                    }
 
-                val pokemonNames = list.map { it.pokemon.name }
-                if (pokemonNames.isNotEmpty()) {
-                    abilityDao.deletePokemonLinksByPokemonNames(pokemonNames)
-                }
+                    val stats = list.flatMap(PokemonLocalModel::stats)
+                    if (stats.isNotEmpty()) {
+                        pokemonDao.upsertStats(stats)
+                    }
 
-                val abilityLinks = list.flatMap(PokemonLocalModel::abilityLinks)
-                if (abilityLinks.isNotEmpty()) {
-                    abilityDao.upsertPokemonLinks(abilityLinks)
+                    val pokemonNames = list.map { it.pokemon.name }
+                    if (pokemonNames.isNotEmpty()) {
+                        abilityDao.deletePokemonLinksByPokemonNames(pokemonNames)
+                    }
+
+                    val abilityLinks = list.flatMap(PokemonLocalModel::abilityLinks)
+                    if (abilityLinks.isNotEmpty()) {
+                        abilityDao.upsertPokemonLinks(abilityLinks)
+                    }
                 }
             }
         }
-    }
 
     suspend fun upsert(entity: PokemonLocalModel): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
@@ -79,10 +87,15 @@ class LocalPokemonDatasource(
                 pokemonDao.upsertPokemon(entity.pokemon)
                 pokemonTypeDao.upsertAll(entity.types)
                 pokemonDao.deleteTypeLinksByPokemonName(entity.pokemon.name)
+                pokemonDao.deleteStatsByPokemonName(entity.pokemon.name)
                 abilityDao.deletePokemonLinksByPokemonName(entity.pokemon.name)
 
                 if (entity.typeLinks.isNotEmpty()) {
                     pokemonDao.upsertTypeLinks(entity.typeLinks)
+                }
+
+                if (entity.stats.isNotEmpty()) {
+                    pokemonDao.upsertStats(entity.stats)
                 }
 
                 if (entity.abilityLinks.isNotEmpty()) {
@@ -100,6 +113,19 @@ class LocalPokemonDatasource(
 
     fun observeAllPokemons(): Flow<List<PokemonWithRelationsEntity>> =
         pokemonDao.observeAll().flowOn(Dispatchers.IO)
+
+    fun observePokemon(pokemonName: String): Flow<PokemonWithRelationsEntity> =
+        pokemonDao.observePokemon(pokemonName)
+
+    suspend fun updateFavoriteState(pokemonName: String, isFavorite: Boolean): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                pokemonDao.updateFavoriteState(
+                    pokemonName = pokemonName,
+                    isFavorite = isFavorite,
+                )
+            }
+        }
 
     fun observePokemonsBySearch(search: String): Flow<List<PokemonWithRelationsEntity>> =
         pokemonDao.searchByName(search).flowOn(

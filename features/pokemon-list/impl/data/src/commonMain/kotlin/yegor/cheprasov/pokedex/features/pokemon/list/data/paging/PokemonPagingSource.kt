@@ -4,15 +4,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import yegor.cheprasov.pokedex.features.pokemon.list.data.datasource.LocalPokemonListDatasource
 import yegor.cheprasov.pokedex.features.pokemon.list.data.mappers.PokemonMapper
-import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonLiteModel
 
 class PokemonPagingSource(
     private val localPokemonListDatasource: LocalPokemonListDatasource,
     private val pokemonMapper: PokemonMapper,
     private val searchQuery: String,
-) : PagingSource<Int, PokemonModel>() {
+) : PagingSource<Int, PokemonLiteModel>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonModel> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonLiteModel> {
         val offset = params.key ?: DEFAULT_OFFSET
         val limit = params.loadSize
 
@@ -30,7 +30,7 @@ class PokemonPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, PokemonModel>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PokemonLiteModel>): Int? {
         val anchorPosition = state.anchorPosition ?: return null
         val closestPage = state.closestPageToPosition(anchorPosition) ?: return null
 

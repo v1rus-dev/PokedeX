@@ -10,6 +10,7 @@ import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonAbilityCrossR
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonTypeDao
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
 
@@ -18,6 +19,7 @@ import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
         PokemonEntity::class,
         PokemonTypeEntity::class,
         PokemonTypeCrossRefEntity::class,
+        PokemonStatEntity::class,
         AbilityEntity::class,
         PokemonAbilityCrossRefEntity::class,
     ],

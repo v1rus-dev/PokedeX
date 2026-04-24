@@ -1,6 +1,15 @@
 package yegor.cheprasov.pokedex.core.design.composable.buttons
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -45,12 +54,39 @@ fun FavoriteButton(
             ),
         contentAlignment = Alignment.Center
     ) {
-        AnimatedContent(isFavorite) {
-            if (isFavorite) {
-                Icon(painter = painterResource(Res.drawable.ic_heart_full), contentDescription = null)
-            } else {
-                Icon(painter = painterResource(Res.drawable.ic_heart_empty), contentDescription = null)
-            }
+        AnimatedContent(
+            targetState = isFavorite,
+            transitionSpec = {
+                if (targetState) {
+                    fadeIn() + scaleIn(
+                        initialScale = 0.65f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessMediumLow
+                        )
+                    ) togetherWith fadeOut() + scaleOut(
+                        targetScale = 0.85f,
+                        animationSpec = tween(120)
+                    )
+                } else {
+                    fadeIn(animationSpec = tween(120)) + scaleIn(initialScale = 0.9f) togetherWith
+                            fadeOut(animationSpec = tween(120)) + scaleOut(targetScale = 0.75f)
+                }.using(
+                    SizeTransform(clip = false)
+                )
+            },
+            label = "FavoriteIconAnimation"
+        ) { favorite ->
+            Icon(
+                painter = painterResource(
+                    if (favorite) {
+                        Res.drawable.ic_heart_full
+                    } else {
+                        Res.drawable.ic_heart_empty
+                    }
+                ),
+                contentDescription = null,
+            )
         }
     }
 }

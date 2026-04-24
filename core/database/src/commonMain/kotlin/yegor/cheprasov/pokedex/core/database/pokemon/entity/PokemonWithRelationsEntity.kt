@@ -17,6 +17,11 @@ data class PokemonWithRelationsEntity(
         parentColumn = "name",
         entityColumn = "pokemon_name",
     )
+    val stats: List<PokemonStatEntity>,
+    @Relation(
+        parentColumn = "name",
+        entityColumn = "pokemon_name",
+    )
     val abilityLinks: List<PokemonAbilityCrossRefEntity>,
     @Relation(
         entity = AbilityEntity::class,
