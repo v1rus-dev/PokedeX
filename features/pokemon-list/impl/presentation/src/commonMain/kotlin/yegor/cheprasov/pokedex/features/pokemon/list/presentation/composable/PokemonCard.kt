@@ -68,7 +68,7 @@ internal fun PokemonCard(
         ) {
             // Номер
             Text(
-                text = "#${pokemon.id.toString().padStart(3, '0')}",
+                text = "#${pokemon.normalizedId}",
                 style = PokedexTheme.typography.labelSmall.copy(
                     color = PokedexTheme.colors.textSecondary
                 ),
@@ -126,7 +126,7 @@ private fun PokemonCardPreview() {
         Column {
             PokemonCard(
                 pokemon = PokemonUiModel(
-                    name = "Bulbasaur", 103256, imageUrl = "", pokemonTypes = listOf(
+                    name = "Bulbasaur", 1, imageUrl = "", pokemonTypes = listOf(
                         PokemonTypeUiModel.Grass,
                         PokemonTypeUiModel.Ground
                     )

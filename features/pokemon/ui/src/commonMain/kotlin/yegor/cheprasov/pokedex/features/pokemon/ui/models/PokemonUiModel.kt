@@ -19,4 +19,6 @@ data class PokemonUiModel(
     }
 
     val mainType: PokemonTypeUiModel = pokemonTypes.firstOrNull() ?: PokemonTypeUiModel.Unknown
+
+    val normalizedId: String = id.toString().padStart(3, '0')
 }
