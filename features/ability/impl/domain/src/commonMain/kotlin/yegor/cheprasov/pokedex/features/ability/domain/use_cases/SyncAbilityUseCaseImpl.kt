@@ -1,6 +1,5 @@
 package yegor.cheprasov.pokedex.features.ability.domain.use_cases
 
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -16,7 +15,6 @@ class SyncAbilityUseCaseImpl(
     override val key: SyncDataKey = SyncDataKey.ABILITIES
 
     override fun invoke(force: Boolean): Flow<SyncDataState> = flow {
-        Napier.v("Sync abilities invoke", tag = "myTag")
         val shouldSync = force || !repository.hasAbilityInDatabase().getOrDefault(false)
         if (!shouldSync) {
             emit(SyncDataState.Skipped)

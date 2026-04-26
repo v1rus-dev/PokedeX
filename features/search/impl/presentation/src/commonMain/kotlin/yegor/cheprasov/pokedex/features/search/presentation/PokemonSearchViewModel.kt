@@ -1,14 +1,14 @@
 package yegor.cheprasov.pokedex.features.search.presentation
 
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 
 class PokemonSearchViewModel :
-    MviViewModel<PokemonSearchStateUi, PokemonSearchActionUi, PokemonSearchEventUi>(
+    MviViewModel<PokemonSearchStateUi, PokemonSearchIntentUi, PokemonSearchEffectUi>(
         initialState = PokemonSearchStateUi,
     ) {
-    override fun onAction(action: PokemonSearchActionUi) {
-        when (action) {
-            PokemonSearchActionUi.OnBackClicked -> sendEvent(PokemonSearchEventUi.CloseScreen)
+    override fun onIntent(intent: PokemonSearchIntentUi) {
+        when (intent) {
+            PokemonSearchIntentUi.OnBackClicked -> sendEffect(PokemonSearchEffectUi.CloseScreen)
         }
     }
 }

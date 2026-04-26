@@ -16,13 +16,13 @@ import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.search
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexSearchTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
-import yegor.cheprasov.pokedex.features.search.presentation.PokemonSearchActionUi
+import yegor.cheprasov.pokedex.features.search.presentation.PokemonSearchIntentUi
 import yegor.cheprasov.pokedex.features.search.presentation.PokemonSearchStateUi
 
 @Composable
 internal fun PokemonSearchScreen(
     state: PokemonSearchStateUi,
-    onAction: (PokemonSearchActionUi) -> Unit,
+    onIntent: (PokemonSearchIntentUi) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val textFieldState = rememberTextFieldState()
@@ -34,7 +34,7 @@ internal fun PokemonSearchScreen(
                 hint = stringResource(Res.string.search),
                 scrollState = scrollState,
                 onBack = {
-                    onAction(PokemonSearchActionUi.OnBackClicked)
+                    onIntent(PokemonSearchIntentUi.OnBackClicked)
                 })
         },
         containerColor = PokedexTheme.colors.background
@@ -57,7 +57,7 @@ private fun PokemonSearchScreenPreview() {
     PokedexTheme {
         PokemonSearchScreen(
             state = PokemonSearchStateUi,
-            onAction = {},
+            onIntent = {},
         )
     }
 }

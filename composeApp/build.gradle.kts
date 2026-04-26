@@ -58,6 +58,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.navigation3)
             implementation(libs.napier)
+            implementation(libs.simplemvi.core)
+            implementation(libs.simplemvi.compose)
 
             /** Core dependencies */
             implementation(projects.core.database)

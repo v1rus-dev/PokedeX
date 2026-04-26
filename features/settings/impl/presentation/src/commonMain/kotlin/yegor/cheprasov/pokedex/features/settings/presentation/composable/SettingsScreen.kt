@@ -11,13 +11,13 @@ import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.settings
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
-import yegor.cheprasov.pokedex.features.settings.presentation.SettingsActionUi
+import yegor.cheprasov.pokedex.features.settings.presentation.SettingsIntentUi
 import yegor.cheprasov.pokedex.features.settings.presentation.SettingsStateUi
 
 @Composable
 internal fun SettingsScreen(
     state: SettingsStateUi,
-    onAction: (SettingsActionUi) -> Unit,
+    onIntent: (SettingsIntentUi) -> Unit,
 ) {
     val colors = PokedexTheme.colors
     Scaffold(

@@ -2,8 +2,8 @@ package yegor.cheprasov.pokedex.features.pokemon.details.presentation
 
 import androidx.lifecycle.viewModelScope
 import io.github.aakira.napier.Napier
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 import kotlinx.coroutines.launch
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeModelToUiModel
@@ -19,7 +19,7 @@ class PokemonDetailsViewModel(
     private val updatePokemonFavoriteStateUseCase: UpdatePokemonFavoriteStateUseCase,
     private val pokemonModelToUiModelMapper: PokemonModelToUiModelMapper,
     private val pokemonTypeMapper: PokemonTypeModelToUiModel
-) : MviViewModel<PokemonDetailsStateUi, PokemonDetailsActionUi, PokemonDetailsEventUi>(
+) : MviViewModel<PokemonDetailsStateUi, PokemonDetailsIntentUi, PokemonDetailsEffectUi>(
     initialState = PokemonDetailsStateUi(
         pokemonName = pokemonName,
         pokemonType = pokemonTypeMapper.map(pokemonType)
@@ -31,10 +31,10 @@ class PokemonDetailsViewModel(
         observeFavoriteState()
     }
 
-    override fun onAction(action: PokemonDetailsActionUi) {
-        when (action) {
-            PokemonDetailsActionUi.OnBackClick -> sendEvent(PokemonDetailsEventUi.CloseScreen)
-            PokemonDetailsActionUi.OnFavoriteClick -> onFavoriteClick()
+    override fun onIntent(intent: PokemonDetailsIntentUi) {
+        when (intent) {
+            PokemonDetailsIntentUi.OnBackClick -> sendEffect(PokemonDetailsEffectUi.CloseScreen)
+            PokemonDetailsIntentUi.OnFavoriteClick -> onFavoriteClick()
         }
     }
 

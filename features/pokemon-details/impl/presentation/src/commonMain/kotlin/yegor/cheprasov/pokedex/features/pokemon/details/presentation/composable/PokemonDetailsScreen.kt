@@ -8,14 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
-import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsActionUi
+import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsIntentUi
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsStateUi
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
 
 @Composable
 internal fun PokemonDetailsScreen(
     state: PokemonDetailsStateUi,
-    onAction: (PokemonDetailsActionUi) -> Unit
+    onAction: (PokemonDetailsIntentUi) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState)) {

@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,12 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import yegor.cheprasov.pokedex.core.design.animation.localSharedElement
+import yegor.cheprasov.pokedex.core.design.composable.badges.PokedexNumberBadge
 import yegor.cheprasov.pokedex.core.design.composable.cardSurface
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
+import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonImage
+import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonTypeBadge
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
@@ -66,16 +71,7 @@ internal fun PokemonCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Номер
-            Text(
-                text = "#${pokemon.normalizedId}",
-                style = PokedexTheme.typography.labelSmall.copy(
-                    color = PokedexTheme.colors.textSecondary
-                ),
-                modifier = Modifier.width(50.dp)
-            )
-
-            if (pokemon.imageUrl.isNotEmpty()) {
+            if (pokemon.imageUrl.isNotEmpty() || LocalInspectionMode.current) {
                 Box(
                     modifier = Modifier
                         .size(72.dp)
@@ -83,33 +79,46 @@ internal fun PokemonCard(
                         .background(pokemon.mainType.colors.gradientStart.copy(alpha = 0.08f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    AsyncImage(
-                        model = pokemon.imageUrl,
-                        contentDescription = pokemon.name,
-                        contentScale = ContentScale.Fit,
+                    PokemonImage(
+                        pokemon.imageUrl,
                         modifier = Modifier.size(60.dp)
+                            .localSharedElement("pokemon_image_${pokemon.imageUrl}")
                     )
                 }
             }
 
-            // Имя + бейджи
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    text = pokemon.name.replaceFirstChar { it.uppercase() },
-                    style = PokedexTheme.typography.titleMedium
-                )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Text(
+                        text = pokemon.name.replaceFirstChar { it.uppercase() },
+                        style = PokedexTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .weight(1f)
+                            .localSharedElement("pokemon_name_${pokemon.normalizedId}")
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    PokedexNumberBadge(
+                        number = pokemon.normalizedId,
+                        color = PokedexTheme.colors.primary.copy(alpha = 0.12f),
+                        modifier = Modifier.localSharedElement(
+                            "pokemon_number_${pokemon.normalizedId}"
+                        )
+                    )
+                }
                 if (pokemon.pokemonTypes.isNotEmpty()) {
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         pokemon.pokemonTypes.forEach { type ->
-                            Text(
-                                text = type.name,
-                                style = PokedexTheme.typography.labelSmall.copy(
-                                    color = type.colors.primary,
-                                ),
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(type.colors.primary.copy(alpha = 0.15f))
-                                    .padding(horizontal = 10.dp, vertical = 3.dp)
+                            PokemonTypeBadge(
+                                type = type,
+                                modifier = Modifier.localSharedElement(
+                                    "pokemon_type_${pokemon.normalizedId}_${type.name}"
+                                )
                             )
                         }
                     }
@@ -123,7 +132,7 @@ internal fun PokemonCard(
 @Composable
 private fun PokemonCardPreview() {
     PokedexTheme {
-        Column {
+        Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
             PokemonCard(
                 pokemon = PokemonUiModel(
                     name = "Bulbasaur", 1, imageUrl = "", pokemonTypes = listOf(

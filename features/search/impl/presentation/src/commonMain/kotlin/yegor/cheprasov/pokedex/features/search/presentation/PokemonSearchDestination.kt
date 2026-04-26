@@ -3,9 +3,9 @@ package yegor.cheprasov.pokedex.features.search.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import io.github.v1rusdev.simplemvi.compose.CollectEffectsUiEvent
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import yegor.cheprasov.pokedex.core.design.composable.effects.CollectEventsUiEffect
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.features.search.presentation.composable.PokemonSearchScreen
 
@@ -18,12 +18,12 @@ fun PokemonSearchDestination(
 
     PokemonSearchScreen(
         state = state,
-        onAction = viewModel::onAction,
+        onIntent = viewModel::onIntent,
     )
 
-    CollectEventsUiEffect(viewModel.uiEvents) { event ->
-        when(event) {
-            PokemonSearchEventUi.CloseScreen -> appNavigator.popBackStack()
+    CollectEffectsUiEvent(viewModel.uiEffects) { effect ->
+        when(effect) {
+            PokemonSearchEffectUi.CloseScreen -> appNavigator.popBackStack()
         }
     }
 }

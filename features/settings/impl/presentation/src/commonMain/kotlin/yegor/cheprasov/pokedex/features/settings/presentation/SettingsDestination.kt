@@ -14,6 +14,6 @@ fun SettingsDestination(
 
     SettingsScreen(
         state = state,
-        onAction = viewModel::onAction,
+        onIntent = viewModel::onIntent,
     )
 }

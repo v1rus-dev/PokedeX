@@ -4,10 +4,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.pokemon.list.domain.use_cases.GetPokemonPagedUseCase
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonLiteModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeUiModelToModel
@@ -25,7 +24,7 @@ class PokemonListViewModel(
     private val getPokemonListUseCase: GetPokemonPagedUseCase,
     private val pokemonMapper: PokemonLiteModelToUiModelMapper,
     private val pokemonTypeUiModelToModel: PokemonTypeUiModelToModel
-) : MviViewModel<PokemonListStateUi, PokemonListActionUi, PokemonListEventUi>(initialState = PokemonListStateUi) {
+) : MviViewModel<PokemonListStateUi, PokemonListIntentUi, PokemonListEffectUi>(initialState = PokemonListStateUi) {
 
     private val mutableSearchQuery = MutableStateFlow("")
 
@@ -42,21 +41,21 @@ class PokemonListViewModel(
             }
             .cachedIn(viewModelScope)
 
-    override fun onAction(action: PokemonListActionUi) {
-        when (action) {
-            PokemonListActionUi.OnBackClick -> closeScreen()
-            is PokemonListActionUi.SearchQueryChanged -> updateSearchQuery(action.query)
-            is PokemonListActionUi.ClickPokemon -> clickPokemon(action.pokemonUiModel)
+    override fun onIntent(intent: PokemonListIntentUi) {
+        when (intent) {
+            PokemonListIntentUi.OnBackClick -> closeScreen()
+            is PokemonListIntentUi.SearchQueryChanged -> updateSearchQuery(intent.query)
+            is PokemonListIntentUi.ClickPokemon -> clickPokemon(intent.pokemonUiModel)
         }
     }
 
     private fun closeScreen() {
-        sendEvent(PokemonListEventUi.CloseScreen)
+        sendEffect(PokemonListEffectUi.CloseScreen)
     }
 
     private fun clickPokemon(pokemon: PokemonUiModel) {
-        sendEvent(
-            PokemonListEventUi.NavigateToPokemonDetail(
+        sendEffect(
+            PokemonListEffectUi.NavigateToPokemonDetail(
                 pokemon.name,
                 pokemonTypeUiModelToModel.map(pokemon.mainType)
             )

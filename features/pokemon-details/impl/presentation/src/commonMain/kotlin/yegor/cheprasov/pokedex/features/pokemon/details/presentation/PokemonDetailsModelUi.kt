@@ -1,8 +1,8 @@
 package yegor.cheprasov.pokedex.features.pokemon.details.presentation
 
-import yegor.cheprasov.pokedex.core.design.mvi.ActionUi
-import yegor.cheprasov.pokedex.core.design.mvi.EventUi
-import yegor.cheprasov.pokedex.core.design.mvi.StateUi
+import io.github.v1rusdev.simplemvi.core.EffectUi
+import io.github.v1rusdev.simplemvi.core.IntentUi
+import io.github.v1rusdev.simplemvi.core.StateUi
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
@@ -39,11 +39,11 @@ sealed interface PokemonDetailsLoadStateUi {
     data object Failure : PokemonDetailsLoadStateUi
 }
 
-sealed interface PokemonDetailsActionUi : ActionUi {
-    data object OnFavoriteClick : PokemonDetailsActionUi
-    data object OnBackClick : PokemonDetailsActionUi
+sealed interface PokemonDetailsIntentUi : IntentUi {
+    data object OnFavoriteClick : PokemonDetailsIntentUi
+    data object OnBackClick : PokemonDetailsIntentUi
 }
 
-sealed interface PokemonDetailsEventUi : EventUi {
-    data object CloseScreen : PokemonDetailsEventUi
+sealed interface PokemonDetailsEffectUi : EffectUi {
+    data object CloseScreen : PokemonDetailsEffectUi
 }

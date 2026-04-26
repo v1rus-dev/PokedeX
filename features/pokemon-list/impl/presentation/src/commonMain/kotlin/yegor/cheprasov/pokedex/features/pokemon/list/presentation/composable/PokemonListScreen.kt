@@ -28,7 +28,7 @@ import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.search_pokemon
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexSearchTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
-import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListActionUi
+import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListIntentUi
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.PokemonListStateUi
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
@@ -38,7 +38,7 @@ internal fun PokemonListScreen(
     state: PokemonListStateUi,
     listState: LazyListState,
     lazyPagingItems: LazyPagingItems<PokemonUiModel>,
-    onAction: (PokemonListActionUi) -> Unit
+    onIntent: (PokemonListIntentUi) -> Unit
 ) {
     val colors = PokedexTheme.colors
     val scrollState = rememberScrollState()
@@ -48,7 +48,7 @@ internal fun PokemonListScreen(
         snapshotFlow { textFieldState.text.toString() }
             .distinctUntilChanged()
             .collect { query ->
-                onAction(PokemonListActionUi.SearchQueryChanged(query))
+                onIntent(PokemonListIntentUi.SearchQueryChanged(query))
             }
     }
 
@@ -60,7 +60,7 @@ internal fun PokemonListScreen(
                 hint = stringResource(Res.string.search_pokemon),
                 scrollState = scrollState,
                 onBack = {
-                    onAction(PokemonListActionUi.OnBackClick)
+                    onIntent(PokemonListIntentUi.OnBackClick)
                 },
             )
         }
@@ -77,7 +77,7 @@ internal fun PokemonListScreen(
             ) { index ->
                 lazyPagingItems[index]?.let {
                     PokemonCard(it, onClick = {
-                        onAction.invoke(PokemonListActionUi.ClickPokemon(it))
+                        onIntent.invoke(PokemonListIntentUi.ClickPokemon(it))
                     })
                 }
             }
@@ -93,7 +93,7 @@ private fun PokemonListScreenPreview() {
             state = PokemonListStateUi,
             listState = rememberLazyListState(),
             lazyPagingItems = flowOf<PagingData<PokemonUiModel>>().collectAsLazyPagingItems(),
-            onAction = {},
+            onIntent = {},
         )
     }
 }

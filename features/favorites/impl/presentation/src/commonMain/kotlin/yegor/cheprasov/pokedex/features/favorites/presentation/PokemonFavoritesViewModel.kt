@@ -1,11 +1,8 @@
 package yegor.cheprasov.pokedex.features.favorites.presentation
 
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 
 class PokemonFavoritesViewModel :
-    MviViewModel<PokemonFavoritesStateUi, PokemonFavoritesActionUi, PokemonFavoritesEventUi>(
+    MviViewModel<PokemonFavoritesStateUi, PokemonFavoritesIntentUi, PokemonFavoritesEffectUi>(
         initialState = PokemonFavoritesStateUi,
-    ) {
-
-    override fun onAction(action: PokemonFavoritesActionUi) = Unit
-}
+    )

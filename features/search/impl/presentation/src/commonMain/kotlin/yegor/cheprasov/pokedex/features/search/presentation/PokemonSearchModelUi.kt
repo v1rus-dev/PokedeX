@@ -1,15 +1,16 @@
 package yegor.cheprasov.pokedex.features.search.presentation
 
-import yegor.cheprasov.pokedex.core.design.mvi.ActionUi
-import yegor.cheprasov.pokedex.core.design.mvi.EventUi
-import yegor.cheprasov.pokedex.core.design.mvi.StateUi
+import io.github.v1rusdev.simplemvi.core.EffectUi
+import io.github.v1rusdev.simplemvi.core.IntentUi
+import io.github.v1rusdev.simplemvi.core.StateUi
+
 
 data object PokemonSearchStateUi : StateUi
 
-sealed interface PokemonSearchActionUi : ActionUi {
-    data object OnBackClicked : PokemonSearchActionUi
+sealed interface PokemonSearchIntentUi : IntentUi {
+    data object OnBackClicked : PokemonSearchIntentUi
 }
 
-sealed interface PokemonSearchEventUi : EventUi {
-    data object CloseScreen : PokemonSearchEventUi
+sealed interface PokemonSearchEffectUi : EffectUi {
+    data object CloseScreen : PokemonSearchEffectUi
 }

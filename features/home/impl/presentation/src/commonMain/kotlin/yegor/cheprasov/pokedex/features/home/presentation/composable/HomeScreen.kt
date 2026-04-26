@@ -26,14 +26,14 @@ import yegor.cheprasov.pokedex.core.design.composable.pull_to_refresh.rememberPo
 import yegor.cheprasov.pokedex.core.design.composable.text_fields.TextField
 import yegor.cheprasov.pokedex.core.design.composable.toolbars.PokedexTopAppBar
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
-import yegor.cheprasov.pokedex.features.home.presentation.HomeActionUi
+import yegor.cheprasov.pokedex.features.home.presentation.HomeIntentUi
 import yegor.cheprasov.pokedex.features.home.presentation.HomeStateUi
 import yegor.cheprasov.pokedex.features.home.presentation.composable.components.HomeCard
 import yegor.cheprasov.pokedex.features.home.presentation.models.HomeMainCardModelUi
 import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemonsStateModelUi
 
 @Composable
-internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
+internal fun HomeScreen(state: HomeStateUi, onAction: (HomeIntentUi) -> Unit) {
     val scrollState = rememberScrollState()
     val pullToRefreshState = rememberPokedexPullToRefreshState()
     val isSyncInProgress =
@@ -52,7 +52,7 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
                 .padding(it),
             isRefreshing = isSyncInProgress,
             onRefresh = {
-                onAction(HomeActionUi.OnRefreshPokemons)
+                onAction(HomeIntentUi.OnRefreshPokemons)
             },
             state = pullToRefreshState,
             indicator = PokedexPullToRefreshIndicator.Progress(
@@ -71,7 +71,7 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
                         .padding(horizontal = PokedexTheme.spacing.large)
                         .localSharedElement(key = "home-search-text-field"),
                     onClick = {
-                        onAction.invoke(HomeActionUi.OnSearchClick)
+                        onAction.invoke(HomeIntentUi.OnSearchClick)
                     },
                     hint = stringResource(Res.string.search)
                 )
@@ -89,7 +89,7 @@ internal fun HomeScreen(state: HomeStateUi, onAction: (HomeActionUi) -> Unit) {
                             model = card,
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                onAction(HomeActionUi.OnClickMainHomeCard(card.type))
+                                onAction(HomeIntentUi.OnClickMainHomeCard(card.type))
                             },
                         )
                     }

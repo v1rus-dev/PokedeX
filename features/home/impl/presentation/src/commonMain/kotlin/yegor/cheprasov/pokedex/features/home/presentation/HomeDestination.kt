@@ -3,9 +3,9 @@ package yegor.cheprasov.pokedex.features.home.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import io.github.v1rusdev.simplemvi.compose.CollectEffectsUiEvent
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import yegor.cheprasov.pokedex.core.design.composable.effects.CollectEventsUiEffect
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.features.pokemon.list.api.PokemonList
 import yegor.cheprasov.pokedex.features.search.api.PokemonSearch
@@ -18,12 +18,12 @@ fun HomeDestination(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    HomeScreen(state, viewModel::onAction)
+    HomeScreen(state, viewModel::onIntent)
 
-    CollectEventsUiEffect(viewModel.uiEvents) { event ->
+    CollectEffectsUiEvent(viewModel.uiEffects) { event ->
         when (event) {
-            HomeEventUi.OpenSearchScreen -> navigator.navigate(PokemonSearch)
-            HomeEventUi.OpenPokemonListScreen -> navigator.navigate(PokemonList)
+            HomeEffectUi.OpenSearchScreen -> navigator.navigate(PokemonSearch)
+            HomeEffectUi.OpenPokemonListScreen -> navigator.navigate(PokemonList)
         }
     }
 }

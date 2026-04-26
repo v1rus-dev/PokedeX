@@ -1,17 +1,15 @@
 package yegor.cheprasov.pokedex.features.settings.presentation
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 import kotlinx.coroutines.launch
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.settings.domain.use_cases.ObserveThemeModeUseCase
 import yegor.cheprasov.pokedex.features.settings.domain.use_cases.SetThemeModeUseCase
 
 class SettingsViewModel(
     private val observeThemeModeUseCase: ObserveThemeModeUseCase,
     private val setThemeModeUseCase: SetThemeModeUseCase,
-) :
-    MviViewModel<SettingsStateUi, SettingsActionUi, SettingsEventUi>(
+) : MviViewModel<SettingsStateUi, SettingsIntentUi, SettingsEffectUi>(
         initialState = SettingsStateUi(),
     ) {
 
@@ -23,11 +21,11 @@ class SettingsViewModel(
         }
     }
 
-    override fun onAction(action: SettingsActionUi) {
-        when (action) {
-            is SettingsActionUi.SelectThemeMode -> {
+    override fun onIntent(intent: SettingsIntentUi) {
+        when (intent) {
+            is SettingsIntentUi.SelectThemeMode -> {
                 viewModelScope.launch {
-                    setThemeModeUseCase(action.themeMode)
+                    setThemeModeUseCase(intent.themeMode)
                 }
             }
         }

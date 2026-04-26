@@ -2,13 +2,13 @@ package yegor.cheprasov.pokedex.features.home.presentation
 
 import androidx.lifecycle.viewModelScope
 import io.github.aakira.napier.Napier
+import io.github.v1rusdev.simplemvi.compose.MviViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import yegor.cheprasov.pokedex.core.common.mapper.Mapper
-import yegor.cheprasov.pokedex.core.design.mvi.MviViewModel
 import yegor.cheprasov.pokedex.features.home.domain.use_cases.SyncUseCase
 import yegor.cheprasov.pokedex.features.home.presentation.models.HomeMainCardTypeUi
 import yegor.cheprasov.pokedex.features.home.presentation.models.SyncAllPokemonsStateModelUi
@@ -18,26 +18,27 @@ import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataState
 class HomeViewModel(
     private val syncUseCase: SyncUseCase,
     private val syncStateToModelUiMapper: Mapper<SyncDataState, SyncAllPokemonsStateModelUi>,
-) : MviViewModel<HomeStateUi, HomeActionUi, HomeEventUi>(
+) : MviViewModel<HomeStateUi, HomeIntentUi, HomeEffectUi>(
     initialState = HomeStateUi(),
 ) {
 
     init {
+        Napier.d("Init home viewModel", tag = "myTag")
         syncInitialData()
     }
 
-    override fun onAction(action: HomeActionUi) {
-        when (action) {
-            HomeActionUi.OnSearchClick -> sendEvent(HomeEventUi.OpenSearchScreen)
-            HomeActionUi.OnRefreshPokemons -> refreshData()
-            HomeActionUi.OnSeeMorePokemonClick -> Unit
-            is HomeActionUi.OnClickMainHomeCard -> onMainHomeCardClick(action.type)
+    override fun onIntent(intent: HomeIntentUi) {
+        when (intent) {
+            HomeIntentUi.OnSearchClick -> sendEffect(HomeEffectUi.OpenSearchScreen)
+            HomeIntentUi.OnRefreshPokemons -> refreshData()
+            HomeIntentUi.OnSeeMorePokemonClick -> Unit
+            is HomeIntentUi.OnClickMainHomeCard -> onMainHomeCardClick(intent.type)
         }
     }
 
     private fun onMainHomeCardClick(type: HomeMainCardTypeUi) {
         when (type) {
-            HomeMainCardTypeUi.POKEMONS -> sendEvent(HomeEventUi.OpenPokemonListScreen)
+            HomeMainCardTypeUi.POKEMONS -> sendEffect(HomeEffectUi.OpenPokemonListScreen)
             HomeMainCardTypeUi.ABILITIES -> Unit
             HomeMainCardTypeUi.LOCATIONS -> Unit
         }

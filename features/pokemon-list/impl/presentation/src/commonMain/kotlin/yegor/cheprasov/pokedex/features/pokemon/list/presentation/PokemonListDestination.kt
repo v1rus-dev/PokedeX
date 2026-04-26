@@ -8,8 +8,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import io.github.v1rusdev.simplemvi.compose.CollectEffectsUiEvent
 import org.koin.compose.koinInject
-import yegor.cheprasov.pokedex.core.design.composable.effects.CollectEventsUiEffect
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
 import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
 import yegor.cheprasov.pokedex.features.pokemon.list.presentation.composable.PokemonListScreen
@@ -29,13 +29,13 @@ fun PokemonListDestination(
         state = state,
         listState = lazyListState,
         lazyPagingItems = lazyPagingItems,
-        onAction = viewModel::onAction,
+        onIntent = viewModel::onIntent,
     )
 
-    CollectEventsUiEffect(viewModel.uiEvents) { event ->
+    CollectEffectsUiEvent(viewModel.uiEffects) { event ->
         when(event) {
-            PokemonListEventUi.CloseScreen -> navigator.popBackStack()
-            is PokemonListEventUi.NavigateToPokemonDetail -> {
+            PokemonListEffectUi.CloseScreen -> navigator.popBackStack()
+            is PokemonListEffectUi.NavigateToPokemonDetail -> {
                 navigator.navigate(PokemonDetails(pokemonName = event.name, pokemonType = event.pokemonType))
             }
         }

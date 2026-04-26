@@ -24,6 +24,8 @@ class KmpPresentationConfigPlugin : Plugin<Project> {
                     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
                     implementation(libs.koin.navigation3)
                     implementation(libs.koin.compose.viewmodel)
+                    implementation(libs.simplemvi.core)
+                    implementation(libs.simplemvi.compose)
                 }
             }
         }
