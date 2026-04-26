@@ -12,7 +12,8 @@ class PokemonLiteModelToUiModelMapper(
             name = input.name,
             id = input.id,
             imageUrl = input.imageUrl ?: "",
-            pokemonTypes = input.types.map(pokemonTypeMapper::map)
+            pokemonTypes = input.types.map(pokemonTypeMapper::map),
+            stats = emptyList(),
         )
     }
 }

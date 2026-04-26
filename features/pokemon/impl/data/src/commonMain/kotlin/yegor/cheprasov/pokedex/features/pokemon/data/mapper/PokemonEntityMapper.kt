@@ -28,10 +28,14 @@ class PokemonEntityMapper : Mapper<PokemonWithRelationsEntity, PokemonModel> {
                 }
             }
         val sortedStats = input.stats
-            .map { statEntity ->
+            .map { statWithRange ->
+                val statEntity = statWithRange.stat
+                val range = statWithRange.range
                 PokemonStatModel(
                     stat = statEntity.stat.toDomainModel(),
                     statValue = statEntity.statValue,
+                    minValue = range?.minValue ?: statEntity.statValue,
+                    maxValue = range?.maxValue ?: statEntity.statValue,
                 )
             }
             .sortedBy { statModel -> statModel.stat.ordinal }

@@ -46,3 +46,14 @@ enum class PokemonStatsUiModel(
         Color(0xFF9CA3AF),
     ),
 }
+
+val PokemonStatsUiModel.previewValueRange: IntRange
+    get() = when (this) {
+        PokemonStatsUiModel.Hp -> 35..120
+        PokemonStatsUiModel.Attack -> 45..135
+        PokemonStatsUiModel.Defense -> 35..130
+        PokemonStatsUiModel.SpecialAttack -> 40..145
+        PokemonStatsUiModel.SpecialDefense -> 40..135
+        PokemonStatsUiModel.Speed -> 25..140
+        PokemonStatsUiModel.Unknown -> 0..100
+    }

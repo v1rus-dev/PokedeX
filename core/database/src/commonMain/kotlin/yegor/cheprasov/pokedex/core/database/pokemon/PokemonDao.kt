@@ -8,6 +8,7 @@ import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatRangeEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 
@@ -65,6 +66,12 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertStats(entities: List<PokemonStatEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertStatRanges(entities: List<PokemonStatRangeEntity>)
+
+    @Query("SELECT stat, MIN(stat_value) AS min_value, MAX(stat_value) AS max_value FROM pokemon_stats GROUP BY stat")
+    suspend fun getStatRanges(): List<PokemonStatRangeEntity>
+
     @Query("DELETE FROM pokemon_type_links WHERE pokemon_name = :pokemonName")
     suspend fun deleteTypeLinksByPokemonName(pokemonName: String)
 
@@ -76,4 +83,7 @@ interface PokemonDao {
 
     @Query("DELETE FROM pokemon_stats")
     suspend fun clearAllStats()
+
+    @Query("DELETE FROM pokemon_stat_ranges")
+    suspend fun clearAllStatRanges()
 }

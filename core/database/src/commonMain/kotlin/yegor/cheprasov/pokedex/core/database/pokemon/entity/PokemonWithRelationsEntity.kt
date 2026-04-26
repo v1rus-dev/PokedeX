@@ -14,10 +14,11 @@ data class PokemonWithRelationsEntity(
     )
     val typeLinks: List<PokemonTypeCrossRefEntity>,
     @Relation(
+        entity = PokemonStatEntity::class,
         parentColumn = "name",
         entityColumn = "pokemon_name",
     )
-    val stats: List<PokemonStatEntity>,
+    val stats: List<PokemonStatWithRangeEntity>,
     @Relation(
         parentColumn = "name",
         entityColumn = "pokemon_name",

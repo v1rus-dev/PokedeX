@@ -45,6 +45,7 @@ class LocalPokemonDatasource(
         withContext(Dispatchers.IO) {
             runCatching {
                 transactionProvider.runAsTransaction {
+                    pokemonDao.clearAllStatRanges()
                     pokemonDao.clearAllTypeLinks()
                     pokemonDao.clearAllStats()
                     pokemonDao.clearAllPokemons()
@@ -67,6 +68,7 @@ class LocalPokemonDatasource(
                     if (stats.isNotEmpty()) {
                         pokemonDao.upsertStats(stats)
                     }
+                    refreshStatRanges()
 
                     val pokemonNames = list.map { it.pokemon.name }
                     if (pokemonNames.isNotEmpty()) {
@@ -97,6 +99,7 @@ class LocalPokemonDatasource(
                 if (entity.stats.isNotEmpty()) {
                     pokemonDao.upsertStats(entity.stats)
                 }
+                refreshStatRanges()
 
                 if (entity.abilityLinks.isNotEmpty()) {
                     abilityDao.upsertPokemonLinks(entity.abilityLinks)
@@ -131,5 +134,14 @@ class LocalPokemonDatasource(
         pokemonDao.searchByName(search).flowOn(
             Dispatchers.IO
         )
+
+    private suspend fun refreshStatRanges() {
+        pokemonDao.clearAllStatRanges()
+
+        val statRanges = pokemonDao.getStatRanges()
+        if (statRanges.isNotEmpty()) {
+            pokemonDao.upsertStatRanges(statRanges)
+        }
+    }
 
 }

@@ -11,6 +11,7 @@ import yegor.cheprasov.pokedex.core.database.pokemon.PokemonTypeDao
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.PokemonDao
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatRangeEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
 
@@ -20,10 +21,11 @@ import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeEntity
         PokemonTypeEntity::class,
         PokemonTypeCrossRefEntity::class,
         PokemonStatEntity::class,
+        PokemonStatRangeEntity::class,
         AbilityEntity::class,
         PokemonAbilityCrossRefEntity::class,
     ],
-    version = 1,
+    version = 3,
     exportSchema = true,
 )
 @ConstructedBy(PokedexDatabaseConstructor::class)

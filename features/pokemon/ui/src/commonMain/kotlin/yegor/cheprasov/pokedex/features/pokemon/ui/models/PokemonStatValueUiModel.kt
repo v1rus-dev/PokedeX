@@ -1,18 +1,21 @@
-package yegor.cheprasov.pokedex.features.pokemon.models
+package yegor.cheprasov.pokedex.features.pokemon.ui.models
 
-data class PokemonStatModel(
-    val stat: PokemonStats,
-    val statValue: Int,
+import androidx.compose.runtime.Immutable
+
+@Immutable
+data class PokemonStatValueUiModel(
+    val statsUiModel: PokemonStatsUiModel,
+    val value: Int,
     val minValue: Int,
     val maxValue: Int,
 ) {
     val percentOfMax: Float = calculatePercentOfMax(
-        value = statValue,
+        value = value,
         maxValue = maxValue,
     )
 
     val normalizedPercent: Float = calculateNormalizedPercent(
-        value = statValue,
+        value = value,
         minValue = minValue,
         maxValue = maxValue,
     )
