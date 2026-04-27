@@ -31,7 +31,6 @@ import yegor.cheprasov.pokedex.core.design.composable.cardSurface
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonImage
 import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonTypeBadge
-import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 @Composable
@@ -134,12 +133,7 @@ private fun PokemonCardPreview() {
     PokedexTheme {
         Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
             PokemonCard(
-                pokemon = PokemonUiModel(
-                    name = "Bulbasaur", 1, imageUrl = "", pokemonTypes = listOf(
-                        PokemonTypeUiModel.Grass,
-                        PokemonTypeUiModel.Ground
-                    )
-                )
+                pokemon = PokemonUiModel.PREVIEW
             ) {}
         }
     }

@@ -2,9 +2,13 @@ package yegor.cheprasov.pokedex.features.pokemon.list.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.features.pokemon.list.data.datasource.LocalPokemonListDatasource
 import yegor.cheprasov.pokedex.features.pokemon.list.data.mappers.PokemonMapper
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonLiteModel
+import kotlin.time.Clock
 
 class PokemonPagingSource(
     private val localPokemonListDatasource: LocalPokemonListDatasource,
@@ -12,23 +16,36 @@ class PokemonPagingSource(
     private val searchQuery: String,
 ) : PagingSource<Int, PokemonLiteModel>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonLiteModel> {
-        val offset = params.key ?: DEFAULT_OFFSET
-        val limit = params.loadSize
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonLiteModel> =
+        withContext(Dispatchers.IO) {
+            val startTime = Clock.System.now().toEpochMilliseconds()
+            Napier.v("Start load time", tag = "myTag")
+            val offset = params.key ?: DEFAULT_OFFSET
+            val limit = params.loadSize
 
-        return try {
-            val pokemons = loadPokemons(offset = offset, limit = limit)
-                .map(pokemonMapper::map)
+            Napier.v("Load pokemons: limit = $limit, offset = $offset", tag = "myTag")
 
-            LoadResult.Page(
-                data = pokemons,
-                prevKey = previousOffset(offset = offset, limit = limit),
-                nextKey = nextOffset(offset = offset, limit = limit, loadedCount = pokemons.size),
-            )
-        } catch (throwable: Throwable) {
-            LoadResult.Error(throwable)
+            return@withContext try {
+                val pokemons = loadPokemons(offset = offset, limit = limit)
+                    .map(pokemonMapper::map)
+
+                val endTime = Clock.System.now().toEpochMilliseconds()
+
+                Napier.v("Time of loading: ${endTime - startTime}", tag = "myTag")
+
+                LoadResult.Page(
+                    data = pokemons,
+                    prevKey = previousOffset(offset = offset, limit = limit),
+                    nextKey = nextOffset(
+                        offset = offset,
+                        limit = limit,
+                        loadedCount = pokemons.size
+                    ),
+                )
+            } catch (throwable: Throwable) {
+                LoadResult.Error(throwable)
+            }
         }
-    }
 
     override fun getRefreshKey(state: PagingState<Int, PokemonLiteModel>): Int? {
         val anchorPosition = state.anchorPosition ?: return null

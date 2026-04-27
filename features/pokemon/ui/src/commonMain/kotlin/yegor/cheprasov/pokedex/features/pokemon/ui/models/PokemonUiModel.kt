@@ -25,6 +25,14 @@ data class PokemonUiModel(
                 )
             }
         )
+
+        fun fromNavArgs(name: String, typeUiModel: PokemonTypeUiModel) = PokemonUiModel(
+            name = name,
+            id = 0,
+            imageUrl = "",
+            pokemonTypes = listOf(typeUiModel),
+            stats = emptyList()
+        )
     }
 
     val mainType: PokemonTypeUiModel = pokemonTypes.firstOrNull() ?: PokemonTypeUiModel.Unknown

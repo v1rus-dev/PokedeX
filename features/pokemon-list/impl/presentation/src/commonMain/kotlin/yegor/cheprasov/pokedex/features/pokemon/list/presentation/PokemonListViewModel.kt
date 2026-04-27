@@ -30,15 +30,13 @@ class PokemonListViewModel(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val pokemonPagingDataFlow: Flow<PagingData<PokemonUiModel>> =
-        mutableSearchQuery.debounce(300L)
-            .flowOn(Dispatchers.IO)
+        mutableSearchQuery
             .flatMapLatest { query ->
                 getPokemonListUseCase(query).map { pagingData ->
-                    withContext(Dispatchers.Default) {
-                        pagingData.map(pokemonMapper::map)
-                    }
+                    pagingData.map(pokemonMapper::map)
                 }
             }
+            .flowOn(Dispatchers.Main)
             .cachedIn(viewModelScope)
 
     override fun onIntent(intent: PokemonListIntentUi) {
