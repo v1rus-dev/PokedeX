@@ -21,6 +21,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import org.jetbrains.compose.resources.stringResource
@@ -47,6 +48,7 @@ internal fun PokemonListScreen(
     LaunchedEffect(textFieldState) {
         snapshotFlow { textFieldState.text.toString() }
             .distinctUntilChanged()
+            .debounce(SEARCH_DEBOUNCE_MILLIS)
             .collect { query ->
                 onIntent(PokemonListIntentUi.SearchQueryChanged(query))
             }
@@ -84,6 +86,8 @@ internal fun PokemonListScreen(
         }
     }
 }
+
+private const val SEARCH_DEBOUNCE_MILLIS = 300L
 
 @Preview
 @Composable

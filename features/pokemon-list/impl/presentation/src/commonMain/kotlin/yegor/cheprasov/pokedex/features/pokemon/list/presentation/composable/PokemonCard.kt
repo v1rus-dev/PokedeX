@@ -5,13 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,7 +30,6 @@ import yegor.cheprasov.pokedex.core.design.composable.cardSurface
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonImage
 import yegor.cheprasov.pokedex.features.pokemon.ui.composable.PokemonTypeBadge
-import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 
 @Composable
@@ -40,33 +38,34 @@ internal fun PokemonCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
             .clip(RoundedCornerShape(16.dp))
             .background(PokedexTheme.colors.surface)
             .clickable(enabled = onClick != null) { onClick?.invoke() }
-            .cardSurface(),
-        verticalAlignment = Alignment.CenterVertically
+            .cardSurface()
     ) {
         Box(
             modifier = Modifier
-                .width(6.dp)
-                .fillMaxHeight()
-                .background(
-                    brush = Brush.verticalGradient(
-                        listOf(
-                            pokemon.mainType.colors.gradientStart,
-                            pokemon.mainType.colors.gradientEnd,
-                        )
+                .matchParentSize()
+                .drawBehind {
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                pokemon.mainType.colors.gradientStart,
+                                pokemon.mainType.colors.gradientEnd,
+                            )
+                        ),
+                        size = Size(width = 6.dp.toPx(), height = this.size.height),
                     )
-                )
+                }
         )
 
         Row(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
+                .padding(start = 6.dp)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -134,12 +133,7 @@ private fun PokemonCardPreview() {
     PokedexTheme {
         Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
             PokemonCard(
-                pokemon = PokemonUiModel(
-                    name = "Bulbasaur", 1, imageUrl = "", pokemonTypes = listOf(
-                        PokemonTypeUiModel.Grass,
-                        PokemonTypeUiModel.Ground
-                    )
-                )
+                pokemon = PokemonUiModel.PREVIEW
             ) {}
         }
     }

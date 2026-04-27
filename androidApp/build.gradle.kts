@@ -29,6 +29,16 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+
+        create("performance") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = ".performance"
+            versionNameSuffix = "-performance"
+            isDebuggable = false
+            isMinifyEnabled = false
+        }
     }
 
     compileOptions {

@@ -14,3 +14,13 @@ internal data class PokedexSystemBarsStyle(
 
 @Composable
 internal expect fun PokedexSystemBarsEffect(style: PokedexSystemBarsStyle)
+
+@Composable
+fun PokedexStatusBarEffect(backgroundColor: Color) {
+    PokedexStatusBarEffect(
+        preferLightIcons = shouldUseLightSystemBarIcons(backgroundColor)
+    )
+}
+
+@Composable
+expect fun PokedexStatusBarEffect(preferLightIcons: Boolean)

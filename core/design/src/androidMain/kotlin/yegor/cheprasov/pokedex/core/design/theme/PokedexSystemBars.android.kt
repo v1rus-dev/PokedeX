@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Color
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
@@ -27,6 +28,32 @@ internal actual fun PokedexSystemBarsEffect(style: PokedexSystemBarsStyle) {
         WindowCompat.getInsetsController(window, view).apply {
             isAppearanceLightStatusBars = !style.preferLightStatusBarIcons
             isAppearanceLightNavigationBars = !style.preferLightNavigationBarIcons
+        }
+    }
+}
+
+@Composable
+actual fun PokedexStatusBarEffect(preferLightIcons: Boolean) {
+    val view = LocalView.current
+
+    DisposableEffect(view, preferLightIcons) {
+        if (view.isInEditMode) {
+            return@DisposableEffect onDispose {}
+        }
+
+        val activity = view.context.findActivity()
+        val window = activity?.window
+        val insetsController = window?.let { WindowCompat.getInsetsController(it, view) }
+
+        if (insetsController == null) {
+            return@DisposableEffect onDispose {}
+        }
+
+        val previousLightStatusBars = insetsController.isAppearanceLightStatusBars
+        insetsController.isAppearanceLightStatusBars = !preferLightIcons
+
+        onDispose {
+            insetsController.isAppearanceLightStatusBars = previousLightStatusBars
         }
     }
 }
