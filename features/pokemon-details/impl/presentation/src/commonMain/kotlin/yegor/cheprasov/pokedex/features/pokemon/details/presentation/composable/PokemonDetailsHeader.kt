@@ -118,22 +118,24 @@ internal fun PokemonDetailsHeader(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                PokedexNumberBadge(
-                    number = state.pokemon.normalizedId,
-                    color = PokedexTheme.colors.background,
-                    modifier = Modifier.localSharedElement(
-                        "pokemon_number_${state.pokemon.normalizedId}"
+                Column {
+                    Text(
+                        text = pokemonName,
+                        style = PokedexTheme.typography.titleLarge.copy(
+                            color = PokedexTheme.colors.textPrimary,
+                        ),
+                        modifier = Modifier.localSharedElement(
+                            "pokemon_name_${state.pokemon.normalizedId}"
+                        )
                     )
-                )
-                Text(
-                    text = pokemonName,
-                    style = PokedexTheme.typography.titleLarge.copy(
-                        color = PokedexTheme.colors.textPrimary,
-                    ),
-                    modifier = Modifier.localSharedElement(
-                        "pokemon_name_${state.pokemon.normalizedId}"
+                    Text(
+                        "#${state.pokemon.normalizedId}",
+                        style = PokedexTheme.typography.labelSmall,
+                        modifier = Modifier.localSharedElement(
+                            "pokemon_number_${state.pokemon.normalizedId}"
+                        )
                     )
-                )
+                }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp)

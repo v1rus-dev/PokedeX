@@ -32,8 +32,9 @@ internal fun PokemonDetailsScreen(
         WindowInsets.navigationBars.getBottom(this).toDp()
     }
     val contentCornerRadius = 32.dp * (
-        1f - collapsingHeaderState.overlapFraction.progressFromStartFraction(ContentCornerCollapseFraction)
-    )
+            1f - collapsingHeaderState.overlapFraction.progressFromStartFraction(
+                ContentCornerCollapseFraction
+            ))
     val isBackgroundUnderStatusBar = collapsingHeaderState.overlapFraction >= 1f
 
     if (isBackgroundUnderStatusBar) {
@@ -48,7 +49,10 @@ internal fun PokemonDetailsScreen(
         headerHeight = HeaderHeight,
         initialContentOverlap = 60.dp,
         backgroundColor = PokedexTheme.colors.background,
-        cornerRadius = RoundedCornerShape(topStart = contentCornerRadius, topEnd = contentCornerRadius),
+        cornerRadius = RoundedCornerShape(
+            topStart = contentCornerRadius,
+            topEnd = contentCornerRadius
+        ),
         header = {
             PokemonDetailsHeader(
                 state,
@@ -66,6 +70,7 @@ internal fun PokemonDetailsScreen(
                 .padding(bottom = 20.dp + navigationBarHeight),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            PokemonBaseInfoPart(state)
             if (state.pokemon.stats.isNotEmpty()) {
                 PokemonStatsCard(state.pokemon.stats)
             }
