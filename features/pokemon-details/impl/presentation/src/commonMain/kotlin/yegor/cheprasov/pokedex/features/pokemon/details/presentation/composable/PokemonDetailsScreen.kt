@@ -67,9 +67,7 @@ internal fun PokemonDetailsScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (state.pokemon.stats.isNotEmpty()) {
-                repeat(TestStatsCardsCount) {
-                    PokemonStatsCard(state.pokemon.stats)
-                }
+                PokemonStatsCard(state.pokemon.stats)
             }
         }
     }
@@ -87,7 +85,6 @@ private fun PokemonDetailsScreenPreview() {
 }
 
 private const val ContentCornerCollapseFraction = 0.2f
-private const val TestStatsCardsCount = 6
 
 private fun Float.progressFromStartFraction(startFractionBeforeEnd: Float): Float {
     val startFraction = 1f - startFractionBeforeEnd.coerceIn(0f, 1f)

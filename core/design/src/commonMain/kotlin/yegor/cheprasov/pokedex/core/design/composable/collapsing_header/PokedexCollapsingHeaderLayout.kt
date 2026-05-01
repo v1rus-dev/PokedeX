@@ -115,11 +115,15 @@ class CollapsingHeaderLayoutState internal constructor(
         offsetAnimation.snapTo(offsetPx.coerceIn(-collapseRangePx, 0f))
         offsetAnimation.animateTo(
             targetValue = targetOffsetPx,
-            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessMedium,
+                visibilityThreshold = CollapseOffsetVisibilityThresholdPx,
+            ),
         ) {
             offsetPx = value
         }
-        offsetPx = targetOffsetPx
+        snapToOffset(targetOffsetPx)
     }
 
     suspend fun snapToOverlapFraction(fraction: Float) {
@@ -378,3 +382,4 @@ private data object NoCollapsingHeaderFlingBehavior : CollapsingHeaderFlingBehav
 
 private val CollapsedContentElevation = 5.dp
 private const val DefaultFlingVelocityThresholdPx = 1_000f
+private const val CollapseOffsetVisibilityThresholdPx = 0.5f

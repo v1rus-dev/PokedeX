@@ -45,4 +45,5 @@
     <string name="pokemons">Pokemons</string>
     <string name="abilities">Abilities</string>
     <string name="location">Locations</string>
+    <string name="evolution">Evolution</string>
 </resources>
