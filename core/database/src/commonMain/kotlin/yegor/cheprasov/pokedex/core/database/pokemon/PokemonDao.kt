@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEvolutionChainLinkEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonStatRangeEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonTypeCrossRefEntity
@@ -16,6 +17,9 @@ import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelations
 interface PokemonDao {
     @Query("SELECT EXISTS(SELECT 1 FROM pokemons)")
     suspend fun hasPokemons(): Boolean
+
+    @Query("SELECT EXISTS(SELECT 1 FROM pokemon_evolution_chain_links)")
+    suspend fun hasEvolutionChains(): Boolean
 
     @Transaction
     @Query("SELECT * FROM pokemons ORDER BY id ASC")
@@ -51,14 +55,35 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemons WHERE name = :name LIMIT 1")
     suspend fun getByName(name: String): PokemonWithRelationsEntity?
 
+    @Transaction
+    @Query(
+        """
+        SELECT pokemons.* FROM pokemons
+        INNER JOIN pokemon_evolution_chain_links links ON links.pokemon_name = pokemons.name
+        WHERE links.chain_id = (
+            SELECT chain_id FROM pokemon_evolution_chain_links
+            WHERE pokemon_name = :pokemonName
+            LIMIT 1
+        )
+        ORDER BY links.slot ASC
+        """
+    )
+    suspend fun getEvolutionChainByPokemonName(pokemonName: String): List<PokemonWithRelationsEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertPokemon(entity: PokemonEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAllPokemons(entities: List<PokemonEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertEvolutionChainLinks(entities: List<PokemonEvolutionChainLinkEntity>)
+
     @Query("DELETE FROM pokemons")
     suspend fun clearAllPokemons()
+
+    @Query("DELETE FROM pokemon_evolution_chain_links")
+    suspend fun clearAllEvolutionChainLinks()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertTypeLinks(entities: List<PokemonTypeCrossRefEntity>)

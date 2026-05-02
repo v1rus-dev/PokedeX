@@ -10,7 +10,7 @@ import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDeta
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsStateUi
 
 @Composable
-internal fun PokedexEvolutionPart(
+internal fun PokemonEvolutionPart(
     state: PokemonDetailsStateUi,
     modifier: Modifier = Modifier,
     onIntent: (PokemonDetailsIntentUi) -> Unit
@@ -20,10 +20,13 @@ internal fun PokedexEvolutionPart(
     }
 }
 
+@Composable
+private fun EvolutionPokemonCard()
+
 @Preview
 @Composable
-private fun PokedexEvolutionPartPreview() {
+private fun PokemonEvolutionPartPreview() {
     PokedexTheme {
-        PokedexEvolutionPart(state = PokemonDetailsStateUi.PREVIEW, onIntent = {})
+        PokemonEvolutionPart(state = PokemonDetailsStateUi.PREVIEW, onIntent = {})
     }
 }

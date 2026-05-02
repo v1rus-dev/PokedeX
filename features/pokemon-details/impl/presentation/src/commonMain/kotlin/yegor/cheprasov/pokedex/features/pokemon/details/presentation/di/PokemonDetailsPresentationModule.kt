@@ -16,6 +16,7 @@ val pokemonDetailsPresentationModule = module {
             pokemonName = params[0],
             pokemonType = params[1],
             getPokemonUseCase = get(),
+            getPokemonEvolutionChainUseCase = get(),
             observePokemonFavoriteStateUseCase = get(),
             updatePokemonFavoriteStateUseCase = get(),
             pokemonModelToUiModelMapper = get(),

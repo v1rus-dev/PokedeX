@@ -11,25 +11,33 @@ import yegor.cheprasov.pokedex.features.pokemon.ui.models.previewValueRange
 
 data class PokemonDetailsStateUi(
     val pokemon: PokemonUiModel,
+    val evolutions: List<PokemonUiModel> = emptyList(),
     val isFavorite: Boolean = false
 ) : StateUi {
     companion object {
+        private val previewPokemon = PokemonUiModel(
+            name = "Bulbasaur",
+            id = 1,
+            imageUrl = "",
+            pokemonTypes = listOf(PokemonTypeUiModel.Grass, PokemonTypeUiModel.Poison),
+            stats = PokemonStatsUiModel.entries
+                .filterNot { it == PokemonStatsUiModel.Unknown }
+                .map {
+                    PokemonStatValueUiModel(
+                        statsUiModel = it,
+                        value = it.previewValueRange.random(),
+                        minValue = it.previewValueRange.first,
+                        maxValue = it.previewValueRange.last,
+                    )
+                }
+        )
+
         val PREVIEW = PokemonDetailsStateUi(
-            pokemon = PokemonUiModel(
-                name = "Bulbasaur",
-                id = 1,
-                imageUrl = "",
-                pokemonTypes = listOf(PokemonTypeUiModel.Grass, PokemonTypeUiModel.Poison),
-                stats = PokemonStatsUiModel.entries
-                    .filterNot { it == PokemonStatsUiModel.Unknown }
-                    .map {
-                        PokemonStatValueUiModel(
-                            statsUiModel = it,
-                            value = it.previewValueRange.random(),
-                            minValue = it.previewValueRange.first,
-                            maxValue = it.previewValueRange.last,
-                        )
-                    }
+            pokemon = previewPokemon,
+            evolutions = listOf(
+                previewPokemon,
+                previewPokemon.copy(name = "Ivysaur", id = 2),
+                previewPokemon.copy(name = "Venusaur", id = 3),
             ),
             isFavorite = false,
         )

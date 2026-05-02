@@ -71,6 +71,9 @@ internal fun PokemonDetailsScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             PokemonBaseInfoPart(state)
+            if (state.evolutions.isNotEmpty()) {
+                PokemonEvolutionPart(state = state, onIntent = onAction)
+            }
             if (state.pokemon.stats.isNotEmpty()) {
                 PokemonStatsCard(state.pokemon.stats)
             }

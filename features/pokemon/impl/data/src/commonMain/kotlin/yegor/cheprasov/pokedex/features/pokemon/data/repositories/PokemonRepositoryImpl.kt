@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEntity
+import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonEvolutionChainLinkEntity
 import yegor.cheprasov.pokedex.core.database.pokemon.entity.PokemonWithRelationsEntity
 import yegor.cheprasov.pokedex.core.network.asResult
 import yegor.cheprasov.pokedex.features.ability.data.datasource.LocalAbilityDatasource
@@ -17,6 +18,7 @@ import yegor.cheprasov.pokedex.features.pokemon.data.datasource.LocalPokemonData
 import yegor.cheprasov.pokedex.features.pokemon.data.datasource.NetworkPokemonDatasource
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonEntityMapper
 import yegor.cheprasov.pokedex.features.pokemon.data.mapper.PokemonResponseMapper
+import yegor.cheprasov.pokedex.features.pokemon.data.models.EvolutionChainLinkResponse
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonLocalModel
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonLiteModel
@@ -37,6 +39,8 @@ class PokemonRepositoryImpl(
 ) : PokemonRepository {
     override suspend fun hasPokemons(): Result<Boolean> = localDatasource.hasPokemons()
 
+    override suspend fun hasEvolutionChains(): Result<Boolean> = localDatasource.hasEvolutionChains()
+
     override suspend fun getPokemon(pokemonName: String): Result<PokemonModel> {
         val normalizedName = pokemonName.lowercase()
 
@@ -53,6 +57,11 @@ class PokemonRepositoryImpl(
             },
         )
     }
+
+    override suspend fun getEvolutionChain(pokemonName: String): Result<List<PokemonModel>> =
+        localDatasource.getEvolutionChain(pokemonName).map { chain ->
+            chain.map(pokemonEntityMapper::map)
+        }
 
     override fun observeAllPokemons(): Flow<List<PokemonLiteModel>> {
         return localDatasource.observeAllPokemons().map { entities ->
@@ -165,6 +174,97 @@ class PokemonRepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalAtomicApi::class)
+    override fun syncAllEvolutionChains(): Flow<SyncAllPokemonsState> = channelFlow {
+        val listResult = networkDatasource.getAllEvolutionChainList(EVOLUTION_CHAIN_LIMIT).asResult()
+        val listResponse = listResult.getOrNull()
+        if (listResponse == null) {
+            send(
+                SyncAllPokemonsState.Error(
+                    completed = 0,
+                    total = 0,
+                    throwable = requireNotNull(listResult.exceptionOrNull()),
+                )
+            )
+            return@channelFlow
+        }
+
+        val chainIds = (1..listResponse.count).toList()
+        val total = chainIds.size
+
+        if (total == 0) {
+            send(SyncAllPokemonsState.Success(savedCount = 0))
+            return@channelFlow
+        }
+
+        send(SyncAllPokemonsState.Started(total = total))
+
+        val completed = AtomicInt(0)
+
+        try {
+            val links = mutableListOf<PokemonEvolutionChainLinkEntity>()
+
+            for (batch in chainIds.chunked(MAX_CONCURRENT_REQUESTS)) {
+                val batchLinks = coroutineScope {
+                    batch.map { chainId ->
+                        async {
+                            val response = networkDatasource.getEvolutionChain(chainId)
+                                .asResult()
+                                .getOrNull() ?: return@async null
+
+                            val chainLinks = flattenEvolutionChain(
+                                chainId = response.id,
+                                chain = response.chain,
+                            )
+
+                            val current = completed.incrementAndFetch()
+                            send(
+                                SyncAllPokemonsState.InProgress(
+                                    completed = current,
+                                    total = total,
+                                )
+                            )
+
+                            chainLinks
+                        }
+                    }.awaitAll().filterNotNull().flatten()
+                }
+
+                links += batchLinks
+            }
+
+            localDatasource.replaceAllEvolutionChains(links)
+                .onSuccess {
+                    Napier.v("Successfully saved evolution chains: ${links.distinctBy { it.chainId }.size}", tag = TAG)
+                }
+                .onFailure {
+                    Napier.v("Can't updating evolution chains with error: $it", tag = TAG)
+                }
+
+            val savedChainCount = links.map(PokemonEvolutionChainLinkEntity::chainId).distinct().size
+            val failedCount = total - savedChainCount
+
+            if (failedCount > 0) {
+                send(
+                    SyncAllPokemonsState.PartialSuccess(
+                        savedCount = savedChainCount,
+                        failedCount = failedCount,
+                    )
+                )
+            } else {
+                send(SyncAllPokemonsState.Success(savedCount = savedChainCount))
+            }
+        } catch (throwable: Throwable) {
+            send(
+                SyncAllPokemonsState.Error(
+                    completed = completed.load(),
+                    total = total,
+                    throwable = throwable,
+                )
+            )
+        }
+    }
+
     override fun observePokemon(pokemonName: String): Flow<PokemonModel> =
         localDatasource.observePokemon(pokemonName).map(pokemonEntityMapper::map)
 
@@ -230,7 +330,34 @@ class PokemonRepositoryImpl(
         }
     }
 
+    private fun flattenEvolutionChain(
+        chainId: Int,
+        chain: EvolutionChainLinkResponse,
+    ): List<PokemonEvolutionChainLinkEntity> {
+        val names = mutableListOf<String>()
+        collectEvolutionNames(chain = chain, names = names)
+
+        return names.distinct().mapIndexed { index, name ->
+            PokemonEvolutionChainLinkEntity(
+                chainId = chainId,
+                pokemonName = name,
+                slot = index,
+            )
+        }
+    }
+
+    private fun collectEvolutionNames(
+        chain: EvolutionChainLinkResponse,
+        names: MutableList<String>,
+    ) {
+        names += chain.species.name.lowercase()
+        chain.evolvesTo.forEach { nextChain ->
+            collectEvolutionNames(chain = nextChain, names = names)
+        }
+    }
+
     private companion object {
+        const val EVOLUTION_CHAIN_LIMIT = 600
         const val MAX_CONCURRENT_REQUESTS = 64
 
         private const val TAG = "PokemonRepository"

@@ -8,7 +8,11 @@ import yegor.cheprasov.pokedex.features.pokemon.models.SyncAllPokemonsState
 interface PokemonRepository {
     suspend fun hasPokemons(): Result<Boolean>
 
+    suspend fun hasEvolutionChains(): Result<Boolean>
+
     suspend fun getPokemon(pokemonName: String): Result<PokemonModel>
+
+    suspend fun getEvolutionChain(pokemonName: String): Result<List<PokemonModel>>
 
     fun observeAllPokemons(): Flow<List<PokemonLiteModel>>
 
@@ -17,6 +21,8 @@ interface PokemonRepository {
     fun searchPokemonsByName(search: String): Flow<List<PokemonLiteModel>>
 
     fun syncAllPokemons(): Flow<SyncAllPokemonsState>
+
+    fun syncAllEvolutionChains(): Flow<SyncAllPokemonsState>
 
     fun observePokemon(pokemonName: String): Flow<PokemonModel>
 

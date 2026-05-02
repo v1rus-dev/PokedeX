@@ -5,22 +5,22 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import yegor.cheprasov.pokedex.features.pokemon.domain.repository.PokemonRepository
-import yegor.cheprasov.pokedex.features.pokemon.use_cases.SyncPokemonsUseCase
+import yegor.cheprasov.pokedex.features.pokemon.use_cases.SyncPokemonEvolutionsUseCase
 import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataKey
 import yegor.cheprasov.pokedex.features.sync.data.api.SyncDataState
 
-class SyncPokemonsUseCaseImpl(
+class SyncPokemonEvolutionsUseCaseImpl(
     private val repository: PokemonRepository,
-) : SyncPokemonsUseCase {
-    override val key: SyncDataKey = SyncDataKey.POKEMONS
+) : SyncPokemonEvolutionsUseCase {
+    override val key: SyncDataKey = SyncDataKey.POKEMON_EVOLUTIONS
 
     override fun invoke(force: Boolean): Flow<SyncDataState> = flow {
-        val shouldSync = force || !repository.hasPokemons().getOrDefault(false)
+        val shouldSync = force || !repository.hasEvolutionChains().getOrDefault(false)
         if (!shouldSync) {
             emit(SyncDataState.Skipped)
             return@flow
         }
 
-        emitAll(repository.syncAllPokemons().map(::mapSyncAllPokemonsState))
+        emitAll(repository.syncAllEvolutionChains().map(::mapSyncAllPokemonsState))
     }
 }

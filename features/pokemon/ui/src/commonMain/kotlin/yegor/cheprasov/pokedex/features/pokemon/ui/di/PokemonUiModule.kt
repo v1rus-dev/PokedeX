@@ -9,6 +9,7 @@ import yegor.cheprasov.pokedex.features.pokemon.models.PokemonModel
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonStatModel
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonStats
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonEvolutionChainModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonLiteModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonStatsModelToUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeModelToUiModel
@@ -36,6 +37,8 @@ val pokemonUiModule = module {
     factoryOf(::PokemonLiteModelToUiModelMapper) {
         bind<Mapper<PokemonLiteModel, PokemonUiModel>>()
     }
+
+    factoryOf(::PokemonEvolutionChainModelToUiModelMapper)
 
     factoryOf(::PokemonTypeUiModelToModel) {
         bind<Mapper<PokemonTypeUiModel, PokemonType>>()

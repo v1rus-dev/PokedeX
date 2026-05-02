@@ -8,6 +8,7 @@ import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeModelToUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
+import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonEvolutionChainUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.ObservePokemonFavoriteStateUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.UpdatePokemonFavoriteStateUseCase
@@ -16,6 +17,7 @@ class PokemonDetailsViewModel(
     private val pokemonName: String,
     private val pokemonType: PokemonType,
     private val getPokemonUseCase: GetPokemonUseCase,
+    private val getPokemonEvolutionChainUseCase: GetPokemonEvolutionChainUseCase,
     private val observePokemonFavoriteStateUseCase: ObservePokemonFavoriteStateUseCase,
     private val updatePokemonFavoriteStateUseCase: UpdatePokemonFavoriteStateUseCase,
     private val pokemonModelToUiModelMapper: PokemonModelToUiModelMapper,
@@ -28,6 +30,7 @@ class PokemonDetailsViewModel(
 
     init {
         getPokemon()
+        getPokemonEvolutions()
         observeFavoriteState()
     }
 
@@ -43,13 +46,29 @@ class PokemonDetailsViewModel(
             getPokemonUseCase.invoke(pokemonName)
                 .map(pokemonModelToUiModelMapper::map)
                 .onSuccess { pokemon ->
-                    Napier.v("Pokemon: $pokemon")
                     updateState {
                         copy(pokemon = pokemon)
                     }
                 }
                 .onFailure { throwable ->
+                    Napier.v("Can't load pokemon: $throwable")
+                }
+        }
+    }
 
+    private fun getPokemonEvolutions() {
+        viewModelScope.launch {
+            getPokemonEvolutionChainUseCase(pokemonName)
+                .map { evolutions ->
+                    evolutions.map(pokemonModelToUiModelMapper::map)
+                }
+                .onSuccess { evolutions ->
+                    updateState {
+                        copy(evolutions = evolutions)
+                    }
+                }
+                .onFailure { throwable ->
+                    Napier.v("Can't load pokemon evolutions: $throwable")
                 }
         }
     }

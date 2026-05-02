@@ -9,6 +9,8 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import yegor.cheprasov.pokedex.core.network.NetworkResult
 import yegor.cheprasov.pokedex.core.network.safeRequest
+import yegor.cheprasov.pokedex.features.pokemon.data.models.EvolutionChainListResponse
+import yegor.cheprasov.pokedex.features.pokemon.data.models.EvolutionChainResponse
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonListResponse
 import yegor.cheprasov.pokedex.features.pokemon.data.models.PokemonResponse
 
@@ -35,5 +37,27 @@ class NetworkPokemonDatasource(
                 }
             }
         }
+
+    suspend fun getAllEvolutionChainList(limit: Int = EVOLUTION_CHAIN_LIMIT): NetworkResult<EvolutionChainListResponse> =
+        withContext(Dispatchers.IO) {
+            httpClient.safeRequest {
+                get("evolution-chain?limit=$limit") {
+                    contentType(ContentType.Application.Json)
+                }
+            }
+        }
+
+    suspend fun getEvolutionChain(id: Int): NetworkResult<EvolutionChainResponse> =
+        withContext(Dispatchers.IO) {
+            httpClient.safeRequest {
+                get("evolution-chain/$id/") {
+                    contentType(ContentType.Application.Json)
+                }
+            }
+        }
+
+    private companion object {
+        const val EVOLUTION_CHAIN_LIMIT = 600
+    }
 
 }
