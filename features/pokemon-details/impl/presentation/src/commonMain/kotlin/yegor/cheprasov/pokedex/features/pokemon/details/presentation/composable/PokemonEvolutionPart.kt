@@ -1,5 +1,6 @@
 package yegor.cheprasov.pokedex.features.pokemon.details.presentation.composable
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import pokedex.core.resources.generated.resources.Res
 import pokedex.core.resources.generated.resources.ic_arrow_right
-import yegor.cheprasov.pokedex.core.design.animation.localSharedElement
 import yegor.cheprasov.pokedex.core.design.composable.cardSurface
 import yegor.cheprasov.pokedex.core.design.theme.PokedexTheme
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.PokemonDetailsIntentUi
@@ -48,47 +48,141 @@ internal fun PokemonEvolutionPart(
     onIntent: (PokemonDetailsIntentUi) -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val scrollContentHorizontalPadding = PokedexTheme.spacing.large
+    val contentHorizontalPadding = PokedexTheme.spacing.large
 
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-        val arrowBlockWidth = ArrowHorizontalPadding * 2 + EvolutionArrowWidth
-        val cardWidth = resolveEvolutionCardWidth(
-            availableWidth = maxWidth,
-            itemsCount = state.evolutions.size,
-            arrowBlockWidth = arrowBlockWidth,
-        )
-        val contentWidth = cardWidth * state.evolutions.size.toFloat() +
-                arrowBlockWidth * (state.evolutions.size - 1).coerceAtLeast(0).toFloat()
-        val shouldScroll = contentWidth > maxWidth
+        val shouldScroll = state.evolutions.size >= MinScrollableEvolutionItemsCount
+        val contentWidth = maxOf(0.dp, maxWidth - contentHorizontalPadding * 2)
 
-        Row(
-            modifier = Modifier
-                .then(
-                    if (shouldScroll) {
-                        Modifier.horizontalScroll(scrollState)
-                    } else {
-                        Modifier.fillMaxWidth()
-                    }
-                ),
-            horizontalArrangement = if (shouldScroll) Arrangement.Start else Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (shouldScroll) {
-                Spacer(Modifier.width(scrollContentHorizontalPadding))
+        if (shouldScroll) {
+            ScrollableEvolutionRow(
+                state = state,
+                horizontalPadding = contentHorizontalPadding,
+                scrollState = scrollState,
+                onIntent = onIntent
+            )
+        } else {
+            StaticEvolutionRow(
+                state = state,
+                availableWidth = contentWidth,
+                horizontalPadding = contentHorizontalPadding,
+                onIntent = onIntent
+            )
+        }
+    }
+}
+
+@Composable
+private fun ScrollableEvolutionRow(
+    state: PokemonDetailsStateUi,
+    horizontalPadding: Dp,
+    scrollState: ScrollState,
+    onIntent: (PokemonDetailsIntentUi) -> Unit
+) {
+    Row(
+        modifier = Modifier.horizontalScroll(scrollState),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(Modifier.width(horizontalPadding))
+        state.evolutions.forEachIndexed { index, model ->
+            EvolutionPokemonCard(
+                pokemon = model,
+                isCurrent = model.isCurrentPokemon(state.pokemon),
+                cardWidth = EvolutionCardWidth,
+                onIntent = onIntent
+            )
+            if (index != state.evolutions.lastIndex) {
+                EvolutionArrow()
             }
-            state.evolutions.forEachIndexed { index, model ->
-                EvolutionPokemonCard(
-                    pokemon = model,
-                    isCurrent = model.isCurrentPokemon(state.pokemon),
-                    cardWidth = cardWidth,
-                    onIntent = onIntent
-                )
-                if (index != state.evolutions.lastIndex) {
-                    EvolutionArrow()
-                }
+        }
+        Spacer(Modifier.width(horizontalPadding))
+    }
+}
+
+@Composable
+private fun StaticEvolutionRow(
+    state: PokemonDetailsStateUi,
+    availableWidth: Dp,
+    horizontalPadding: Dp,
+    onIntent: (PokemonDetailsIntentUi) -> Unit
+) {
+    if (state.evolutions.size == ThreeItemEvolutionCount) {
+        ThreeItemEvolutionRow(
+            state = state,
+            availableWidth = availableWidth,
+            horizontalPadding = horizontalPadding,
+            onIntent = onIntent
+        )
+    } else {
+        CenteredEvolutionRow(
+            state = state,
+            availableWidth = availableWidth,
+            horizontalPadding = horizontalPadding,
+            onIntent = onIntent
+        )
+    }
+}
+
+@Composable
+private fun CenteredEvolutionRow(
+    state: PokemonDetailsStateUi,
+    availableWidth: Dp,
+    horizontalPadding: Dp,
+    onIntent: (PokemonDetailsIntentUi) -> Unit
+) {
+    val cardWidth = resolveCenteredEvolutionCardWidth(
+        availableWidth = availableWidth,
+        itemsCount = state.evolutions.size,
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = horizontalPadding),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        state.evolutions.forEachIndexed { index, model ->
+            EvolutionPokemonCard(
+                pokemon = model,
+                isCurrent = model.isCurrentPokemon(state.pokemon),
+                cardWidth = cardWidth,
+                onIntent = onIntent
+            )
+            if (index != state.evolutions.lastIndex) {
+                EvolutionArrow()
             }
-            if (shouldScroll) {
-                Spacer(Modifier.width(scrollContentHorizontalPadding))
+        }
+    }
+}
+
+@Composable
+private fun ThreeItemEvolutionRow(
+    state: PokemonDetailsStateUi,
+    availableWidth: Dp,
+    horizontalPadding: Dp,
+    onIntent: (PokemonDetailsIntentUi) -> Unit
+) {
+    val cardWidth = resolveThreeItemEvolutionCardWidth(availableWidth)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = horizontalPadding),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        state.evolutions.forEachIndexed { index, model ->
+            EvolutionPokemonCard(
+                pokemon = model,
+                isCurrent = model.isCurrentPokemon(state.pokemon),
+                cardWidth = cardWidth,
+                onIntent = onIntent
+            )
+            if (index != state.evolutions.lastIndex) {
+                Spacer(Modifier.weight(1f))
+                EvolutionArrowIcon()
+                Spacer(Modifier.weight(1f))
             }
         }
     }
@@ -158,7 +252,6 @@ private fun EvolutionPokemonCard(
                     PokemonImage(
                         imageUrl = pokemon.imageUrl,
                         modifier = Modifier.size(64.dp)
-                            .localSharedElement("pokemon_image_${pokemon.imageUrl}")
                     )
                 }
 
@@ -179,49 +272,88 @@ private fun EvolutionPokemonCard(
 private fun EvolutionArrow() {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Spacer(Modifier.width(ArrowHorizontalPadding))
-        Icon(
-            painter = painterResource(Res.drawable.ic_arrow_right),
-            modifier = Modifier.size(EvolutionArrowWidth),
-            contentDescription = null,
-            tint = PokedexTheme.colors.textSecondary
-        )
+        EvolutionArrowIcon()
         Spacer(Modifier.width(ArrowHorizontalPadding))
+    }
+}
+
+@Composable
+private fun EvolutionArrowIcon() {
+    Icon(
+        painter = painterResource(Res.drawable.ic_arrow_right),
+        modifier = Modifier.size(EvolutionArrowWidth),
+        contentDescription = null,
+        tint = PokedexTheme.colors.textSecondary
+    )
+}
+
+@Preview
+@Composable
+private fun PokemonEvolutionPartOneItemPreview() {
+    PokedexTheme {
+        Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
+            PokemonEvolutionPart(state = previewEvolutionState(1), onIntent = {})
+        }
     }
 }
 
 @Preview
 @Composable
-private fun PokemonEvolutionPartPreview() {
+private fun PokemonEvolutionPartTwoItemsPreview() {
     PokedexTheme {
         Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
-            PokemonEvolutionPart(state = PokemonDetailsStateUi.PREVIEW, onIntent = {})
+            PokemonEvolutionPart(state = previewEvolutionState(2), onIntent = {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonEvolutionPartThreeItemsPreview() {
+    PokedexTheme {
+        Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
+            PokemonEvolutionPart(state = previewEvolutionState(3), onIntent = {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonEvolutionPartFourItemsPreview() {
+    PokedexTheme {
+        Column(modifier = Modifier.fillMaxSize().background(PokedexTheme.colors.background)) {
+            PokemonEvolutionPart(state = previewEvolutionState(4), onIntent = {})
         }
     }
 }
 
 private val EvolutionCardWidth = 112.dp
-private val EvolutionCardMinWidth = 96.dp
 private val EvolutionCardHeight = 144.dp
 private val EvolutionArrowWidth = 24.dp
 private val ArrowHorizontalPadding = 4.dp
+private const val ThreeItemEvolutionCount = 3
+private const val MinScrollableEvolutionItemsCount = 4
 
-private fun resolveEvolutionCardWidth(
+private fun resolveCenteredEvolutionCardWidth(
     availableWidth: Dp,
     itemsCount: Int,
-    arrowBlockWidth: Dp
 ): Dp {
     if (itemsCount <= 0) {
         return EvolutionCardWidth
     }
 
+    val arrowBlockWidth = ArrowHorizontalPadding * 2 + EvolutionArrowWidth
     val arrowsWidth = arrowBlockWidth * (itemsCount - 1).coerceAtLeast(0).toFloat()
     val maxCardWidthWithoutScroll = (availableWidth - arrowsWidth) / itemsCount.toFloat()
 
-    return if (maxCardWidthWithoutScroll >= EvolutionCardMinWidth) {
-        minOf(EvolutionCardWidth, maxCardWidthWithoutScroll)
-    } else {
-        EvolutionCardWidth
-    }
+    return minOf(EvolutionCardWidth, maxOf(0.dp, maxCardWidthWithoutScroll))
+}
+
+private fun resolveThreeItemEvolutionCardWidth(availableWidth: Dp): Dp {
+    val arrowsWidth = EvolutionArrowWidth * (ThreeItemEvolutionCount - 1)
+    val maxCardWidthWithoutScroll = (availableWidth - arrowsWidth) / ThreeItemEvolutionCount.toFloat()
+
+    return minOf(EvolutionCardWidth, maxOf(0.dp, maxCardWidthWithoutScroll))
 }
 
 private fun PokemonUiModel.isCurrentPokemon(currentPokemon: PokemonUiModel): Boolean {
@@ -229,4 +361,16 @@ private fun PokemonUiModel.isCurrentPokemon(currentPokemon: PokemonUiModel): Boo
         currentPokemon.name,
         ignoreCase = true
     )
+}
+
+private fun previewEvolutionState(itemsCount: Int): PokemonDetailsStateUi {
+    val preview = PokemonDetailsStateUi.PREVIEW
+    val evolutions = listOf(
+        preview.pokemon,
+        preview.pokemon.copy(name = "Ivysaur", id = 2),
+        preview.pokemon.copy(name = "Venusaur", id = 3),
+        preview.pokemon.copy(name = "Mega Venusaur", id = 10033),
+    )
+
+    return preview.copy(evolutions = evolutions.take(itemsCount))
 }
