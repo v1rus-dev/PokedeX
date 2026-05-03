@@ -46,4 +46,6 @@
     <string name="abilities">Abilities</string>
     <string name="location">Locations</string>
     <string name="evolution">Evolution</string>
+    <string name="current_evolution">Current</string>
+    <string name="not_current_evolution">Not current</string>
 </resources>

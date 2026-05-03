@@ -3,6 +3,8 @@ package yegor.cheprasov.pokedex.core.design.animation
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -44,6 +46,25 @@ fun Modifier.localSharedElement(key: Any): Modifier = composed {
         sharedElement(
             sharedContentState = rememberSharedContentState(key = key),
             animatedVisibilityScope = animatedScope,
+        )
+    }
+}
+
+fun Modifier.localSharedBounds(key: Any): Modifier = composed {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedScope.current
+
+    if (sharedTransitionScope == null || animatedScope == null) {
+        return@composed this
+    }
+
+    with(sharedTransitionScope) {
+        sharedBounds(
+            sharedContentState = rememberSharedContentState(key = key),
+            animatedVisibilityScope = animatedScope,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds()
         )
     }
 }

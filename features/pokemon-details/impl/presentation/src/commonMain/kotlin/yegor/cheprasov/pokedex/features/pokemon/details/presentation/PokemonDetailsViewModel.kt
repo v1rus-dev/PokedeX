@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonModelToUiModelMapper
 import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeModelToUiModel
+import yegor.cheprasov.pokedex.features.pokemon.ui.mappers.PokemonTypeUiModelToModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonUiModel
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonEvolutionChainUseCase
 import yegor.cheprasov.pokedex.features.pokemon.use_cases.GetPokemonUseCase
@@ -21,7 +22,8 @@ class PokemonDetailsViewModel(
     private val observePokemonFavoriteStateUseCase: ObservePokemonFavoriteStateUseCase,
     private val updatePokemonFavoriteStateUseCase: UpdatePokemonFavoriteStateUseCase,
     private val pokemonModelToUiModelMapper: PokemonModelToUiModelMapper,
-    private val pokemonTypeMapper: PokemonTypeModelToUiModel
+    private val pokemonTypeMapper: PokemonTypeModelToUiModel,
+    private val pokemonTypeUiModelToModel: PokemonTypeUiModelToModel
 ) : MviViewModel<PokemonDetailsStateUi, PokemonDetailsIntentUi, PokemonDetailsEffectUi>(
     initialState = PokemonDetailsStateUi(
         pokemon = PokemonUiModel.fromNavArgs(pokemonName, pokemonTypeMapper.map(pokemonType)),
@@ -37,6 +39,7 @@ class PokemonDetailsViewModel(
     override fun onIntent(intent: PokemonDetailsIntentUi) {
         when (intent) {
             PokemonDetailsIntentUi.OnBackClick -> sendEffect(PokemonDetailsEffectUi.CloseScreen)
+            is PokemonDetailsIntentUi.OnEvolutionClick -> onEvolutionClick(intent.pokemon)
             PokemonDetailsIntentUi.OnFavoriteClick -> onFavoriteClick()
         }
     }
@@ -86,5 +89,23 @@ class PokemonDetailsViewModel(
         viewModelScope.launch {
             updatePokemonFavoriteStateUseCase(pokemonName, isFavorite = !uiState.value.isFavorite)
         }
+    }
+
+    private fun onEvolutionClick(pokemon: PokemonUiModel) {
+        if (pokemon.isCurrentPokemon()) {
+            return
+        }
+
+        sendEffect(
+            PokemonDetailsEffectUi.OpenPokemonDetails(
+                pokemonName = pokemon.name,
+                pokemonType = pokemonTypeUiModelToModel.map(pokemon.mainType)
+            )
+        )
+    }
+
+    private fun PokemonUiModel.isCurrentPokemon(): Boolean {
+        val currentPokemon = uiState.value.pokemon
+        return (id != 0 && id == currentPokemon.id) || name.equals(currentPokemon.name, ignoreCase = true)
     }
 }

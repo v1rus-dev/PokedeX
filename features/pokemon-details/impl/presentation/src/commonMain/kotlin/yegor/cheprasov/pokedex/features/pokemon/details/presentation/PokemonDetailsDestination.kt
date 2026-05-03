@@ -8,6 +8,7 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import yegor.cheprasov.pokedex.core.design.navigation.AppNavigator
+import yegor.cheprasov.pokedex.features.pokemon.details.api.PokemonDetails
 import yegor.cheprasov.pokedex.features.pokemon.details.presentation.composable.PokemonDetailsScreen
 import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 
@@ -27,6 +28,12 @@ internal fun PokemonDetailsDestination(
     CollectEffectsUiEvent(viewModel.uiEffects) { event ->
         when(event) {
             PokemonDetailsEffectUi.CloseScreen -> appNavigator.popBackStack()
+            is PokemonDetailsEffectUi.OpenPokemonDetails -> appNavigator.navigate(
+                PokemonDetails(
+                    pokemonName = event.pokemonName,
+                    pokemonType = event.pokemonType
+                )
+            )
         }
     }
 }

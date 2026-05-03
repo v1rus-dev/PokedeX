@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import yegor.cheprasov.pokedex.core.design.animation.localSharedBounds
 import yegor.cheprasov.pokedex.core.design.animation.localSharedElement
 import yegor.cheprasov.pokedex.core.design.composable.badges.PokedexNumberBadge
 import yegor.cheprasov.pokedex.core.design.composable.cardSurface

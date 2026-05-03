@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "5b8a1acf7c9d019ca77ce8ceff2687f4",
+    "identityHash": "14bcaae8be76fcb0c7b4fc8598141484",
     "entities": [
       {
         "tableName": "pokemons",
@@ -329,11 +329,63 @@
             "ability_name"
           ]
         }
+      },
+      {
+        "tableName": "pokemon_evolution_chain_links",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chain_id` INTEGER NOT NULL, `pokemon_name` TEXT NOT NULL, `slot` INTEGER NOT NULL, PRIMARY KEY(`chain_id`, `pokemon_name`))",
+        "fields": [
+          {
+            "fieldPath": "chainId",
+            "columnName": "chain_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pokemonName",
+            "columnName": "pokemon_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "slot",
+            "columnName": "slot",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "chain_id",
+            "pokemon_name"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_pokemon_evolution_chain_links_pokemon_name",
+            "unique": false,
+            "columnNames": [
+              "pokemon_name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_pokemon_evolution_chain_links_pokemon_name` ON `${TABLE_NAME}` (`pokemon_name`)"
+          },
+          {
+            "name": "index_pokemon_evolution_chain_links_chain_id_slot",
+            "unique": true,
+            "columnNames": [
+              "chain_id",
+              "slot"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_pokemon_evolution_chain_links_chain_id_slot` ON `${TABLE_NAME}` (`chain_id`, `slot`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b8a1acf7c9d019ca77ce8ceff2687f4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '14bcaae8be76fcb0c7b4fc8598141484')"
     ]
   }
 }

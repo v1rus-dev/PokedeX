@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import yegor.cheprasov.pokedex.core.design.animation.localSharedBounds
 import yegor.cheprasov.pokedex.core.design.composable.collapsing_header.CollapsingHeaderLayout
 import yegor.cheprasov.pokedex.core.design.composable.collapsing_header.rememberCollapsingHeaderLayoutState
 import yegor.cheprasov.pokedex.core.design.theme.PokedexStatusBarEffect
@@ -45,6 +46,7 @@ internal fun PokemonDetailsScreen(
 
     CollapsingHeaderLayout(
         state = collapsingHeaderState,
+        modifier = Modifier.localSharedBounds("pokemon_${state.pokemon.id}"),
         minHeaderHeight = 76.dp,
         headerHeight = HeaderHeight,
         initialContentOverlap = 60.dp,
@@ -65,17 +67,15 @@ internal fun PokemonDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp)
                 .padding(top = 20.dp)
                 .padding(bottom = 20.dp + navigationBarHeight),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PokemonBaseInfoPart(state)
             if (state.evolutions.isNotEmpty()) {
                 PokemonEvolutionPart(state = state, onIntent = onAction)
             }
             if (state.pokemon.stats.isNotEmpty()) {
-                PokemonStatsCard(state.pokemon.stats)
+                PokemonStatsCard(state.pokemon.stats, modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
     }

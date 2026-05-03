@@ -20,7 +20,8 @@ val pokemonDetailsPresentationModule = module {
             observePokemonFavoriteStateUseCase = get(),
             updatePokemonFavoriteStateUseCase = get(),
             pokemonModelToUiModelMapper = get(),
-            pokemonTypeMapper = get()
+            pokemonTypeMapper = get(),
+            pokemonTypeUiModelToModel = get()
         )
     }
 

@@ -3,6 +3,7 @@ package yegor.cheprasov.pokedex.features.pokemon.details.presentation
 import io.github.v1rusdev.simplemvi.core.EffectUi
 import io.github.v1rusdev.simplemvi.core.IntentUi
 import io.github.v1rusdev.simplemvi.core.StateUi
+import yegor.cheprasov.pokedex.features.pokemon.models.PokemonType
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonStatValueUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonStatsUiModel
 import yegor.cheprasov.pokedex.features.pokemon.ui.models.PokemonTypeUiModel
@@ -57,8 +58,17 @@ sealed interface PokemonDetailsLoadStateUi {
 sealed interface PokemonDetailsIntentUi : IntentUi {
     data object OnFavoriteClick : PokemonDetailsIntentUi
     data object OnBackClick : PokemonDetailsIntentUi
+
+    data class OnEvolutionClick(
+        val pokemon: PokemonUiModel
+    ) : PokemonDetailsIntentUi
 }
 
 sealed interface PokemonDetailsEffectUi : EffectUi {
     data object CloseScreen : PokemonDetailsEffectUi
+
+    data class OpenPokemonDetails(
+        val pokemonName: String,
+        val pokemonType: PokemonType
+    ) : PokemonDetailsEffectUi
 }

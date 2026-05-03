@@ -12,10 +12,10 @@ data class PokemonUiModel(
 ) {
     companion object {
         val PREVIEW = PokemonUiModel(
-            name = "Charmander",
-            id = 3,
+            name = "Bulbazaur",
+            id = 1,
             imageUrl = "",
-            pokemonTypes = listOf(PokemonTypeUiModel.Fire),
+            pokemonTypes = listOf(PokemonTypeUiModel.Grass),
             stats = PokemonStatsUiModel.entries.map {
                 PokemonStatValueUiModel(
                     statsUiModel = it,
